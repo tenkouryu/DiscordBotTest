@@ -9,26 +9,33 @@ async def main(message):
 
     argument = message.content.partition(' ')[2]
     try:
-        role_name, permission_name, enabled_text = argument.rsplit(' ', 2)
+        role_name, setting_name, setting_value = argument.rsplit(' ', 2)
     except ValueError:
         await message.channel.send(
-            '使い方: /editrole ロール名 権限名 on|off'
-        )
-        return
-
-    enabled_text = enabled_text.lower()
-    if enabled_text not in ('on', 'off'):
-        await message.channel.send(
-            '権限の設定値は on または off を指定してください。'
+            '使い方: /editrole ロール名 権限名 on|off\n'
+            'または /editrole ロール名 color #RRGGBB'
         )
         return
 
     try:
+        if setting_name.lower() == 'color':
+            role = await edit_roll.edit_role_color(
+                message.guild, role_name, setting_value
+            )
+            await message.channel.send(
+                f'ロール「{role.name}」の色を{setting_value}に変更しました。'
+            )
+            return
+
+        enabled_text = setting_value.lower()
+        if enabled_text not in ('on', 'off'):
+            await message.channel.send(
+                '権限の設定値は on または off を指定してください。'
+            )
+            return
+
         role = await edit_roll.edit_role_permissions(
-            message.guild,
-            role_name,
-            permission_name,
-            enabled_text == 'on',
+            message.guild, role_name, setting_name, enabled_text == 'on'
         )
     except ValueError as error:
         await message.channel.send(str(error))
@@ -39,5 +46,5 @@ async def main(message):
 
     status = '有効' if enabled_text == 'on' else '無効'
     await message.channel.send(
-        f'ロール「{role.name}」の権限「{permission_name}」を{status}にしました。'
+        f'ロール「{role.name}」の権限「{setting_name}」を{status}にしました。'
     )
