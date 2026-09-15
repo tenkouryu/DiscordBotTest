@@ -1,7 +1,9 @@
 import discord
+from . import message_command_addmemberrole
 from . import message_command_addrole
 from . import message_command_editrole
 from . import message_command_list
+from . import message_command_removememberrole
 from . import message_command_removerole
 import function.send_message as send_message
 
@@ -14,8 +16,12 @@ async def parse_message_command(client, message):
             await message_command_list.main(client, message)
         case '/addrole':
             await message_command_addrole.main(message)
+        case '/addmemberrole':
+            await message_command_addmemberrole.main(message)
         case '/removerole':
             await message_command_removerole.main(message)
+        case '/removememberrole':
+            await message_command_removememberrole.main(message)
         case '/editrole':
             await message_command_editrole.main(message)
         case _:
