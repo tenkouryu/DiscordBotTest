@@ -24,11 +24,16 @@ def get_role_settings(
     if role is None:
         raise ValueError(f'ロール「{role_name}」が見つかりません。')
 
+    permissions = {
+        permission_name: getattr(role.permissions, permission_name)
+        for permission_name in role.permissions.VALID_FLAGS
+    }
+
     return {
         "id": role.id,
         "name": role.name,
         "color": f"#{role.color.value:06X}",
-        "permissions": role.permissions.to_dict(),
+        "permissions": permissions,
     }
 
 async def add_role_to_server(
