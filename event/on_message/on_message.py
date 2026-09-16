@@ -1,5 +1,5 @@
 import discord
-from .command import message_command
+from .message_comand import message_command
 import function.send_message as send_message
 
 #----------メッセージ受信時の処理はここ----------

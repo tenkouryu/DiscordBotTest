@@ -1,10 +1,10 @@
 import json
 import discord
-import event.on_ready
-import event.on_message
-import event.on_reaction
-import event.on_member_join
-import event.on_voice_state_update
+from event.on_ready import on_ready as on_ready_event
+from event.on_message import on_message as on_message_event
+from event.on_reaction import on_reaction as on_reaction_event
+from event.on_member_join import on_member_join as on_member_join_event
+from event.on_voice_state_update import on_voice_state_update as on_voice_state_update_event
 
 
 #----------Botの設定はここ----------
@@ -25,27 +25,27 @@ client = discord.Client(intents=intents_set)
 """Bot起動時に実行されるイベントハンドラ"""
 @client.event
 async def on_ready():
-    await event.on_ready.on_ready_main(client)
+    await on_ready_event.on_ready_main(client)
 
 """メッセージ受信時に実行されるイベントハンドラ"""
 @client.event
 async def on_message(message):
-    await event.on_message.on_message_main(client, message)
+    await on_message_event.on_message_main(client, message)
 
 """リアクション追加時に実行されるイベントハンドラ"""
 @client.event
 async def on_reaction_add(reaction, user):
-   await event.on_reaction.on_reaction_main(client, REDIRECT_CHANNEL_ID, reaction, user)
+    await on_reaction_event.on_reaction_main(client, REDIRECT_CHANNEL_ID, reaction, user)
 
 """新規メンバー参加時に実行されるイベントハンドラ"""
 @client.event
 async def on_member_join(member):
-    await event.on_member_join.on_member_join_main(client, REDIRECT_CHANNEL_ID, member)
+    await on_member_join_event.on_member_join_main(client, REDIRECT_CHANNEL_ID, member)
 
 """メンバーのボイスチャンネル出入り時に実行されるイベントハンドラ"""
 @client.event
 async def on_voice_state_update(member, before, after):
-    await event.on_voice_state_update.on_voice_state_update_main(client, REDIRECT_CHANNEL_ID, member, before, after)
+    await on_voice_state_update_event.on_voice_state_update_main(client, REDIRECT_CHANNEL_ID, member, before, after)
 
 #----------Botの起動処理はここ----------
 # Botの起動とDiscordサーバーへの接続

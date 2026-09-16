@@ -5,6 +5,7 @@ from . import message_command_editrole
 from . import message_command_list
 from . import message_command_removememberrole
 from . import message_command_removerole
+from . import message_comand_getrole2csv
 import function.send_message as send_message
 
 async def parse_message_command(client, message):
@@ -24,6 +25,8 @@ async def parse_message_command(client, message):
             await message_command_removememberrole.main(message)
         case '/editrole':
             await message_command_editrole.main(message)
+        case '/getrole':
+            await message_comand_getrole2csv.main(client, message)
         case _:
             await send_message.send_message_to_channel(
                 client,
