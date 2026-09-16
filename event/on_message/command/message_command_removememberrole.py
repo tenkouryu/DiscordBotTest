@@ -1,5 +1,5 @@
 import discord
-import function.edit_roll as edit_roll
+import function.edit_role as edit_role
 
 
 async def main(message):
@@ -16,7 +16,7 @@ async def main(message):
 
     _, _, role_name = argument.partition(' ')
     try:
-        role = await edit_roll.remove_role_from_member(
+        role = await edit_role.remove_role_from_member(
             message.mentions[0],
             role_name,
         )

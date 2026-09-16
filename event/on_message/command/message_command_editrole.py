@@ -1,5 +1,5 @@
 import discord
-import function.edit_roll as edit_roll
+import function.edit_role as edit_role
 
 
 async def main(message):
@@ -19,7 +19,7 @@ async def main(message):
 
     try:
         if setting_name.lower() == 'color':
-            role = await edit_roll.edit_role_color(
+            role = await edit_role.edit_role_color(
                 message.guild, role_name, setting_value
             )
             await message.channel.send(
@@ -34,7 +34,7 @@ async def main(message):
             )
             return
 
-        role = await edit_roll.edit_role_permissions(
+        role = await edit_role.edit_role_permissions(
             message.guild, role_name, setting_name, enabled_text == 'on'
         )
     except ValueError as error:

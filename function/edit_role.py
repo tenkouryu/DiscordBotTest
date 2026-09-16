@@ -2,6 +2,35 @@ import discord
 import re
 
 """サーバーのロールを操作する共通処理。"""
+def get_role_settings(
+    guild: discord.Guild, role_name: str
+) -> dict:
+    """指定したロールの基本設定と権限を読み出す。"""
+    if guild is None:
+        raise ValueError("サーバーが指定されていません。")
+
+    role_name = role_name.strip()
+    if not role_name:
+        raise ValueError("ロール名を指定してください。")
+
+    role = next(
+        (
+            role
+            for role in guild.roles
+            if role.name == role_name and not role.is_default()
+        ),
+        None,
+    )
+    if role is None:
+        raise ValueError(f'ロール「{role_name}」が見つかりません。')
+
+    return {
+        "id": role.id,
+        "name": role.name,
+        "color": f"#{role.color.value:06X}",
+        "permissions": role.permissions.to_dict(),
+    }
+
 async def add_role_to_server(
     guild: discord.Guild, role_name: str
 ) -> discord.Role:

@@ -1,5 +1,5 @@
 import discord
-import function.edit_roll as edit_roll
+import function.edit_role as edit_role
 
 
 async def main(message):
@@ -8,7 +8,7 @@ async def main(message):
         return
 
     try:
-        role = await edit_roll.add_role_to_server(message.guild, message.content.partition(' ')[2])
+        role = await edit_role.add_role_to_server(message.guild, message.content.partition(' ')[2])
     except ValueError as error:
         await message.channel.send(str(error))
         return
