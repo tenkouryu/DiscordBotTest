@@ -45,7 +45,7 @@ async def main(client, message):
 	"""ロール設定を CSV に出力して、実行チャンネルへ送信する。"""
 	if message.content.partition(" ")[2].strip() == "-h":
 		await message.channel.send(
-			"/getrole: サーバーのロール情報を CSV ファイルで取得します。"
+			"/server_get_role_csv: サーバーのロール情報を CSV ファイルで取得します。"
 		)
 		return
 

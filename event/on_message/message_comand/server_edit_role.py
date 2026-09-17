@@ -5,8 +5,8 @@ import function.edit_roll as edit_roll
 async def main(message):
     if message.content.partition(' ')[2].strip() == '-h':
         await message.channel.send(
-            '/editrole ロール名 権限名 on|off\n'
-            '/editrole ロール名 color #RRGGBB\n'
+            '/server_edit_role ロール名 権限名 on|off\n'
+            '/server_edit_role ロール名 color #RRGGBB\n'
             'ロールの権限または色を変更します。'
         )
         return
@@ -20,8 +20,8 @@ async def main(message):
         role_name, setting_name, setting_value = argument.rsplit(' ', 2)
     except ValueError:
         await message.channel.send(
-            '使い方: /editrole ロール名 権限名 on|off\n'
-            'または /editrole ロール名 color #RRGGBB'
+            '使い方: /server_edit_role ロール名 権限名 on|off\n'
+            'または /server_edit_role ロール名 color #RRGGBB'
         )
         return
 
