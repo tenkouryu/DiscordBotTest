@@ -1,12 +1,12 @@
 import discord
-from . import message_command_addmemberrole
-from . import message_command_addrole
-from . import message_command_editrole
-from . import message_command_editmemberrole
-from . import message_command_memberlist
-from . import message_command_removememberrole
-from . import message_command_removerole
-from . import message_comand_getrole2csv
+from . import member_add_role
+from . import server_add_role
+from . import server_edit_role
+from . import member_edit_role
+from . import member_list
+from . import member_remove_role
+from . import server_remove_role
+from . import server_get_role_csv
 import function.send_message as send_message
 
 
@@ -36,21 +36,21 @@ async def parse_message_command(client, message):
         case '/help':
             await _send_command_help(message)
         case '/list':
-            await message_command_memberlist.main(client, message)
+            await member_list.main(client, message)
         case '/addrole':
-            await message_command_addrole.main(message)
+            await server_add_role.main(message)
         case '/addmemberrole':
-            await message_command_addmemberrole.main(message)
+            await member_add_role.main(message)
         case '/removerole':
-            await message_command_removerole.main(message)
+            await server_remove_role.main(message)
         case '/removememberrole':
-            await message_command_removememberrole.main(message)
+            await member_remove_role.main(message)
         case '/editrole':
-            await message_command_editrole.main(message)
+            await server_edit_role.main(message)
         case '/editmemberrole':
-            await message_command_editmemberrole.main(message)
+            await member_edit_role.main(message)
         case '/getrole':
-            await message_comand_getrole2csv.main(client, message)
+            await server_get_role_csv.main(client, message)
         case _:
             await send_message.send_message_to_channel(
                 client,
