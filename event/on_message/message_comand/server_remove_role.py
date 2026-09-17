@@ -5,7 +5,7 @@ import function.edit_roll as edit_roll
 async def main(message):
     if message.content.partition(' ')[2].strip() == '-h':
         await message.channel.send(
-            '/removerole ロール名\n'
+            '/server_remove_role ロール名\n'
             'サーバーからロールを削除します。'
         )
         return
