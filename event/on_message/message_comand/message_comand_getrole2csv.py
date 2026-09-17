@@ -43,6 +43,12 @@ def export_roles_to_csv(guild, file_path: str) -> str:
 
 async def main(client, message):
 	"""ロール設定を CSV に出力して、実行チャンネルへ送信する。"""
+	if message.content.partition(" ")[2].strip() == "-h":
+		await message.channel.send(
+			"/getrole: サーバーのロール情報を CSV ファイルで取得します。"
+		)
+		return
+
 	file_path = "roles_list.csv"
 	try:
 		export_roles_to_csv(message.guild, file_path)

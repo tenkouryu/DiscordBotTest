@@ -3,6 +3,13 @@ import function.edit_roll as edit_roll
 
 
 async def main(message):
+    if message.content.partition(' ')[2].strip() == '-h':
+        await message.channel.send(
+            '/addmemberrole @メンバー ロール名\n'
+            '指定したメンバーにロールを追加します。'
+        )
+        return
+
     if not message.author.guild_permissions.manage_roles:
         await message.channel.send('メンバーのロールを追加する権限がありません。')
         return

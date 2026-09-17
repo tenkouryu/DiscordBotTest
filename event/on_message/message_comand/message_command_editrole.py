@@ -3,6 +3,14 @@ import function.edit_roll as edit_roll
 
 
 async def main(message):
+    if message.content.partition(' ')[2].strip() == '-h':
+        await message.channel.send(
+            '/editrole ロール名 権限名 on|off\n'
+            '/editrole ロール名 color #RRGGBB\n'
+            'ロールの権限または色を変更します。'
+        )
+        return
+
     if not message.author.guild_permissions.manage_roles:
         await message.channel.send('ロールを変更する権限がありません。')
         return

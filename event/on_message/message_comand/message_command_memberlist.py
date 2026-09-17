@@ -4,6 +4,13 @@ import os
 import function.send_message as send_message
 
 async def main(client, message):
+    if message.content.partition(' ')[2].strip() == '-h':
+        await message.channel.send(
+            '/list\n'
+            'サーバーのメンバー一覧を CSV ファイルで取得します。'
+        )
+        return
+
     # メンバーのリストを取得
     members = message.guild.members
     # CSVファイルに書き込む
