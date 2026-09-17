@@ -2,6 +2,7 @@ import discord
 from . import message_command_addmemberrole
 from . import message_command_addrole
 from . import message_command_editrole
+from . import message_command_editmemberrole
 from . import message_command_memberlist
 from . import message_command_removememberrole
 from . import message_command_removerole
@@ -21,6 +22,7 @@ async def _send_command_help(message):
         '/removememberrole @メンバー ロール名 - メンバーからロールを削除\n'
         '/editrole ロール名 権限名 on|off - ロール権限を変更\n'
         '/editrole ロール名 color #RRGGBB - ロール色を変更\n'
+        '/editmemberrole + CSVファイル - メンバーのロールを CSV から更新\n'
         '/getrole - ロール一覧を CSV で取得\n'
         '各コマンドに -h を付けると詳細を表示します。'
     )
@@ -45,6 +47,8 @@ async def parse_message_command(client, message):
             await message_command_removememberrole.main(message)
         case '/editrole':
             await message_command_editrole.main(message)
+        case '/editmemberrole':
+            await message_command_editmemberrole.main(message)
         case '/getrole':
             await message_comand_getrole2csv.main(client, message)
         case _:
