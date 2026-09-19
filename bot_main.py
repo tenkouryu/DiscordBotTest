@@ -52,7 +52,12 @@ async def on_voice_state_update(
     before: discord.VoiceState,
     after: discord.VoiceState,
 ) -> None:
-    await on_voice_state_update_event.on_voice_state_update_main(client, REDIRECT_CHANNEL_ID, member, before, after)
+    await on_voice_state_update_event.on_voice_state_update_main(
+        client,
+        member,
+        before,
+        after,
+    )
 
 #----------Botの起動処理はここ----------
 # Botの起動とDiscordサーバーへの接続
