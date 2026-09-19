@@ -1,13 +1,14 @@
 import discord
-from . import member_role_add
-from . import server_role_add
-from . import server_role_edit
-from . import member_role_edit
-from . import server_member_list
-from . import member_role_remove
-from . import server_role_remove
-from . import server_role_get
-from . import channel_edit
+from .member import role_add as member_role_add
+from .member import role_edit as member_role_edit
+from .member import role_remove as member_role_remove
+from .server import member_list as server_member_list
+from .server import role_add as server_role_add
+from .server import role_edit as server_role_edit
+from .server import role_get as server_role_get
+from .server import role_remove as server_role_remove
+from .channel import create as channel_create
+from .channel import move as channel_move
 import function.send_message as send_message
 
 
@@ -56,6 +57,19 @@ def _resource_subcommand_message(
 
     content = f'/{command_prefix}_{operation}_{resource_name}'
     if operation_separator:
+        content += f' {operation_arguments}'
+    return handler, _CommandMessage(message, content)
+
+
+def _operation_message(message, command_prefix, command_handlers):
+    _, _, arguments = message.content.partition(' ')
+    operation, separator, operation_arguments = arguments.partition(' ')
+    handler = command_handlers.get(operation.lower())
+    if handler is None:
+        return None, None
+
+    content = f'/{command_prefix}_{operation}'
+    if separator:
         content += f' {operation_arguments}'
     return handler, _CommandMessage(message, content)
 
@@ -134,7 +148,18 @@ async def parse_message_command(client, message):
             else:
                 await handler(command_message)
         case '/channel':
-            await channel_edit.main(message)
+            handler, command_message = _operation_message(
+                message,
+                'channel',
+                {
+                    'create': channel_create.main,
+                    'move': channel_move.main,
+                },
+            )
+            if handler is None:
+                await message.channel.send('使い方: /channel create|move')
+            else:
+                await handler(command_message)
         case _:
             await send_message.send_message_to_channel(
                 client,
