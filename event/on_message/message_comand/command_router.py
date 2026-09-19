@@ -3,7 +3,7 @@ from . import member_add_role
 from . import server_add_role
 from . import server_edit_role
 from . import member_edit_role
-from . import member_list
+from . import member_get_list
 from . import member_remove_role
 from . import server_remove_role
 from . import server_get_role_csv
@@ -17,7 +17,7 @@ async def _send_command_help(message):
         '/help - このコマンド一覧を表示\n'
         '/member_add_role @メンバー ロール名 - メンバーにロールを追加\n'
         '/member_edit_role + CSVファイル - メンバーのロールを CSV から更新\n'
-        '/member_list - メンバー一覧を CSV で取得\n'
+        '/member_get_list - メンバー一覧を CSV で取得\n'
         '/member_remove_role @メンバー ロール名 - メンバーからロールを削除\n'
         '/server_add_role ロール名 - ロールを追加\n'
         '/server_edit_role ロール名 権限名 on|off - ロール権限を変更\n'
@@ -39,8 +39,8 @@ async def parse_message_command(client, message):
             await member_add_role.main(message)
         case '/member_edit_role':
             await member_edit_role.main(message)
-        case '/member_list':
-            await member_list.main(client, message)
+        case '/member_get_list':
+            await member_get_list.main(client, message)
         case '/member_remove_role':
             await member_remove_role.main(message)
         case '/server_add_role':
