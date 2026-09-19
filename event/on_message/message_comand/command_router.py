@@ -7,6 +7,7 @@ from . import member_get_list
 from . import member_remove_role
 from . import server_remove_role
 from . import server_get_role_csv
+from . import channel_edit
 import function.send_message as send_message
 
 
@@ -24,6 +25,8 @@ async def _send_command_help(message):
         '/server_edit_role ロール名 color #RRGGBB - ロール色を変更\n'
         '/server_get_role_csv - ロール一覧を CSV で取得\n'
         '/server_remove_role ロール名 - ロールを削除\n'
+        '/channel create text|voice チャンネル名 [カテゴリー名] - チャンネルを作成\n'
+        '/channel move #チャンネル カテゴリー名 - チャンネルを移動\n'
         '各コマンドに -h を付けると詳細を表示します。'
     )
 
@@ -51,6 +54,8 @@ async def parse_message_command(client, message):
             await server_get_role_csv.main(client, message)
         case '/server_remove_role':
             await server_remove_role.main(message)
+        case '/channel':
+            await channel_edit.main(message)
         case _:
             await send_message.send_message_to_channel(
                 client,
