@@ -15,6 +15,8 @@ from .server import role_template as server_role_template
 from .server import role_remove as server_role_remove
 from .channel import create as channel_create
 from .channel import move as channel_move
+from .channel import set as channel_set
+from .channel import template as channel_template
 import function.send_message as send_message
 
 
@@ -111,6 +113,8 @@ async def _send_command_help(message: discord.Message) -> None:
         '/server member list - メンバー一覧を CSV で取得\n'
         '/channel create text|voice チャンネル名 [カテゴリー名] - チャンネルを作成\n'
         '/channel move #チャンネル カテゴリー名 - チャンネルを移動\n'
+        '/channel set + CSVファイル - CSVからチャンネルを作成・設定\n'
+        '/channel template - チャンネル設定 CSV のテンプレートを取得\n'
         '各コマンドに -h を付けると詳細を表示します。'
     )
 
@@ -182,10 +186,12 @@ async def parse_message_command(
                 {
                     'create': channel_create.main,
                     'move': channel_move.main,
+                    'set': channel_set.main,
+                    'template': channel_template.main,
                 },
             )
             if handler is None:
-                await message.channel.send('使い方: /channel create|move')
+                await message.channel.send('使い方: /channel create|move|set|template')
             else:
                 await handler(command_message)
         case _:

@@ -87,9 +87,20 @@ Bot トークンは公開せず、`config/config.json` を Git にコミット�
 /channel create text チャンネル名 [カテゴリー名]
 /channel create voice チャンネル名 [カテゴリー名]
 /channel move #チャンネル カテゴリー名
+/channel set + CSVファイル
+/channel template
 ```
 
 チャンネルの作成・移動には「チャンネルの管理」権限が必要です。指定したカテゴリーが存在しない場合は自動作成します。
+
+`/channel set` の CSV は次の形式です。
+
+```csv
+name,type,category
+チャンネル名,text,カテゴリー名
+```
+
+`type` には `text` または `voice` を指定します。既存チャンネルは名前で検索してカテゴリーを変更し、存在しない場合は新規作成します。カテゴリーが存在しない場合は自動作成します。
 
 ### イベント通知
 
