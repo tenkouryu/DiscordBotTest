@@ -1,14 +1,63 @@
 import discord
-from . import member_add_role
-from . import server_add_role
-from . import server_edit_role
-from . import member_edit_role
-from . import member_get_list
-from . import member_remove_role
-from . import server_remove_role
-from . import server_get_role_csv
+from . import member_role_add
+from . import server_role_add
+from . import server_role_edit
+from . import member_role_edit
+from . import server_member_list
+from . import member_role_remove
+from . import server_role_remove
+from . import server_role_get
 from . import channel_edit
 import function.send_message as send_message
+
+
+class _CommandMessage:
+    """既存コマンドへ親コマンドを除いた内容を渡すメッセージ。"""
+
+    def __init__(self, message, content):
+        self._message = message
+        self.content = content
+
+    def __getattr__(self, name):
+        return getattr(self._message, name)
+
+
+def _subcommand_message(message, command_prefix, command_handlers):
+    _, _, arguments = message.content.partition(' ')
+    operation, separator, operation_arguments = arguments.partition(' ')
+    handler = command_handlers.get(operation.lower())
+    if handler is None:
+        return None, None
+
+    content = f'/{command_prefix}_{operation}'
+    if separator:
+        content += f' {operation_arguments}'
+    return handler, _CommandMessage(message, content)
+
+
+def _resource_subcommand_message(
+    message,
+    command_prefix,
+    resource_handlers,
+):
+    _, _, arguments = message.content.partition(' ')
+    resource, separator, resource_arguments = arguments.partition(' ')
+    resource_name = resource.lower()
+    command_handlers = resource_handlers.get(resource_name)
+    if command_handlers is None:
+        return None, None
+
+    operation, operation_separator, operation_arguments = resource_arguments.partition(
+        ' '
+    )
+    handler = command_handlers.get(operation.lower())
+    if handler is None:
+        return None, None
+
+    content = f'/{command_prefix}_{operation}_{resource_name}'
+    if operation_separator:
+        content += f' {operation_arguments}'
+    return handler, _CommandMessage(message, content)
 
 
 async def _send_command_help(message):
@@ -16,15 +65,15 @@ async def _send_command_help(message):
     await message.channel.send(
         '利用可能なコマンド一覧:\n'
         '/help - このコマンド一覧を表示\n'
-        '/member_add_role @メンバー ロール名 - メンバーにロールを追加\n'
-        '/member_edit_role + CSVファイル - メンバーのロールを CSV から更新\n'
-        '/member_get_list - メンバー一覧を CSV で取得\n'
-        '/member_remove_role @メンバー ロール名 - メンバーからロールを削除\n'
-        '/server_add_role ロール名 - ロールを追加\n'
-        '/server_edit_role ロール名 権限名 on|off - ロール権限を変更\n'
-        '/server_edit_role ロール名 color #RRGGBB - ロール色を変更\n'
-        '/server_get_role_csv - ロール一覧を CSV で取得\n'
-        '/server_remove_role ロール名 - ロールを削除\n'
+        '/member role add @メンバー ロール名 - メンバーにロールを追加\n'
+        '/member role edit + CSVファイル - メンバーのロールを CSV から更新\n'
+        '/member role remove @メンバー ロール名 - メンバーからロールを削除\n'
+        '/server role add ロール名 - ロールを追加\n'
+        '/server role edit ロール名 権限名 on|off - ロール権限を変更\n'
+        '/server role edit ロール名 color #RRGGBB - ロール色を変更\n'
+        '/server role get - ロール一覧を CSV で取得\n'
+        '/server role remove ロール名 - ロールを削除\n'
+        '/server member list - メンバー一覧を CSV で取得\n'
         '/channel create text|voice チャンネル名 [カテゴリー名] - チャンネルを作成\n'
         '/channel move #チャンネル カテゴリー名 - チャンネルを移動\n'
         '各コマンドに -h を付けると詳細を表示します。'
@@ -38,22 +87,52 @@ async def parse_message_command(client, message):
     match command:
         case '/help':
             await _send_command_help(message)
-        case '/member_add_role':
-            await member_add_role.main(message)
-        case '/member_edit_role':
-            await member_edit_role.main(message)
-        case '/member_get_list':
-            await member_get_list.main(client, message)
-        case '/member_remove_role':
-            await member_remove_role.main(message)
-        case '/server_add_role':
-            await server_add_role.main(message)
-        case '/server_edit_role':
-            await server_edit_role.main(message)
-        case '/server_get_role_csv':
-            await server_get_role_csv.main(client, message)
-        case '/server_remove_role':
-            await server_remove_role.main(message)
+        case '/member':
+            handler, command_message = _resource_subcommand_message(
+                message,
+                'member',
+                {
+                    'role': {
+                        'add': member_role_add.main,
+                        'edit': member_role_edit.main,
+                        'remove': member_role_remove.main,
+                    },
+                },
+            )
+            if handler is None:
+                await message.channel.send(
+                    '使い方: /member role add|edit|remove'
+                )
+            else:
+                await handler(command_message)
+        case '/server':
+            handler, command_message = _resource_subcommand_message(
+                message,
+                'server',
+                {
+                    'role': {
+                        'add': server_role_add.main,
+                        'edit': server_role_edit.main,
+                        'get': lambda current_message: server_role_get.main(
+                            client,
+                            current_message,
+                        ),
+                        'remove': server_role_remove.main,
+                    },
+                    'member': {
+                        'list': lambda current_message: server_member_list.main(
+                            client,
+                            current_message,
+                        ),
+                    },
+                },
+            )
+            if handler is None:
+                await message.channel.send(
+                    '使い方: /server role add|edit|get|remove または /server member list'
+                )
+            else:
+                await handler(command_message)
         case '/channel':
             await channel_edit.main(message)
         case _:
