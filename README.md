@@ -1,1 +1,144 @@
 # DiscordBotTest
+
+## 概要
+
+Discord.py で作成した Discord Bot です。メンバー・ロール・チャンネルの管理、CSV によるロール設定の一括更新などを行えます。
+
+## セットアップ
+
+1. Python 3.14 以降を用意します。
+2. discord.py をインストールします。
+
+```powershell
+pip install discord.py
+```
+
+3. `config/config.json` に Bot トークンと通知先チャンネル ID を設定します。
+
+```json
+{
+	"BOT_TOKEN": "Botのトークン",
+	"REDIRECT_CHANNEL_ID": "通知先チャンネルのID"
+}
+```
+
+4. Discord Developer Portal で、Bot の以下の Intent を有効にします。
+   - Message Content Intent
+   - Server Members Intent
+   - Reactions と Voice States はコードで使用しています。
+
+5. 起動します。
+
+```powershell
+python bot_main.py
+```
+
+Bot トークンは公開せず、`config/config.json` を Git にコミットしないでください。
+
+## コマンド
+
+すべてのコマンドは `-h` を付けると個別の使い方を表示できます。
+
+### 共通
+
+```text
+/help
+```
+
+### メンバーのロール
+
+```text
+/member role add @メンバー ロール名
+/member role get メンバー名
+/member role set + CSVファイル
+/member role template
+/member role remove @メンバー ロール名
+```
+
+`get` はメンバー名または表示名に一致するメンバーのロール一覧を返信します。メンションで指定することもできます。
+
+`add`、`set`、`remove` には「ロールの管理」権限が必要です。
+
+### サーバーのロール
+
+```text
+/server role add ロール名
+/server role edit ロール名 権限名 on|off
+/server role edit ロール名 color #RRGGBB
+/server role get
+/server role set + CSVファイル
+/server role template
+/server role remove ロール名
+```
+
+`add`、`edit`、`set`、`remove` には「ロールの管理」権限が必要です。
+
+### メンバー一覧
+
+```text
+/server member list
+```
+
+サーバーのメンバー一覧を CSV ファイルで取得します。
+
+### チャンネル
+
+```text
+/channel create text チャンネル名 [カテゴリー名]
+/channel create voice チャンネル名 [カテゴリー名]
+/channel move #チャンネル カテゴリー名
+```
+
+チャンネルの作成・移動には「チャンネルの管理」権限が必要です。指定したカテゴリーが存在しない場合は自動作成します。
+
+### イベント通知
+
+- リアクションに 👍 を付けると、リアクションされたメッセージのチャンネルへ返信します。
+- ボイスチャンネルへ参加・退出すると、対象ボイスチャンネルのテキストチャットへ通知します。
+- 新規メンバー参加時は、`REDIRECT_CHANNEL_ID` で指定したチャンネルへ通知します。
+
+## CSV
+
+### メンバーロール操作
+
+テンプレートを取得します。
+
+```text
+/member role template
+```
+
+CSV の列は次の3つです。
+
+```csv
+追加/削除,表示名,ロール
+```
+
+2行目の説明を実際の値に置き換えてから、次のコマンドへ添付します。
+
+```text
+/member role set + CSVファイル
+```
+
+`追加/削除` には `追加` または `削除` を指定します。
+
+### サーバーロール設定
+
+テンプレートを取得します。
+
+```text
+/server role template
+```
+
+CSV の `name` 列は必須です。`color` 列と権限列は任意で、記載した列だけ設定されます。設定しない場合は、その列を CSV から削除してください。
+
+```text
+/server role set + CSVファイル
+```
+
+指定した名前のロールが存在しない場合は新規作成します。権限値には `true` または `false` を指定します。
+
+ロール一覧を設定 CSV として取得するには、次のコマンドを使用します。
+
+```text
+/server role get
+```
