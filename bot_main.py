@@ -24,27 +24,34 @@ client = discord.Client(intents=intents_set)
 #----------イベントハンドラ群はここ----------
 """Bot起動時に実行されるイベントハンドラ"""
 @client.event
-async def on_ready():
+async def on_ready() -> None:
     await on_ready_event.on_ready_main(client)
 
 """メッセージ受信時に実行されるイベントハンドラ"""
 @client.event
-async def on_message(message):
+async def on_message(message: discord.Message) -> None:
     await on_message_event.on_message_main(client, message)
 
 """リアクション追加時に実行されるイベントハンドラ"""
 @client.event
-async def on_reaction_add(reaction, user):
-    await on_reaction_event.on_reaction_main(client, REDIRECT_CHANNEL_ID, reaction, user)
+async def on_reaction_add(
+    reaction: discord.Reaction,
+    user: discord.User,
+) -> None:
+    await on_reaction_event.on_reaction_main(client, reaction, user)
 
 """新規メンバー参加時に実行されるイベントハンドラ"""
 @client.event
-async def on_member_join(member):
+async def on_member_join(member: discord.Member) -> None:
     await on_member_join_event.on_member_join_main(client, REDIRECT_CHANNEL_ID, member)
 
 """メンバーのボイスチャンネル出入り時に実行されるイベントハンドラ"""
 @client.event
-async def on_voice_state_update(member, before, after):
+async def on_voice_state_update(
+    member: discord.Member,
+    before: discord.VoiceState,
+    after: discord.VoiceState,
+) -> None:
     await on_voice_state_update_event.on_voice_state_update_main(client, REDIRECT_CHANNEL_ID, member, before, after)
 
 #----------Botの起動処理はここ----------

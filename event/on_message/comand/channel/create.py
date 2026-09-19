@@ -2,7 +2,7 @@ import discord
 import function.edit_channel as edit_channel
 
 
-async def main(message):
+async def main(message: discord.Message) -> None:
     arguments = message.content.partition(' ')[2].strip()
     if arguments in ('', '-h'):
         await message.channel.send(

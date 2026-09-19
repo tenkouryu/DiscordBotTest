@@ -1,7 +1,10 @@
 import discord
 
 
-async def get_or_create_category(guild: discord.Guild, category_name: str):
+async def get_or_create_category(
+    guild: discord.Guild,
+    category_name: str,
+) -> discord.CategoryChannel:
     """指定した名前のカテゴリーを取得し、なければ作成する。"""
     if guild is None:
         raise ValueError("サーバーが指定されていません。")

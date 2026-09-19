@@ -3,7 +3,10 @@ from .comand import command_router
 import function.send_message as send_message
 
 #----------メッセージ受信時の処理はここ----------
-async def on_message_main(client, message):
+async def on_message_main(
+    client: discord.Client,
+    message: discord.Message,
+) -> None:
        # デバッグログ
         print(f'{message.author}からのメッセージ：{message.content}')
     
