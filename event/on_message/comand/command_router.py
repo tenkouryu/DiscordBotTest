@@ -2,12 +2,14 @@ from collections.abc import Awaitable, Callable
 
 import discord
 from .member import role_add as member_role_add
-from .member import role_edit as member_role_edit
+from .member import role_get as member_role_get
+from .member import role_set as member_role_set
 from .member import role_remove as member_role_remove
 from .server import member_list as server_member_list
 from .server import role_add as server_role_add
 from .server import role_edit as server_role_edit
 from .server import role_get as server_role_get
+from .server import role_set as server_role_set
 from .server import role_remove as server_role_remove
 from .channel import create as channel_create
 from .channel import move as channel_move
@@ -93,12 +95,14 @@ async def _send_command_help(message: discord.Message) -> None:
         '利用可能なコマンド一覧:\n'
         '/help - このコマンド一覧を表示\n'
         '/member role add @メンバー ロール名 - メンバーにロールを追加\n'
-        '/member role edit + CSVファイル - メンバーのロールを CSV から更新\n'
+        '/member role get メンバー名 - メンバーのロール一覧を表示\n'
+        '/member role set + CSVファイル - メンバーのロールを CSV から更新\n'
         '/member role remove @メンバー ロール名 - メンバーからロールを削除\n'
         '/server role add ロール名 - ロールを追加\n'
         '/server role edit ロール名 権限名 on|off - ロール権限を変更\n'
         '/server role edit ロール名 color #RRGGBB - ロール色を変更\n'
         '/server role get - ロール一覧を CSV で取得\n'
+        '/server role set + CSVファイル - CSVからロール設定を更新\n'
         '/server role remove ロール名 - ロールを削除\n'
         '/server member list - メンバー一覧を CSV で取得\n'
         '/channel create text|voice チャンネル名 [カテゴリー名] - チャンネルを作成\n'
@@ -124,14 +128,15 @@ async def parse_message_command(
                 {
                     'role': {
                         'add': member_role_add.main,
-                        'edit': member_role_edit.main,
+                        'get': member_role_get.main,
+                        'set': member_role_set.main,
                         'remove': member_role_remove.main,
                     },
                 },
             )
             if handler is None:
                 await message.channel.send(
-                    '使い方: /member role add|edit|remove'
+                    '使い方: /member role add|get|set|remove'
                 )
             else:
                 await handler(command_message)
@@ -147,6 +152,7 @@ async def parse_message_command(
                             client,
                             current_message,
                         ),
+                        'set': server_role_set.main,
                         'remove': server_role_remove.main,
                     },
                     'member': {

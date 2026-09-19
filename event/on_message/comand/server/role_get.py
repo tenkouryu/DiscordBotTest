@@ -1,6 +1,7 @@
 import csv
 import os
 
+import discord
 import function.edit_roll as edit_roll
 import function.send_message as send_message
 
