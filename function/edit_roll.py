@@ -139,6 +139,51 @@ async def edit_role_color(
     color = discord.Colour(int(color_text.lstrip("#"), 16))
     return await role.edit(color=color)
 
+
+async def edit_role_settings(
+    guild: discord.Guild,
+    role_name: str,
+    color_text: str,
+    permissions: dict[str, bool],
+) -> discord.Role:
+    """指定したロールの色と権限をまとめて変更する。"""
+    if guild is None:
+        raise ValueError("サーバーが指定されていません。")
+
+    role_name = role_name.strip()
+    if not role_name:
+        raise ValueError("ロール名を指定してください。")
+
+    role = next(
+        (
+            role
+            for role in guild.roles
+            if role.name == role_name
+            and not role.is_default()
+            and not role.managed
+        ),
+        None,
+    )
+    if role is None:
+        role = await guild.create_role(name=role_name)
+
+    role_color = role.color
+    if color_text:
+        if not re.fullmatch(r"#?[0-9a-fA-F]{6}", color_text.strip()):
+            raise ValueError("色は #RRGGBB 形式で指定してください。")
+        role_color = discord.Colour(int(color_text.strip().lstrip("#"), 16))
+
+    valid_flags = set(role.permissions.VALID_FLAGS)
+    unknown_permissions = set(permissions) - valid_flags
+    if unknown_permissions:
+        raise ValueError(
+            f'存在しない権限が含まれています: {", ".join(sorted(unknown_permissions))}'
+        )
+
+    role_permissions = role.permissions
+    role_permissions.update(**permissions)
+    return await role.edit(color=role_color, permissions=role_permissions)
+
 """メンバーのロールを操作する共通処理。"""
 async def add_role_to_member(
     member: discord.Member, role_name: str
