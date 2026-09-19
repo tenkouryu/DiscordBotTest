@@ -6,7 +6,7 @@ import function.send_message as send_message
 async def main(client, message):
     if message.content.partition(' ')[2].strip() == '-h':
         await message.channel.send(
-            '/member_list\n'
+            '/member_get_list\n'
             'サーバーのメンバー一覧を CSV ファイルで取得します。'
         )
         return
