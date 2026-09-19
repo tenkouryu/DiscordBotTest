@@ -93,7 +93,7 @@ async def main(message):
     """添付されたCSVからメンバーのロールを操作し、結果CSVを送信する。"""
     if message.content.partition(" ")[2].strip() == "-h":
         await message.channel.send(
-            "/member_edit_role + CSVファイル\n"
+            "/member role edit + CSVファイル\n"
             "CSV形式: 追加/削除,表示名,ロール\n"
             "処理結果を「実行結果」列に追加したCSVを返信します。"
         )
@@ -113,7 +113,7 @@ async def main(message):
     )
     if csv_attachment is None:
         await message.channel.send(
-            "CSVファイルを添付してください。使い方: /editmemberrole + CSVファイル"
+            "CSVファイルを添付してください。使い方: /member role edit + CSVファイル"
         )
         return
 

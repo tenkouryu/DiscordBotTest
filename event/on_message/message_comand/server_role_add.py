@@ -5,7 +5,7 @@ import function.edit_roll as edit_roll
 async def main(message):
     if message.content.partition(' ')[2].strip() == '-h':
         await message.channel.send(
-            '/server_add_role ロール名\n'
+            '/server add_role ロール名\n'
             'サーバーにロールを追加します。'
         )
         return
