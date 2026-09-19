@@ -7,7 +7,10 @@ import discord
 import function.edit_roll as edit_roll
 
 
-def _find_member_by_display_name(guild, display_name):
+def _find_member_by_display_name(
+    guild: discord.Guild,
+    display_name: str,
+) -> discord.Member | None:
     """表示名から対象メンバーを特定する。"""
     matches = [
         member
@@ -17,7 +20,7 @@ def _find_member_by_display_name(guild, display_name):
     return matches[0] if len(matches) == 1 else None
 
 
-def _find_role(guild, role_name):
+def _find_role(guild: discord.Guild, role_name: str) -> discord.Role | None:
     """変更可能なロールを名前から取得する。"""
     return next(
         (
@@ -31,7 +34,12 @@ def _find_role(guild, role_name):
     )
 
 
-async def _execute_row(guild, action, display_name, role_name):
+async def _execute_row(
+    guild: discord.Guild,
+    action: str,
+    display_name: str,
+    role_name: str,
+) -> str:
     """CSV 1 行分のロール操作を実行する。"""
     if action not in ("追加", "削除"):
         return "失敗: 1列目は「追加」または「削除」を指定してください。"
@@ -62,7 +70,10 @@ async def _execute_row(guild, action, display_name, role_name):
         return f"失敗: {error}"
 
 
-async def update_member_roles_from_csv(guild, csv_text: str) -> tuple[str, int]:
+async def update_member_roles_from_csv(
+    guild: discord.Guild,
+    csv_text: str,
+) -> tuple[str, int]:
     """CSVを処理し、実行結果列を追加したCSVを返す。"""
     if guild is None:
         raise ValueError("サーバーが指定されていません。")
@@ -89,7 +100,7 @@ async def update_member_roles_from_csv(guild, csv_text: str) -> tuple[str, int]:
     return output.getvalue(), success_count
 
 
-async def main(message):
+async def main(message: discord.Message) -> None:
     """添付されたCSVからメンバーのロールを操作し、結果CSVを送信する。"""
     if message.content.partition(" ")[2].strip() == "-h":
         await message.channel.send(

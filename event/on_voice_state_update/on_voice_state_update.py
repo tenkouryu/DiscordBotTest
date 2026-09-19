@@ -1,7 +1,13 @@
 import discord
 import function.send_message as send_message
 
-async def on_voice_state_update_main(client, channel_id, member, before, after):
+async def on_voice_state_update_main(
+    client: discord.Client,
+    channel_id: int,
+    member: discord.Member,
+    before: discord.VoiceState,
+    after: discord.VoiceState,
+) -> None:
     print(f'{member}のボイス状態が変更されました')
     # メンバーがボイスチャンネルに参加した場合
     if before.channel is None and after.channel is not None:

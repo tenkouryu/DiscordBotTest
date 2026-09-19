@@ -4,7 +4,7 @@ import re
 """サーバーのロールを操作する共通処理。"""
 def get_role_settings(
     guild: discord.Guild, role_name: str
-) -> dict:
+) -> dict[str, object]:
     """指定したロールの基本設定と権限を読み出す。"""
     if guild is None:
         raise ValueError("サーバーが指定されていません。")

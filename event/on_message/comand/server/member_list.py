@@ -3,7 +3,7 @@ import csv
 import os
 import function.send_message as send_message
 
-async def main(client, message):
+async def main(client: discord.Client, message: discord.Message) -> None:
     if message.content.partition(' ')[2].strip() == '-h':
         await message.channel.send(
             '/server member list\n'

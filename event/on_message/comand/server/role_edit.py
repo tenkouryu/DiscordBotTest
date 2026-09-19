@@ -2,7 +2,7 @@ import discord
 import function.edit_roll as edit_roll
 
 
-async def main(message):
+async def main(message: discord.Message) -> None:
     if message.content.partition(' ')[2].strip() == '-h':
         await message.channel.send(
             '/server edit_role ロール名 権限名 on|off\n'

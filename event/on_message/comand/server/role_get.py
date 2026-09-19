@@ -5,7 +5,7 @@ import function.edit_roll as edit_roll
 import function.send_message as send_message
 
 
-def export_roles_to_csv(guild, file_path: str) -> str:
+def export_roles_to_csv(guild: discord.Guild, file_path: str) -> str:
 	"""サーバーのロール設定を CSV ファイルに出力する。"""
 	if guild is None:
 		raise ValueError("サーバーが指定されていません。")
@@ -41,7 +41,7 @@ def export_roles_to_csv(guild, file_path: str) -> str:
 	return file_path
 
 
-async def main(client, message):
+async def main(client: discord.Client, message: discord.Message) -> None:
 	"""ロール設定を CSV に出力して、実行チャンネルへ送信する。"""
 	if message.content.partition(" ")[2].strip() == "-h":
 		await message.channel.send(

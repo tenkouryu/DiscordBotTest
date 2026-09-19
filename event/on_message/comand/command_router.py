@@ -1,3 +1,5 @@
+from collections.abc import Awaitable, Callable
+
 import discord
 from .member import role_add as member_role_add
 from .member import role_edit as member_role_edit
@@ -15,7 +17,7 @@ import function.send_message as send_message
 class _CommandMessage:
     """既存コマンドへ親コマンドを除いた内容を渡すメッセージ。"""
 
-    def __init__(self, message, content):
+    def __init__(self, message: discord.Message, content: str) -> None:
         self._message = message
         self.content = content
 
@@ -23,7 +25,11 @@ class _CommandMessage:
         return getattr(self._message, name)
 
 
-def _subcommand_message(message, command_prefix, command_handlers):
+def _subcommand_message(
+    message: discord.Message,
+    command_prefix: str,
+    command_handlers: dict[str, Callable[[discord.Message], Awaitable[None]]],
+) -> tuple[Callable[[discord.Message], Awaitable[None]] | None, _CommandMessage | None]:
     _, _, arguments = message.content.partition(' ')
     operation, separator, operation_arguments = arguments.partition(' ')
     handler = command_handlers.get(operation.lower())
@@ -37,10 +43,13 @@ def _subcommand_message(message, command_prefix, command_handlers):
 
 
 def _resource_subcommand_message(
-    message,
-    command_prefix,
-    resource_handlers,
-):
+    message: discord.Message,
+    command_prefix: str,
+    resource_handlers: dict[
+        str,
+        dict[str, Callable[[discord.Message], Awaitable[None]]],
+    ],
+) -> tuple[Callable[[discord.Message], Awaitable[None]] | None, _CommandMessage | None]:
     _, _, arguments = message.content.partition(' ')
     resource, separator, resource_arguments = arguments.partition(' ')
     resource_name = resource.lower()
@@ -61,7 +70,11 @@ def _resource_subcommand_message(
     return handler, _CommandMessage(message, content)
 
 
-def _operation_message(message, command_prefix, command_handlers):
+def _operation_message(
+    message: discord.Message,
+    command_prefix: str,
+    command_handlers: dict[str, Callable[[discord.Message], Awaitable[None]]],
+) -> tuple[Callable[[discord.Message], Awaitable[None]] | None, _CommandMessage | None]:
     _, _, arguments = message.content.partition(' ')
     operation, separator, operation_arguments = arguments.partition(' ')
     handler = command_handlers.get(operation.lower())
@@ -74,7 +87,7 @@ def _operation_message(message, command_prefix, command_handlers):
     return handler, _CommandMessage(message, content)
 
 
-async def _send_command_help(message):
+async def _send_command_help(message: discord.Message) -> None:
     """利用可能なコマンドの一覧を送信する。"""
     await message.channel.send(
         '利用可能なコマンド一覧:\n'
@@ -94,7 +107,10 @@ async def _send_command_help(message):
     )
 
 
-async def parse_message_command(client, message):
+async def parse_message_command(
+    client: discord.Client,
+    message: discord.Message,
+) -> None:
     # メッセージコマンドの振り分け
     command = message.content.partition(' ')[0]
 
