@@ -1,5 +1,5 @@
 import discord
-from .comand import command_router
+from .comand import router
 import function.send_message as send_message
 
 #----------メッセージ受信時の処理はここ----------
@@ -25,5 +25,5 @@ async def on_message_main(
                 await send_message.send_message_to_channel(client, message.channel, 'Hi')
 
         # /から始まるコマンドの処理
-        await command_router.parse_message_command(client, message)  # メッセージコマンドの処理を呼び出す
+        await router.parse_message_command(client, message)  # メッセージコマンドの処理を呼び出す
         
