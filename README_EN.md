@@ -87,11 +87,14 @@ Exports the server member list as a CSV file.
 /channel create text channel-name [category-name]
 /channel create voice channel-name [category-name]
 /channel move #channel category-name
+/channel get
 /channel set + CSV-file
 /channel template
 ```
 
 Creating and moving channels requires the Manage Channels permission. A specified category is created automatically if it does not exist.
+
+Use `/channel get` to export the server's channels as a CSV file in `name,type,category` format.
 
 The CSV format for `/channel set` is:
 
