@@ -15,8 +15,8 @@ async def main(message: discord.Message) -> None:
 
     output = io.StringIO(newline="")
     writer = csv.writer(output)
-    writer.writerow(["category_name", "channel_name", "start_date"])
-    writer.writerow(["カテゴリー名", "チャンネル名", "YYYY-MM-DD"])
+    writer.writerow(["category_name", "channel_name", "start_date", "extension"])
+    writer.writerow(["カテゴリー名", "チャンネル名", "YYYY-MM-DD", "png"])
     await message.channel.send(
         "チャット添付ファイル取得用CSVテンプレートです。",
         file=discord.File(

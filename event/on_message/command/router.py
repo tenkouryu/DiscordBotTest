@@ -119,7 +119,7 @@ async def _send_command_help(message: discord.Message) -> None:
         '/channel get - チャンネル一覧を CSV で取得\n'
         '/channel set + CSVファイル - CSVからチャンネルを作成・設定\n'
         '/channel template - チャンネル設定 CSV のテンプレートを取得\n'
-        '/chat get #チャンネル [開始日] または + CSVファイル - 添付ファイルを ZIP で取得\n'
+        '/chat get #チャンネル [開始日] [拡張子] または + CSVファイル - 添付ファイルを ZIP で取得\n'
         '/chat template - チャット添付ファイル取得CSVのテンプレートを取得\n'
         '各コマンドに -h を付けると詳細を表示します。'
     )
@@ -209,7 +209,7 @@ async def parse_message_command(
             )
             if handler is None:
                 await message.channel.send(
-                    '使い方: /chat get #チャンネル [開始日] または + CSVファイル'
+                    '使い方: /chat get #チャンネル [開始日] [拡張子] または + CSVファイル'
                     '、/chat template'
                 )
             else:

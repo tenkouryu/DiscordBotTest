@@ -17,6 +17,9 @@ _CSV_COLUMNS = {
     "channel_name": {"channel_name", "channel", "チャンネル名"},
     "start_date": {"start_date", "date", "開始日"},
 }
+_OPTIONAL_CSV_COLUMNS = {
+    "extension": {"extension", "file_extension", "拡張子"},
+}
 
 
 def _safe_path_component(value: str, fallback: str) -> str:
@@ -51,6 +54,24 @@ def _parse_start_date(value: str) -> datetime:
     return datetime.combine(parsed_date, time.min, tzinfo=timezone.utc)
 
 
+def _normalize_extensions(value: str | None) -> frozenset[str] | None:
+    """添付ファイル検索用の拡張子を正規化する。"""
+    if value is None or not value.strip():
+        return None
+
+    extensions = set()
+    for extension in value.split("|"):
+        extension = extension.strip().lower()
+        if not extension.startswith("."):
+            extension = f".{extension}"
+        if extension == "." or "/" in extension or "\\" in extension:
+            raise ValueError(
+                "拡張子を指定してください（例: png|jpg または .png|.jpg）。"
+            )
+        extensions.add(extension)
+    return frozenset(extensions)
+
+
 def _get_csv_columns(fieldnames: list[str] | None) -> dict[str, str]:
     normalized_fieldnames = {
         fieldname.strip(): fieldname
@@ -72,6 +93,27 @@ def _get_csv_columns(fieldnames: list[str] | None) -> dict[str, str]:
                 "CSVには category_name、channel_name、start_date 列が必要です。"
             )
         columns[column_name] = matched_column
+    return columns
+
+
+def _get_optional_csv_columns(fieldnames: list[str] | None) -> dict[str, str]:
+    normalized_fieldnames = {
+        fieldname.strip(): fieldname
+        for fieldname in (fieldnames or [])
+        if fieldname
+    }
+    columns: dict[str, str] = {}
+    for column_name, aliases in _OPTIONAL_CSV_COLUMNS.items():
+        matched_column = next(
+            (
+                normalized_fieldname
+                for alias, normalized_fieldname in normalized_fieldnames.items()
+                if alias in aliases
+            ),
+            None,
+        )
+        if matched_column is not None:
+            columns[column_name] = matched_column
     return columns
 
 
@@ -110,6 +152,7 @@ async def archive_channels_from_csv(
 
     reader = csv.DictReader(io.StringIO(csv_text))
     columns = _get_csv_columns(reader.fieldnames)
+    optional_columns = _get_optional_csv_columns(reader.fieldnames)
     downloaded_count = 0
     errors: list[str] = []
 
@@ -128,10 +171,16 @@ async def archive_channels_from_csv(
                 if start_date_value
                 else None
             )
+            extension = (
+                row.get(optional_columns["extension"])
+                if "extension" in optional_columns
+                else None
+            )
             count, channel_errors = await archive_channel_attachments(
                 channel,
                 destination,
                 start_date,
+                extension,
             )
             downloaded_count += count
             errors.extend(
@@ -150,10 +199,13 @@ async def archive_channel_attachments(
     channel: discord.TextChannel,
     destination: str | Path,
     start_date: datetime | None = None,
+    extensions: str | None = None,
 ) -> tuple[int, list[str]]:
     """テキストチャンネルの添付ファイルを指定構成で保存する。"""
     if not isinstance(channel, discord.TextChannel):
         raise ValueError("テキストチャンネルを指定してください。")
+
+    normalized_extensions = _normalize_extensions(extensions)
 
     category_name = _safe_path_component(
         channel.category.name if channel.category else "カテゴリーなし",
@@ -171,6 +223,12 @@ async def archive_channel_attachments(
         oldest_first=True,
     ):
         for attachment in message.attachments:
+            if (
+                normalized_extensions is not None
+                and Path(attachment.filename).suffix.lower()
+                not in normalized_extensions
+            ):
+                continue
             file_path = _unique_file_path(channel_directory, attachment.filename)
             try:
                 file_path.write_bytes(await attachment.read())
@@ -186,11 +244,12 @@ async def main(message: discord.Message) -> None:
     arguments = message.content.partition(" ")[2].strip()
     if arguments == "-h":
         await message.channel.send(
-            "/chat get #テキストチャンネル [開始日 YYYY-MM-DD]\n"
+            "/chat get #テキストチャンネル [開始日 YYYY-MM-DD] [拡張子]\n"
             "または /chat get + CSVファイル\n"
             "単一チャンネルまたはCSVで指定した複数チャンネルの"
-            "添付ファイルをZIPにまとめます。\n"
-            "CSV形式: category_name,channel_name,start_date"
+            "添付ファイルをZIPにまとめます。拡張子は png|jpg または"
+            " .png|.jpg のように指定できます。\n"
+            "CSV形式: category_name,channel_name,start_date,extension"
         )
         return
 
@@ -232,14 +291,18 @@ async def main(message: discord.Message) -> None:
                     )
                     return
 
-                argument_parts = arguments.split(maxsplit=1)
+                argument_parts = arguments.split()
                 start_date = None
-                if len(argument_parts) == 2:
+                extension = None
+                if len(argument_parts) >= 2 and argument_parts[1]:
                     start_date = _parse_start_date(argument_parts[1])
+                if len(argument_parts) >= 3:
+                    extension = argument_parts[2]
                 downloaded_count, errors = await archive_channel_attachments(
                     target_channel,
                     output_directory,
                     start_date,
+                    extension,
                 )
             if downloaded_count == 0:
                 result = "添付ファイルが見つかりませんでした。"
