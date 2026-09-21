@@ -1,5 +1,5 @@
 import discord
-from .comand import router
+from .command import router
 import function.send_message as send_message
 
 #----------メッセージ受信時の処理はここ----------
