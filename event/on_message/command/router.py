@@ -18,6 +18,8 @@ from .channel import get as channel_get
 from .channel import move as channel_move
 from .channel import set as channel_set
 from .channel import template as channel_template
+from .chat import get as chat_get
+from .chat import template as chat_template
 import function.send_message as send_message
 
 
@@ -117,6 +119,8 @@ async def _send_command_help(message: discord.Message) -> None:
         '/channel get - チャンネル一覧を CSV で取得\n'
         '/channel set + CSVファイル - CSVからチャンネルを作成・設定\n'
         '/channel template - チャンネル設定 CSV のテンプレートを取得\n'
+        '/chat get #チャンネル [開始日] または + CSVファイル - 添付ファイルを ZIP で取得\n'
+        '/chat template - チャット添付ファイル取得CSVのテンプレートを取得\n'
         '各コマンドに -h を付けると詳細を表示します。'
     )
 
@@ -195,6 +199,19 @@ async def parse_message_command(
             )
             if handler is None:
                 await message.channel.send('使い方: /channel create|get|move|set|template')
+            else:
+                await handler(command_message)
+        case '/chat':
+            handler, command_message = _operation_message(
+                message,
+                'chat',
+                {'get': chat_get.main, 'template': chat_template.main},
+            )
+            if handler is None:
+                await message.channel.send(
+                    '使い方: /chat get #チャンネル [開始日] または + CSVファイル'
+                    '、/chat template'
+                )
             else:
                 await handler(command_message)
         case _:

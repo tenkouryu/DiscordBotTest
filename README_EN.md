@@ -105,6 +105,23 @@ channel-name,text,category-name
 
 Set `type` to `text` or `voice`. Existing channels are found by name and moved to the specified category; missing channels are created. Missing categories are created automatically.
 
+### Chat attachments
+
+```text
+/chat get #text-channel [start-date YYYY-MM-DD]
+/chat get + CSV-file
+/chat template
+```
+
+Mention a channel to download attachments from a single channel. The start date is optional and must use `YYYY-MM-DD`; messages from 00:00 UTC on that date onward are included.
+
+For multiple channels, set `category_name,channel_name,start_date` in the CSV. Attachments from each channel are collected into one ZIP file organized as `category-name/channel-name/file-name`. The Manage Messages permission is required.
+
+```csv
+category_name,channel_name,start_date
+category-name,channel-name,2026-09-01
+```
+
 ### Event notifications
 
 These are sample features. Change or disable the behavior and notification destinations to suit your production requirements.
