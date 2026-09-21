@@ -1,4 +1,4 @@
-# DiscordBotTest
+# DiscordBot_Servercontroller
 
 ## 概要
 
