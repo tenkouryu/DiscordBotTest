@@ -115,7 +115,7 @@ Set `type` to `text` or `voice`. Existing channels are found by name and moved t
 
 Mention a channel to download attachments from a single channel. The start date is optional and must use `YYYY-MM-DD`; messages from 00:00 UTC on that date onward are included.
 
-For multiple channels, set `category_name,channel_name,start_date` in the CSV. Attachments from each channel are collected into one ZIP file organized as `category-name/channel-name/file-name`. The Manage Messages permission is required.
+For multiple channels, set `category_name,channel_name,start_date` in the CSV. Attachments from each channel are collected into one ZIP file organized as `category-name/channel-name/file-name`. Leave `start_date` blank to include the entire history for that channel. The Manage Messages permission is required.
 
 ```csv
 category_name,channel_name,start_date

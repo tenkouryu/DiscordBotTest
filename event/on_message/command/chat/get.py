@@ -118,12 +118,16 @@ async def archive_channels_from_csv(
         channel_name = (row.get(columns["channel_name"]) or "").strip()
         start_date_value = (row.get(columns["start_date"]) or "").strip()
         try:
-            if not category_name or not channel_name or not start_date_value:
+            if not category_name or not channel_name:
                 raise ValueError(
-                    "カテゴリ名、チャンネル名、開始日をすべて指定してください。"
+                    "カテゴリ名とチャンネル名を指定してください。"
                 )
             channel = _find_text_channel(guild, category_name, channel_name)
-            start_date = _parse_start_date(start_date_value)
+            start_date = (
+                _parse_start_date(start_date_value)
+                if start_date_value
+                else None
+            )
             count, channel_errors = await archive_channel_attachments(
                 channel,
                 destination,
