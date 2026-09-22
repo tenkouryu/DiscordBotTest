@@ -39,13 +39,13 @@ Do not expose your bot token or commit `config/config.json` to Git.
 
 Add `-h` to any command to display its usage.
 
-### General
+### General features
 
 ```text
 /help
 ```
 
-### Member roles
+### Member role features
 
 ```text
 /member role add @member role-name
@@ -61,7 +61,7 @@ See `member_role_template.csv` in the [Template files](#template-files) section 
 
 The `add`, `set`, and `remove` commands require the Manage Roles permission.
 
-### Server roles
+### Server role features
 
 ```text
 /server role add role-name
@@ -77,7 +77,7 @@ See `server_role_template.csv` in the [Template files](#template-files) section 
 
 The `add`, `edit`, `set`, and `remove` commands require the Manage Roles permission.
 
-### Member list
+### Member list features
 
 ```text
 /server member list
@@ -85,7 +85,7 @@ The `add`, `edit`, `set`, and `remove` commands require the Manage Roles permiss
 
 Exports the server member list as a CSV file.
 
-### Channels
+### Channel features
 
 ```text
 /channel create text channel-name [category-name]
@@ -104,7 +104,7 @@ See `channel_template.csv` in the [Template files](#template-files) section for 
 
 Set `type` to `text` or `voice`. Existing channels are found by name and moved to the specified category; missing channels are created. Missing categories are created automatically.
 
-### Chat attachments
+### Chat attachment features
 
 ```text
 /chat get #text-channel [start-date YYYY-MM-DD] [extension]
@@ -118,15 +118,14 @@ For multiple channels, set `category_name,channel_name,start_date,extension` in 
 
 See `chat_template.csv` in the [Template files](#template-files) section for the CSV format.
 
-### Event notifications
+### Event notification features
 
 These are sample features. Change or disable the behavior and notification destinations to suit your production requirements.
 
-- Adding a thumbs-up reaction replies in the channel containing the reacted message.
 - Joining or leaving a voice channel sends a notification to that voice channel's text chat.
 - When a new member joins, a notification is sent to the channel specified by `REDIRECT_CHANNEL_ID`.
 
-### Scenarios
+### Scenario features
 
 ```text
 /scenario template
