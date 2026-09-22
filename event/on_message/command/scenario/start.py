@@ -39,6 +39,10 @@ async def main(message: discord.Message) -> None:
     for reaction in get_scenario_reaction_examples(step):
         await sent_message.add_reaction(reaction)
     try:
-        set_scenario_message_id(message.guild.id, sent_message.id)
+        set_scenario_message_id(
+            message.guild.id,
+            sent_message.id,
+            message.channel.id,
+        )
     except (OSError, ValueError) as error:
         await message.channel.send(f"台本の状態を保存できませんでした: {error}")

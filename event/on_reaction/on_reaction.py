@@ -2,6 +2,8 @@ import discord
 import function.discord.message.send_message as send_message
 from function.scenario.scenario_service import (
     advance_scenario,
+    get_scenario_wait_type,
+    has_active_scenario,
     set_scenario_message_id,
 )
 
@@ -23,6 +25,12 @@ async def on_reaction_main(
         return
 
     if reaction.message.guild is not None:
+        if has_active_scenario(reaction.message.guild.id):
+            if get_scenario_wait_type(
+                reaction.message.guild.id,
+                reaction.message.channel.id,
+            ) is None:
+                return
         try:
             scenario_result = advance_scenario(
                 reaction.message.guild.id,
@@ -47,6 +55,7 @@ async def on_reaction_main(
                     set_scenario_message_id(
                         reaction.message.guild.id,
                         next_message.id,
+                        reaction.message.channel.id,
                     )
                 except (OSError, ValueError) as error:
                     await reaction.message.channel.send(
