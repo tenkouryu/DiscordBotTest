@@ -1,6 +1,12 @@
 import discord
-import function.edit_roll as edit_roll
+import function.discord.role.edit_roll as edit_roll
 
+"""
+    サーバーロール変更コマンドを処理する。
+
+    main:
+        ロールの権限または色を変更する。
+"""
 
 async def main(message: discord.Message) -> None:
     if message.content.partition(' ')[2].strip() == '-h':

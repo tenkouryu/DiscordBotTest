@@ -14,7 +14,7 @@
 def check_banned_list(list1: list[str], list2: list[str]) -> tuple[bool, list[str]]:
     list2_set = set(list2)
 
-    # list1の順番を維持して一致する文字列を取得
+    # list1の順番を維持して一致する文字列を取得する。
     matches = [value for value in list1 if value in list2_set]
 
     if matches:

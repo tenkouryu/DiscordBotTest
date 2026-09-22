@@ -4,6 +4,20 @@ import os
 from pathlib import Path
 import zipfile
 
+"""
+    ファイルやディレクトリのZIP圧縮と、安全なZIP解凍を行う共通処理。
+
+    compress_files:
+        複数のファイルをZIP形式で圧縮する。
+
+    compress_directory:
+        ディレクトリ内のファイルを相対パスを維持して再帰的に圧縮する。
+
+    extract_zip:
+        ZIP内のパスが解凍先ディレクトリ外へ移動しないことを確認してから解凍する。
+        パストラバーサル攻撃を防止する。
+"""
+
 
 def compress_files(
     file_paths: list[str | os.PathLike[str]],

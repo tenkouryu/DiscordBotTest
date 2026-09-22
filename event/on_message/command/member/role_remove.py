@@ -1,6 +1,12 @@
 import discord
-import function.edit_roll as edit_roll
+import function.discord.role.edit_roll as edit_roll
 
+"""
+    メンバーからのロール削除コマンドを処理する。
+
+    main:
+        指定したメンバーからロールを削除する。
+"""
 
 async def main(message: discord.Message) -> None:
     if message.content.partition(' ')[2].strip() == '-h':

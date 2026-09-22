@@ -1,6 +1,12 @@
 import discord
-import function.edit_roll as edit_roll
+import function.discord.role.edit_roll as edit_roll
 
+"""
+    サーバーへのロール追加コマンドを処理する。
+
+    main:
+        サーバーへ新しいロールを追加する。
+"""
 
 async def main(message: discord.Message) -> None:
     if message.content.partition(' ')[2].strip() == '-h':

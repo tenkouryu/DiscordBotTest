@@ -1,29 +1,37 @@
 import discord
 from .command import router
-import function.send_message as send_message
+import function.discord.message.send_message as send_message
 
-#----------メッセージ受信時の処理はここ----------
+"""
+    Discordメッセージ受信イベントを処理する。
+
+    on_message_main:
+        Bot自身のメッセージを除外し、コマンドルーターへ処理を渡す。
+"""
+
 async def on_message_main(
     client: discord.Client,
     message: discord.Message,
 ) -> None:
-       # デバッグログ
+    # デバッグログを出力する。
         print(f'{message.author}からのメッセージ：{message.content}')
     
-        # メッセージ送信者がBotだった場合は無視する
+        # メッセージ送信者がBotの場合は無視する。
         if message.author.bot:
             return
-        if '管理人' in [role.name for role in message.author.roles]:  # 例: 特定ロールからの送信の場合
-            # 管理者専用の処理
+        # 特定ロールからの送信の場合は管理者用処理を行う。
+        if '管理人' in [role.name for role in message.author.roles]:
+            # 管理者専用の処理。
              print(f'管理者：{message.author}からのメッセージ：{message.content}')
         if 0:
-            # 「Hi」と発言したら「Hi」が返る処理
+            # 「Hi」と発言したら「Hi」を返す。
             if message.content == 'Hi':
-                # メッセージを送信する(message自体が送ってきたチャンネルを持ってるので、そこに送信する場合はmessage.channel.sendを使う)
+                # メッセージ自身のチャンネルへ送信する場合はmessage.channel.sendを使う。
                 await message.channel.send('Hi')
-                #特定のチャンネルに送信する場合は、send_message_to_channel関数を使う
+                # 特定のチャンネルへ送信する場合はsend_message_to_channelを使う。
                 await send_message.send_message_to_channel(client, message.channel, 'Hi')
 
-        # /から始まるコマンドの処理
-        await router.parse_message_command(client, message)  # メッセージコマンドの処理を呼び出す
+        # /から始まるコマンドを処理する。
+        # メッセージコマンドの処理を呼び出す。
+        await router.parse_message_command(client, message)
         

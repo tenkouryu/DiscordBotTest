@@ -1,7 +1,14 @@
 import discord
 
-#メッセージ送信に関する処理はここ
-"""指定したチャンネルにメッセージを送信する共通処理"""
+"""
+    Discordチャンネルへのメッセージ送信を行う共通処理。
+
+    send_message_to_channel:
+        指定したチャンネルへテキストメッセージを送信する。
+
+    send_message_to_channel_with_file:
+        指定したチャンネルへテキストメッセージとファイルを送信する。
+"""
 async def send_message_to_channel(
     client: discord.Client,
     channel_id: int,
@@ -13,7 +20,6 @@ async def send_message_to_channel(
     else:
         print(f'チャンネルID {channel_id} が見つかりませんでした。')
 
-"""指定したチャンネルに添付ファイル付きメッセージを送信する共通処理"""
 async def send_message_to_channel_with_file(
     client: discord.Client,
     channel_id: int,

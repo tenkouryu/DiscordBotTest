@@ -3,6 +3,15 @@ import io
 
 import discord
 
+"""
+    チャンネル一覧取得コマンドを処理する。
+
+    export_channels_to_csv:
+        サーバーのチャンネル一覧をCSVデータへ変換する。
+
+    main:
+        チャンネル一覧CSVを作成して送信する。
+"""
 
 def export_channels_to_csv(guild: discord.Guild) -> bytes:
     """サーバーのチャンネル一覧をCSVデータとして作成する。"""

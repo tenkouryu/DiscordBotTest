@@ -18,21 +18,21 @@ import re
 """
 def create_card_list(data: str | list[str] | list[list[str]]) -> list[str]:
 
-    # Discordから取得したテキストを想定
+    # Discordから取得したテキストを想定する。
     if isinstance(data, str):
         lines = data.splitlines()
     elif isinstance(data, list):
         lines = []
 
         for row in data:
-            # Sheets APIの [["AAA"], ["BBB"]] を想定
+            # Sheets APIの [["AAA"], ["BBB"]] を想定する。
             if isinstance(row, list):
                 lines.extend(row)
             else:
-                # ["AAA", "BBB"] を想定
+                # ["AAA", "BBB"] を想定する。
                 lines.append(row)
     else:
-        # どの形式でもない場合（Sheets APIの型が想定通りじゃない場合）
+        # どの形式でもない場合は形式不備として扱う。
         print("形式不備！")
 
 
@@ -40,25 +40,25 @@ def create_card_list(data: str | list[str] | list[list[str]]) -> list[str]:
 
     for line in lines:
 
-        # Noneなどを考慮して文字列化
+        # Noneなどを考慮して文字列かどうかを確認する。
         if not isinstance(line, str):
             continue
 
-        # 前後の空白を削除
+        # 前後の空白を削除する。
         line = line.strip()
 
-        # 空行を無視
+        # 空行を無視する。
         if not line:
             continue
 
-        # Commander / Deck の行を無視
+        # Commander / Deckの行を無視する。
         if line in ("Commander", "Deck"):
             continue
 
-        # 行頭の「数字 + 半角スペース」を削除
+        # 行頭の「数字 + 半角スペース」を削除する。
         line = re.sub(r"^\d+\s", "", line)
 
-        # 「(」以降と、その直前の半角スペースを削除
+        # 「(」以降と、その直前の半角スペースを削除する。
         line = re.sub(r"\s+\(.*$", "", line)
 
         card_list.append(line)

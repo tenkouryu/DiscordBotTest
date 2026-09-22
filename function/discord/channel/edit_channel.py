@@ -1,5 +1,24 @@
 import discord
 
+"""
+    Discordサーバーのカテゴリーとチャンネルを操作する共通処理。
+
+    get_or_create_category:
+        指定した名前のカテゴリーを取得し、なければ作成する。
+
+    create_text_channel / create_voice_channel:
+        テキストまたはボイスチャンネルを作成する。
+
+    move_channel_to_category:
+        チャンネルを指定したカテゴリーへ移動する。
+
+    move_text_channel_to_category:
+        テキストチャンネルを指定したカテゴリーへ移動する。
+
+    move_voice_channel_to_category:
+        ボイスチャンネルを指定したカテゴリーへ移動する。
+"""
+
 
 async def get_or_create_category(
     guild: discord.Guild,

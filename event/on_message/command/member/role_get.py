@@ -1,5 +1,14 @@
 import discord
 
+"""
+    メンバーのロール取得コマンドを処理する。
+
+    _find_members:
+        名前または表示名からメンバーを検索する。
+
+    main:
+        指定したメンバーのロール一覧を送信する。
+"""
 
 def _find_members(
     guild: discord.Guild,

@@ -3,6 +3,12 @@ import io
 
 import discord
 
+"""
+    サーバーロール設定CSVテンプレートコマンドを処理する。
+
+    main:
+        サーバーロール設定用CSVテンプレートを作成して送信する。
+"""
 
 async def main(message: discord.Message) -> None:
     """サーバーロール設定用 CSV テンプレートを送信する。"""

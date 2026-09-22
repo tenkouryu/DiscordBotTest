@@ -2,8 +2,20 @@ import csv
 import io
 
 import discord
-import function.edit_roll as edit_roll
+import function.discord.role.edit_roll as edit_roll
 
+"""
+    CSVによるサーバーロール設定コマンドを処理する。
+
+    _parse_bool:
+        CSVの文字列を権限設定用の真偽値へ変換する。
+
+    set_roles_from_csv:
+        CSV全体を読み込み、サーバーのロール設定を更新する。
+
+    main:
+        添付CSVを読み込み、サーバーロール設定を実行する。
+"""
 
 def _parse_bool(value: str, permission_name: str) -> bool:
     normalized = value.strip().lower()

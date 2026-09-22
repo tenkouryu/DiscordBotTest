@@ -1,7 +1,26 @@
 import discord
 import re
 
-"""サーバーのロールを操作する共通処理。"""
+"""
+    Discordサーバーとメンバーのロールを操作する共通処理。
+
+    サーバーのロールについて、取得、追加、削除、権限変更、色変更を行う。
+    メンバーについては、ロールの追加と削除を行う。
+
+    get_role_settings:
+        ロールの基本設定と権限を取得する。
+
+    add_role_to_server / remove_role_from_server:
+        サーバーのロールを追加または削除する。
+
+    edit_role_permissions / edit_role_color / edit_role_settings:
+        ロールの権限や色を変更する。
+
+    add_role_to_member / remove_role_from_member:
+        メンバーのロールを追加または削除する。
+"""
+
+
 def get_role_settings(
     guild: discord.Guild, role_name: str
 ) -> dict[str, object]:

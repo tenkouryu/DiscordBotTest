@@ -3,6 +3,12 @@ import io
 
 import discord
 
+"""
+    チャンネル設定CSVテンプレートコマンドを処理する。
+
+    main:
+        チャンネル設定用CSVテンプレートを作成して送信する。
+"""
 
 async def main(message: discord.Message) -> None:
     """チャンネル設定用 CSV テンプレートを送信する。"""
