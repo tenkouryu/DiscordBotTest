@@ -98,10 +98,7 @@ Bot トークンは公開せず、`config/config.json` を Git にコミット�
 
 `/channel set` の CSV は次の形式です。
 
-```csv
-name,type,category
-チャンネル名,text,カテゴリー名
-```
+形式は [templates/channel_template.csv](templates/channel_template.csv) を参照してください。
 
 `type` には `text` または `voice` を指定します。既存チャンネルは名前で検索してカテゴリーを変更し、存在しない場合は新規作成します。カテゴリーが存在しない場合は自動作成します。
 
@@ -117,10 +114,7 @@ name,type,category
 
 CSVに `category_name,channel_name,start_date,extension` を指定すると、各行のチャンネルから開始日以降の添付ファイルを取得し、`カテゴリー名/チャンネル名/ファイル名` の構成で1つの ZIP ファイルにまとめて返信します。`start_date` または `extension` を空欄にすると、その条件では絞り込みません。実行には「メッセージの管理」権限が必要です。
 
-```csv
-category_name,channel_name,start_date,extension
-カテゴリー名,チャンネル名,2026-09-01,png|jpg
-```
+形式は [templates/chat_template.csv](templates/chat_template.csv) を参照してください。
 
 ### イベント通知
 
@@ -144,12 +138,7 @@ category_name,channel_name,start_date,extension
 
 シナリオCSVの形式は次のとおりです。
 
-```csv
-scenario_id,step,instruction,completion_type,completion_value,response,branch_reaction_1,branch_scenario_id_1,branch_step_1,branch_reaction_2,branch_scenario_id_2,branch_step_2
-welcome,1,参加ありがとうございます。確認できたら任意のリアクションを押してください。,reaction,*,ありがとうございます。次の確認へ進みます。,👍,welcome,2,👎,welcome,1
-welcome,2,名前を確認します。確認できたら✅を押してください。,reaction,✅,名前を確認しました。最後の確認へ進みます.,,,,,,
-welcome,3,最後に🎉を押してください。,reaction,🎉,シナリオが完了しました.,,,,,,
-```
+形式は [templates/scenario_template.csv](templates/scenario_template.csv) を参照してください。`welcome` シナリオの3ステップ例が入っています。
 
 `completion_type` が `reaction` の場合、現在の指示メッセージにリアクションが付くと次へ進みます。`completion_value` が `*` または空欄なら任意のリアクション、絵文字を指定した場合はその絵文字だけが有効です。リアクション条件の指示メッセージには、見本となるリアクションが自動で追加されます。
 
@@ -167,9 +156,7 @@ welcome,3,最後に🎉を押してください。,reaction,🎉,シナリオが
 
 CSV の列は次の3つです。
 
-```csv
-追加/削除,表示名,ロール
-```
+形式は [templates/member_role_template.csv](templates/member_role_template.csv) を参照してください。
 
 2行目の説明を実際の値に置き換えてから、次のコマンドへ添付します。
 
@@ -211,10 +198,7 @@ CSV の `name` 列は必須です。`color` 列と権限列は任意で、記載
 
 CSV の項目は次の3つです。
 
-```csv
-name,type,category
-チャンネル名,text,カテゴリー名
-```
+形式は [templates/channel_template.csv](templates/channel_template.csv) を参照してください。
 
 - `name`: 作成または設定するチャンネル名
 - `type`: `text` または `voice`
