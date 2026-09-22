@@ -1,8 +1,14 @@
 import re
 
 import discord
-import function.edit_channel as edit_channel
+import function.discord.channel.edit_channel as edit_channel
 
+"""
+    チャンネル移動コマンドを処理する。
+
+    main:
+        指定したチャンネルをカテゴリーへ移動する。
+"""
 
 async def main(message: discord.Message) -> None:
     arguments = message.content.partition(' ')[2].strip()

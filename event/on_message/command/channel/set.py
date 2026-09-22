@@ -2,8 +2,17 @@ import csv
 import io
 
 import discord
-import function.edit_channel as edit_channel
+import function.discord.channel.edit_channel as edit_channel
 
+"""
+    CSVによるチャンネル設定コマンドを処理する。
+
+    set_channels_from_csv:
+        CSVの内容をもとにチャンネルを作成または設定する。
+
+    main:
+        添付CSVを読み込み、チャンネル設定を実行する。
+"""
 
 async def set_channels_from_csv(
     guild: discord.Guild,

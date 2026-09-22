@@ -2,9 +2,18 @@ import csv
 import os
 
 import discord
-import function.edit_roll as edit_roll
-import function.send_message as send_message
+import function.discord.role.edit_roll as edit_roll
+import function.discord.message.send_message as send_message
 
+"""
+	サーバーロール一覧取得コマンドを処理する。
+
+	export_roles_to_csv:
+		サーバーのロール設定をCSVファイルへ出力する。
+
+	main:
+		ロール設定CSVを作成して送信する。
+"""
 
 def export_roles_to_csv(guild: discord.Guild, file_path: str) -> str:
 	"""サーバーのロール設定を CSV ファイルに出力する。"""

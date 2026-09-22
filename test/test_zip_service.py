@@ -1,9 +1,10 @@
+
+"""ZIP圧縮・解凍サービスの動作を検証するテスト。"""
 import zipfile
 import unittest
 from pathlib import Path
 
-from function.zip_service import compress_directory, extract_zip
-
+from function.file.zip_service import compress_directory, extract_zip
 
 class ZipServiceTests(unittest.TestCase):
     def test_compress_directory_and_extract_zip(self):

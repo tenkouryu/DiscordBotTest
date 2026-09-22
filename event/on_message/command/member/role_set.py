@@ -4,8 +4,23 @@ import os
 import tempfile
 
 import discord
-import function.edit_roll as edit_roll
+import function.discord.role.edit_roll as edit_roll
 
+"""
+    CSVによるメンバーロール設定コマンドを処理する。
+
+    _find_member_by_display_name / _find_role:
+        CSV指定に対応するメンバーまたはロールを検索する。
+
+    _execute_row:
+        CSVの1行分のロール操作を実行する。
+
+    update_member_roles_from_csv:
+        CSV全体を読み込み、メンバーのロールを更新する。
+
+    main:
+        添付CSVを読み込み、メンバーロール設定を実行する。
+"""
 
 def _find_member_by_display_name(
     guild: discord.Guild,

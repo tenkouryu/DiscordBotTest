@@ -89,35 +89,35 @@ class crypto_service:
         if not isinstance(plaintext, str):
             raise TypeError("plaintext は文字列で指定してください。")
 
-        # UTF-8に変換
+        # UTF-8に変換する。
         plaintext_bytes = plaintext.encode("utf-8")
 
-        # 暗号化ごとに異なるnonceを生成
+        # 暗号化ごとに異なるnonceを生成する。
         nonce = os.urandom(self.NONCE_SIZE)
 
-        # キーストリームを生成
+        # キーストリームを生成する。
         keystream = self._generate_keystream(
             nonce,
             len(plaintext_bytes)
         )
 
-        # XORで暗号化
+        # XORで暗号化する。
         ciphertext = self._xor_bytes(
             plaintext_bytes,
             keystream
         )
 
-        # 改ざん検知用タグを生成
+        # 改ざん検知用タグを生成する。
         tag = hmac.new(
             self.key,
             nonce + ciphertext,
             hashlib.sha256
         ).digest()
 
-        # nonce + ciphertext + tag を結合
+        # nonce、ciphertext、tagを結合する。
         encrypted_data = nonce + ciphertext + tag
 
-        # Base64で文字列化
+        # Base64で文字列化する。
         return base64.b64encode(encrypted_data).decode("ascii")
 
     def decrypt(self, encrypted_text: str) -> str:
@@ -136,11 +136,11 @@ class crypto_service:
         except Exception as e:
             raise ValueError("暗号化文字列が不正です。") from e
 
-        # 最低でも nonce + tag が必要
+        # 最低でもnonceとtagが必要。
         if len(encrypted_data) < self.NONCE_SIZE + self.TAG_SIZE:
             raise ValueError("暗号化文字列が短すぎます。")
 
-        # データを分割
+        # データを分割する。
         nonce = encrypted_data[:self.NONCE_SIZE]
 
         ciphertext = encrypted_data[
@@ -149,7 +149,7 @@ class crypto_service:
 
         tag = encrypted_data[-self.TAG_SIZE:]
 
-        # 改ざん検知
+        # 改ざんを検知する。
         expected_tag = hmac.new(
             self.key,
             nonce + ciphertext,
@@ -162,19 +162,19 @@ class crypto_service:
                 "暗号化キーが間違っています。"
             )
 
-        # キーストリームを生成
+        # キーストリームを生成する。
         keystream = self._generate_keystream(
             nonce,
             len(ciphertext)
         )
 
-        # XORで復号化
+        # XORで復号化する。
         plaintext_bytes = self._xor_bytes(
             ciphertext,
             keystream
         )
 
-        # UTF-8に戻す
+        # UTF-8に戻す。
         try:
             return plaintext_bytes.decode("utf-8")
         except UnicodeDecodeError as e:

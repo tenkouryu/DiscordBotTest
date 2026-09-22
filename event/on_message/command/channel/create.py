@@ -1,6 +1,12 @@
 import discord
-import function.edit_channel as edit_channel
+import function.discord.channel.edit_channel as edit_channel
 
+"""
+    チャンネル作成コマンドを処理する。
+
+    main:
+        テキストまたはボイスチャンネルを作成する。
+"""
 
 async def main(message: discord.Message) -> None:
     arguments = message.content.partition(' ')[2].strip()

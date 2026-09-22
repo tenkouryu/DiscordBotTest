@@ -1,27 +1,47 @@
 from collections.abc import Awaitable, Callable
 
 import discord
-from .member import role_add as member_role_add
-from .member import role_get as member_role_get
-from .member import role_set as member_role_set
-from .member import role_template as member_role_template
-from .member import role_remove as member_role_remove
-from .server import member_list as server_member_list
-from .server import role_add as server_role_add
-from .server import role_edit as server_role_edit
-from .server import role_get as server_role_get
-from .server import role_set as server_role_set
-from .server import role_template as server_role_template
-from .server import role_remove as server_role_remove
-from .channel import create as channel_create
-from .channel import get as channel_get
-from .channel import move as channel_move
-from .channel import set as channel_set
-from .channel import template as channel_template
-from .chat import get as chat_get
-from .chat import template as chat_template
-import function.send_message as send_message
+from .channel import (
+    create as channel_create,
+    get as channel_get,
+    move as channel_move,
+    set as channel_set,
+    template as channel_template,
+)
+from .chat import get as chat_get, template as chat_template
+from .member import (
+    role_add as member_role_add,
+    role_get as member_role_get,
+    role_remove as member_role_remove,
+    role_set as member_role_set,
+    role_template as member_role_template,
+)
+from .server import (
+    member_list as server_member_list,
+    role_add as server_role_add,
+    role_edit as server_role_edit,
+    role_get as server_role_get,
+    role_remove as server_role_remove,
+    role_set as server_role_set,
+    role_template as server_role_template,
+)
+from function.discord.message import send_message
 
+"""
+    Discordメッセージコマンドを解析し、対応する処理へ振り分ける。
+
+    _CommandMessage.__init__ / __getattr__:
+        親コマンドを除いたメッセージ内容を保持・転送する。
+
+    _subcommand_message / _resource_subcommand_message / _operation_message:
+        コマンド階層を解析して実行対象のハンドラーを取得する。
+
+    _send_command_help:
+        利用可能なコマンド一覧を送信する。
+
+    parse_message_command:
+        受信したメッセージを対応するコマンド処理へ振り分ける。
+"""
 
 class _CommandMessage:
     """既存コマンドへ親コマンドを除いた内容を渡すメッセージ。"""
@@ -129,7 +149,7 @@ async def parse_message_command(
     client: discord.Client,
     message: discord.Message,
 ) -> None:
-    # メッセージコマンドの振り分け
+    # メッセージコマンドを振り分ける。
     command = message.content.partition(' ')[0]
 
     match command:

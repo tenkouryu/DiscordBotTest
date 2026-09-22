@@ -3,6 +3,12 @@ import io
 
 import discord
 
+"""
+    チャット添付ファイル取得用CSVテンプレートコマンドを処理する。
+
+    main:
+        添付ファイル取得用CSVテンプレートを作成して送信する。
+"""
 
 async def main(message: discord.Message) -> None:
     """チャット添付ファイル取得用CSVテンプレートを送信する。"""

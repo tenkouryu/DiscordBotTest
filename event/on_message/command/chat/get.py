@@ -9,8 +9,32 @@ from tempfile import TemporaryDirectory
 
 import discord
 
-from function.zip_service import compress_directory
+from function.file.zip_service import compress_directory
 
+"""
+    チャンネルの添付ファイル取得コマンドを処理する。
+
+    _safe_path_component / _unique_file_path:
+        保存先パスや重複ファイル名を安全に扱う。
+
+    _parse_start_date / _normalize_extensions:
+        開始日と拡張子フィルターを解析する。
+
+    _get_csv_columns / _get_optional_csv_columns:
+        添付CSVの必須列と任意列を取得する。
+
+    _find_text_channel:
+        カテゴリー内のテキストチャンネルを検索する。
+
+    archive_channels_from_csv:
+        CSVで指定された複数チャンネルの添付ファイルを保存する。
+
+    archive_channel_attachments:
+        指定チャンネルの添付ファイルを保存する。
+
+    main:
+        添付ファイルをZIPにまとめて送信する。
+"""
 
 _CSV_COLUMNS = {
     "category_name": {"category_name", "category", "カテゴリ名"},
