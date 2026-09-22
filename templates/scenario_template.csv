@@ -1,2 +1,2 @@
-scenario_id,step,instruction,completion_type,completion_value,response
-example,1,参加者に確認できたら任意のリアクションを押してもらう,reaction,*,確認しました。次の指示へ進みます。
+scenario_id,step,instruction,completion_type,completion_value,response,branch_reaction_1,branch_scenario_id_1,branch_step_1,branch_reaction_2,branch_scenario_id_2,branch_step_2
+example,1,参加者に確認できたら任意のリアクションを押してもらう,reaction,*,確認しました。次の指示へ進みます。,👍,success,1,👎,retry,1

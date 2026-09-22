@@ -14,9 +14,6 @@ from typing import Any
     register_scenario_csv:
         CSV形式の台本を定義JSONへ登録する。
 
-    branch_map:
-        完了条件ごとの分岐先をJSON形式で指定する。
-
     list_scenarios:
         登録済み台本のIDとステップ数を取得する。
 
@@ -43,6 +40,7 @@ _REQUIRED_COLUMNS = {
     "completion_value",
     "response",
 }
+_BRANCH_COLUMNS = {"branch_reaction", "branch_scenario_id", "branch_step"}
 
 
 def _read_json(path: Path, default: Any) -> Any:
@@ -94,21 +92,41 @@ def register_scenario_csv(
             raise ValueError("stepは1以上で指定してください。")
 
         scenario_steps = scenarios.setdefault(scenario_id, [])
-        scenario_steps[:] = [
-            current_step
-            for current_step in scenario_steps
-            if current_step.get("step") != step
-        ]
-        scenario_steps.append(
-            {
-                "step": step,
-                "instruction": (row.get("instruction") or "").strip(),
-                "completion_type": (row.get("completion_type") or "keyword").strip().lower(),
-                "completion_value": (row.get("completion_value") or "").strip(),
-                "response": (row.get("response") or "").strip(),
-                "branch_map": _parse_branch_map(row.get("branch_map")),
-            }
+        existing_step = next(
+            (current_step for current_step in scenario_steps if current_step.get("step") == step),
+            None,
         )
+
+        branch_map = _parse_branch_columns(row)
+        if branch_map:
+            if existing_step is None:
+                existing_step = {
+                    "step": step,
+                    "instruction": (row.get("instruction") or "").strip(),
+                    "completion_type": (row.get("completion_type") or "keyword").strip().lower(),
+                    "completion_value": (row.get("completion_value") or "").strip(),
+                    "response": (row.get("response") or "").strip(),
+                    "branch_map": branch_map,
+                }
+                scenario_steps.append(existing_step)
+            else:
+                existing_step.setdefault("branch_map", {}).update(branch_map)
+        else:
+            scenario_steps[:] = [
+                current_step
+                for current_step in scenario_steps
+                if current_step.get("step") != step
+            ]
+            scenario_steps.append(
+                {
+                    "step": step,
+                    "instruction": (row.get("instruction") or "").strip(),
+                    "completion_type": (row.get("completion_type") or "keyword").strip().lower(),
+                    "completion_value": (row.get("completion_value") or "").strip(),
+                    "response": (row.get("response") or "").strip(),
+                    "branch_map": {},
+                }
+            )
         scenario_steps.sort(key=lambda current_step: current_step["step"])
         registered_count += 1
 
@@ -116,24 +134,54 @@ def register_scenario_csv(
     return registered_count
 
 
-def _parse_branch_map(value: str | None) -> dict[str, dict[str, Any]]:
-    """CSVの分岐先JSONを検証して読み込む。"""
-    if value is None or not value.strip():
-        return {}
-    try:
-        branch_map = json.loads(value)
-    except json.JSONDecodeError as error:
-        raise ValueError("branch_mapはJSON形式で指定してください。") from error
-    if not isinstance(branch_map, dict):
-        raise ValueError("branch_mapはオブジェクト形式で指定してください。")
-    for branch in branch_map.values():
-        if not isinstance(branch, dict) or "scenario_id" not in branch:
+def _parse_branch_columns(row: dict[str, str | None]) -> dict[str, dict[str, Any]]:
+    """番号付き分岐列を1行から必要な数だけ読み込む。"""
+    branch_map: dict[str, dict[str, Any]] = {}
+    indexes = sorted(
+        {
+            key.rsplit("_", 1)[1]
+            for key in row
+            if key.startswith("branch_")
+            and key.rsplit("_", 1)[-1].isdigit()
+        },
+        key=int,
+    )
+    for index in indexes:
+        suffix = f"_{index}"
+        reaction = (row.get(f"branch_reaction{suffix}") or "").strip()
+        scenario_id = (row.get(f"branch_scenario_id{suffix}") or "").strip()
+        step_text = (row.get(f"branch_step{suffix}") or "").strip()
+        if not reaction and not scenario_id and not step_text:
+            continue
+        if not reaction or not scenario_id:
             raise ValueError(
-                "branch_mapの分岐先にはscenario_idが必要です。"
+                f"branch_reaction{suffix}とbranch_scenario_id{suffix}を指定してください。"
             )
-        if "step" in branch and not isinstance(branch["step"], int):
-            raise ValueError("branch_mapのstepは整数で指定してください。")
-    return branch_map
+        branch: dict[str, Any] = {"scenario_id": scenario_id}
+        if step_text:
+            try:
+                branch["step"] = int(step_text)
+            except ValueError as error:
+                raise ValueError(f"branch_step{suffix}は整数で指定してください。") from error
+        branch_map[reaction] = branch
+
+    if branch_map:
+        return branch_map
+
+    reaction = (row.get("branch_reaction") or "").strip()
+    scenario_id = (row.get("branch_scenario_id") or "").strip()
+    step_text = (row.get("branch_step") or "").strip()
+    if reaction or scenario_id or step_text:
+        if not reaction or not scenario_id:
+            raise ValueError("branch_reactionとbranch_scenario_idを指定してください。")
+        branch: dict[str, Any] = {"scenario_id": scenario_id}
+        if step_text:
+            try:
+                branch["step"] = int(step_text)
+            except ValueError as error:
+                raise ValueError("branch_stepは整数で指定してください。") from error
+        return {reaction: branch}
+    return {}
 
 
 def list_scenarios(

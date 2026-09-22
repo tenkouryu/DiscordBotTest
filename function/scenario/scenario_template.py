@@ -21,7 +21,12 @@ def create_scenario_template() -> io.BytesIO:
         "completion_type",
         "completion_value",
         "response",
-        "branch_map",
+        "branch_reaction_1",
+        "branch_scenario_id_1",
+        "branch_step_1",
+        "branch_reaction_2",
+        "branch_scenario_id_2",
+        "branch_step_2",
     ])
     writer.writerow([
         "example",
@@ -30,6 +35,11 @@ def create_scenario_template() -> io.BytesIO:
         "reaction",
         "*",
         "確認しました。次の指示へ進みます。",
-        "{\"👍\":{\"scenario_id\":\"success\",\"step\":1},\"👎\":{\"scenario_id\":\"retry\",\"step\":1}}",
+        "👍",
+        "success",
+        "1",
+        "👎",
+        "retry",
+        "1",
     ])
     return io.BytesIO(output.getvalue().encode("utf-8-sig"))
