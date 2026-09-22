@@ -3,9 +3,12 @@ from __future__ import annotations
 import csv
 import io
 import json
+import re
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Any
+
+import discord
 
 
 """
@@ -277,6 +280,35 @@ def get_scenario_reaction_examples(step: dict[str, Any]) -> list[str]:
         for reaction in step.get("branch_map", {})
         if reaction != "*"
     ]
+
+
+def resolve_scenario_mentions(text: str, guild: discord.Guild) -> str:
+    """シナリオ内の@ユーザー名・@ロール名をDiscordメンションへ変換する。"""
+    resolved_text = text
+    roles = sorted(guild.roles, key=lambda role: len(role.name), reverse=True)
+    members = sorted(guild.members, key=lambda member: len(member.display_name), reverse=True)
+
+    for role in roles:
+        if role.is_default() or not role.name:
+            continue
+        resolved_text = re.sub(
+            rf"@{re.escape(role.name)}(?=$|\s|[、。,.!?！？])",
+            f"<@&{role.id}>",
+            resolved_text,
+        )
+
+    for member in members:
+        names = [member.display_name, member.name]
+        for name in sorted(set(names), key=len, reverse=True):
+            if not name:
+                continue
+            resolved_text = re.sub(
+                rf"@{re.escape(name)}(?=$|\s|[、。,.!?！？])",
+                f"<@{member.id}>",
+                resolved_text,
+            )
+
+    return resolved_text
 
 
 def set_scenario_message_id(

@@ -130,7 +130,7 @@ category_name,channel_name,start_date,extension
 - ボイスチャンネルへ参加・退出すると、対象ボイスチャンネルのテキストチャットへ通知します。
 - 新規メンバー参加時は、`REDIRECT_CHANNEL_ID` で指定したチャンネルへ通知します。
 
-### シナリオ
+### シナリオ進行機能
 
 ```text
 /scenario template

@@ -2,6 +2,7 @@ import discord
 
 from function.scenario.scenario_service import (
     get_scenario_reaction_examples,
+    resolve_scenario_mentions,
     set_scenario_message_id,
     start_scenario,
 )
@@ -43,7 +44,10 @@ async def main(message: discord.Message) -> None:
         return
 
     sent_message = await message.channel.send(
-        step["instruction"] or "台本を開始しました。"
+        resolve_scenario_mentions(
+            step["instruction"] or "台本を開始しました。",
+            message.guild,
+        )
     )
     for reaction in get_scenario_reaction_examples(step):
         await sent_message.add_reaction(reaction)

@@ -5,6 +5,7 @@ from function.scenario.scenario_service import (
     advance_scenario,
     has_active_scenario,
     get_scenario_wait_type,
+    resolve_scenario_mentions,
 )
 
 """
@@ -63,9 +64,19 @@ async def on_message_main(
                         return
                     if scenario_result is not None:
                         if scenario_result["response"]:
-                            await message.channel.send(scenario_result["response"])
+                            await message.channel.send(
+                                resolve_scenario_mentions(
+                                    scenario_result["response"],
+                                    message.guild,
+                                )
+                            )
                         if scenario_result["instruction"]:
-                            await message.channel.send(scenario_result["instruction"])
+                            await message.channel.send(
+                                resolve_scenario_mentions(
+                                    scenario_result["instruction"],
+                                    message.guild,
+                                )
+                            )
                     return
 
                 # reaction待ち、または台本以外のメッセージは無視する。
