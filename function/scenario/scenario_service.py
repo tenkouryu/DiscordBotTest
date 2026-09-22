@@ -49,7 +49,7 @@ def _read_json(path: Path, default: Any) -> Any:
     """JSONファイルを読み込み、存在しない場合は初期値を返す。"""
     if not path.exists():
         return default
-    with path.open("r", encoding="utf-8") as file:
+    with path.open("r", encoding="utf-8-sig") as file:
         return json.load(file)
 
 
@@ -197,6 +197,7 @@ def start_scenario(
         "scenario_id": scenario_id,
         "step": steps[0]["step"],
         "message_id": None,
+        "channel_id": None,
     }
     _write_json(Path(states_path), states)
     return steps[0]
@@ -221,6 +222,7 @@ def get_scenario_reaction_examples(step: dict[str, Any]) -> list[str]:
 def set_scenario_message_id(
     guild_id: int,
     message_id: int,
+    channel_id: int | None = None,
     states_path: str | Path = _DEFAULT_STATES_PATH,
 ) -> None:
     """現在の台本指示メッセージIDを保存する。"""
@@ -229,7 +231,40 @@ def set_scenario_message_id(
     if state is None:
         raise ValueError("開始中の台本がありません。")
     state["message_id"] = message_id
+    if channel_id is not None:
+        state["channel_id"] = channel_id
     _write_json(Path(states_path), states)
+
+
+def get_scenario_wait_type(
+    guild_id: int,
+    channel_id: int,
+    definitions_path: str | Path = _DEFAULT_DEFINITIONS_PATH,
+    states_path: str | Path = _DEFAULT_STATES_PATH,
+) -> str | None:
+    """指定チャンネルで待機中の台本条件を返す。"""
+    states = _read_json(Path(states_path), {})
+    state = states.get(str(guild_id))
+    if state is None or state.get("channel_id") != channel_id:
+        return None
+
+    scenarios = _read_json(Path(definitions_path), {})
+    steps = scenarios.get(state.get("scenario_id"), [])
+    current_step = next(
+        (step for step in steps if step.get("step") == state.get("step")),
+        None,
+    )
+    return current_step.get("completion_type") if current_step else None
+
+
+def has_active_scenario(
+    guild_id: int,
+    states_path: str | Path = _DEFAULT_STATES_PATH,
+) -> bool:
+    """指定サーバーで台本が進行中か確認する。"""
+    states = _read_json(Path(states_path), {})
+    state = states.get(str(guild_id))
+    return state is not None and state.get("channel_id") is not None
 
 
 def advance_scenario(
