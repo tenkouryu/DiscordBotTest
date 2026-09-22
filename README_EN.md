@@ -145,20 +145,13 @@ Scenario definitions are stored in `config/scenario_definitions.json`, while per
 The scenario CSV format is:
 
 ```csv
-scenario_id,step,instruction,completion_type,completion_value,response,branch_map
-welcome,1,React when ready.,reaction,*,Confirmed.,"{\"👍\":{\"scenario_id\":\"welcome\",\"step\":2}}"
+scenario_id,step,instruction,completion_type,completion_value,response,branch_reaction_1,branch_scenario_id_1,branch_step_1,branch_reaction_2,branch_scenario_id_2,branch_step_2
+welcome,1,React when ready.,reaction,*,Confirmed.,👍,success,1,👎,retry,1
 ```
 
 When `completion_type` is `reaction`, the scenario advances when a reaction is added to the current instruction message. An empty `completion_value` or `*` accepts any reaction; a specific emoji accepts only that emoji. Example reactions are automatically added to reaction-based instruction messages.
 
-Use `branch_map` to route different reactions to different scenarios or steps.
-
-```json
-{
-   "👍": {"scenario_id": "success", "step": 1},
-   "👎": {"scenario_id": "retry", "step": 1}
-}
-```
+Define multiple branches in one row with numbered columns. Add sequential `_1`, `_2`, `_3`, and later columns as needed; there is no fixed maximum.
 
 ## CSV
 

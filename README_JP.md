@@ -130,35 +130,28 @@ category_name,channel_name,start_date,extension
 - ボイスチャンネルへ参加・退出すると、対象ボイスチャンネルのテキストチャットへ通知します。
 - 新規メンバー参加時は、`REDIRECT_CHANNEL_ID` で指定したチャンネルへ通知します。
 
-### 台本
+### シナリオ
 
 ```text
 /scenario template
 /scenario set + CSVファイル
 /scenario list
-/scenario start 台本ID [開始step]
-/scenario delete 台本ID
+/scenario start シナリオID [開始step]
+/scenario delete シナリオID
 ```
 
-台本は `config/scenario_definitions.json` に保存され、サーバーごとの進行状態は `config/scenario_states.json` に保存されます。`/scenario set` は既存の台本を保持したままCSVの内容を追記します。同じ台本IDとステップ番号がある場合は更新されます。
+シナリオは `config/scenario_definitions.json` に保存され、サーバーごとの進行状態は `config/scenario_states.json` に保存されます。`/scenario set` は既存のシナリオを保持したままCSVの内容を追記します。同じシナリオIDとステップ番号がある場合は更新されます。
 
-台本CSVの形式は次のとおりです。
+シナリオCSVの形式は次のとおりです。
 
 ```csv
-scenario_id,step,instruction,completion_type,completion_value,response,branch_map
-welcome,1,確認できたらリアクションを押してください。,reaction,*,確認しました。,"{\"👍\":{\"scenario_id\":\"welcome\",\"step\":2}}"
+scenario_id,step,instruction,completion_type,completion_value,response,branch_reaction_1,branch_scenario_id_1,branch_step_1,branch_reaction_2,branch_scenario_id_2,branch_step_2
+welcome,1,確認できたらリアクションを押してください。,reaction,*,確認しました。,👍,success,1,👎,retry,1
 ```
 
 `completion_type` が `reaction` の場合、現在の指示メッセージにリアクションが付くと次へ進みます。`completion_value` が `*` または空欄なら任意のリアクション、絵文字を指定した場合はその絵文字だけが有効です。リアクション条件の指示メッセージには、見本となるリアクションが自動で追加されます。
 
-`branch_map` を指定すると、リアクションごとに次の台本やステップへ分岐できます。
-
-```json
-{
-   "👍": {"scenario_id": "success", "step": 1},
-   "👎": {"scenario_id": "retry", "step": 1}
-}
-```
+複数の分岐は、1行に番号付きの列を追加して指定できます。`_1`、`_2` のように連番の列を必要な数だけ追加できます。
 
 ## CSV
 
@@ -241,4 +234,4 @@ CSV を添付して実行します。
 - `chat_template.csv`: 添付ファイル取得
 - `member_role_template.csv`: メンバーロール設定
 - `server_role_template.csv`: サーバーロール設定
-- `scenario_template.csv`: 台本登録
+- `scenario_template.csv`: シナリオ登録
