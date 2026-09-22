@@ -1,0 +1,2 @@
+scenario_id,step,instruction,completion_type,completion_value,response
+example,1,参加者に確認できたら任意のリアクションを押してもらう,reaction,*,確認しました。次の指示へ進みます。
