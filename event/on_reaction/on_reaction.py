@@ -4,6 +4,7 @@ from function.scenario.scenario_service import (
     advance_scenario,
     get_scenario_wait_type,
     has_active_scenario,
+    resolve_scenario_mentions,
     set_scenario_message_id,
 )
 
@@ -44,10 +45,18 @@ async def on_reaction_main(
             return
         if scenario_result is not None:
             if scenario_result["response"]:
-                await reaction.message.channel.send(scenario_result["response"])
+                await reaction.message.channel.send(
+                    resolve_scenario_mentions(
+                        scenario_result["response"],
+                        reaction.message.guild,
+                    )
+                )
             if scenario_result["instruction"]:
                 next_message = await reaction.message.channel.send(
-                    scenario_result["instruction"]
+                    resolve_scenario_mentions(
+                        scenario_result["instruction"],
+                        reaction.message.guild,
+                    )
                 )
                 for next_reaction in scenario_result["reaction_examples"]:
                     await next_message.add_reaction(next_reaction)
