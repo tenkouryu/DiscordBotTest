@@ -136,7 +136,7 @@ These are sample features. Change or disable the behavior and notification desti
 /scenario template
 /scenario set + CSV-file
 /scenario list
-/scenario start scenario-id
+/scenario start scenario-id [start-step]
 /scenario delete scenario-id
 ```
 
