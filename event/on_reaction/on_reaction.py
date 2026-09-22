@@ -71,11 +71,3 @@ async def on_reaction_main(
                         f"台本の状態を保存できませんでした: {error}"
                     )
             return
-
-    # リアクションが「👍」の場合に「Good!」と返す。
-    if str(reaction.emoji) == '👍':
-        await send_message.send_message_to_channel(
-            client,
-            reaction.message.channel.id,
-            'Good!',
-        )
