@@ -9,6 +9,10 @@ from .channel import (
     template as channel_template,
 )
 from .chat import get as chat_get, template as chat_template
+from .scenario import set as scenario_set
+from .scenario import start as scenario_start
+from .scenario import template as scenario_template
+from .scenario import list as scenario_list
 from .member import (
     role_add as member_role_add,
     role_get as member_role_get,
@@ -141,6 +145,10 @@ async def _send_command_help(message: discord.Message) -> None:
         '/channel template - チャンネル設定 CSV のテンプレートを取得\n'
         '/chat get #チャンネル [開始日] [拡張子] または + CSVファイル - 添付ファイルを ZIP で取得\n'
         '/chat template - チャット添付ファイル取得CSVのテンプレートを取得\n'
+        '/scenario template - 台本登録用CSVのテンプレートを取得\n'
+        '/scenario set + CSVファイル - 台本を登録\n'
+        '/scenario start 台本ID - 台本を開始\n'
+        '/scenario list - 登録済み台本の一覧を表示\n'
         '各コマンドに -h を付けると詳細を表示します。'
     )
 
@@ -231,6 +239,23 @@ async def parse_message_command(
                 await message.channel.send(
                     '使い方: /chat get #チャンネル [開始日] [拡張子] または + CSVファイル'
                     '、/chat template'
+                )
+            else:
+                await handler(command_message)
+        case '/scenario':
+            handler, command_message = _operation_message(
+                message,
+                'scenario',
+                {
+                    'template': scenario_template.main,
+                    'set': scenario_set.main,
+                    'start': scenario_start.main,
+                    'list': scenario_list.main,
+                },
+            )
+            if handler is None:
+                await message.channel.send(
+                    '使い方: /scenario template|set|start'
                 )
             else:
                 await handler(command_message)
