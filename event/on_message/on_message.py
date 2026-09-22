@@ -1,6 +1,7 @@
 import discord
 from .command import router
 import function.discord.message.send_message as send_message
+from function.scenario.scenario_service import advance_scenario
 
 """
     Discordメッセージ受信イベントを処理する。
@@ -30,6 +31,22 @@ async def on_message_main(
                 await message.channel.send('Hi')
                 # 特定のチャンネルへ送信する場合はsend_message_to_channelを使う。
                 await send_message.send_message_to_channel(client, message.channel, 'Hi')
+
+        if message.guild is not None and not message.content.startswith('/'):
+            try:
+                scenario_result = advance_scenario(
+                    message.guild.id,
+                    message.content,
+                )
+            except (OSError, ValueError) as error:
+                await message.channel.send(f"台本を進行できませんでした: {error}")
+                return
+            if scenario_result is not None:
+                if scenario_result["response"]:
+                    await message.channel.send(scenario_result["response"])
+                if scenario_result["instruction"]:
+                    await message.channel.send(scenario_result["instruction"])
+                return
 
         # /から始まるコマンドを処理する。
         # メッセージコマンドの処理を呼び出す。

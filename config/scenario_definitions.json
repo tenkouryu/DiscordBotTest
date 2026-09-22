@@ -1,0 +1,25 @@
+{
+	"welcome": [
+		{
+			"step": 1,
+			"instruction": "参加ありがとうございます。確認できたら任意のリアクションを押してください。",
+			"completion_type": "reaction",
+			"completion_value": "*",
+			"response": "ありがとうございます。次の確認へ進みます。"
+		},
+		{
+			"step": 2,
+			"instruction": "名前を確認します。確認できたら✅を押してください。",
+			"completion_type": "reaction",
+			"completion_value": "✅",
+			"response": "名前を確認しました。最後の確認へ進みます。"
+		},
+		{
+			"step": 3,
+			"instruction": "最後に🎉を押してください。",
+			"completion_type": "reaction",
+			"completion_value": "🎉",
+			"response": "台本が完了しました。"
+		}
+	]
+}
