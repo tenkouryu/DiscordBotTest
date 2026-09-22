@@ -98,10 +98,7 @@ Use `/channel get` to export the server's channels as a CSV file in `name,type,c
 
 The CSV format for `/channel set` is:
 
-```csv
-name,type,category
-channel-name,text,category-name
-```
+See [templates/channel_template.csv](templates/channel_template.csv) for the format.
 
 Set `type` to `text` or `voice`. Existing channels are found by name and moved to the specified category; missing channels are created. Missing categories are created automatically.
 
@@ -117,10 +114,7 @@ Mention a channel to download attachments from a single channel. The start date 
 
 For multiple channels, set `category_name,channel_name,start_date,extension` in the CSV. Attachments from each channel are collected into one ZIP file organized as `category-name/channel-name/file-name`. Leave `start_date` or `extension` blank to omit that filter. The Manage Messages permission is required.
 
-```csv
-category_name,channel_name,start_date,extension
-category-name,channel-name,2026-09-01,png|jpg
-```
+See [templates/chat_template.csv](templates/chat_template.csv) for the format.
 
 ### Event notifications
 
@@ -144,12 +138,7 @@ Scenario definitions are stored in `config/scenario_definitions.json`, while per
 
 The scenario CSV format is:
 
-```csv
-scenario_id,step,instruction,completion_type,completion_value,response,branch_reaction_1,branch_scenario_id_1,branch_step_1,branch_reaction_2,branch_scenario_id_2,branch_step_2
-welcome,1,Welcome. React when ready.,reaction,*,Thank you. Moving to the next check.,👍,welcome,2,👎,welcome,1
-welcome,2,We will confirm your name. React with the check mark.,reaction,✅,Name confirmed. Moving to the final check.,,,,,,
-welcome,3,React with the celebration emoji to finish.,reaction,🎉,The scenario is complete.,,,,,,
-```
+See [templates/scenario_template.csv](templates/scenario_template.csv) for the format. It contains the three-step `welcome` scenario example.
 
 When `completion_type` is `reaction`, the scenario advances when a reaction is added to the current instruction message. An empty `completion_value` or `*` accepts any reaction; a specific emoji accepts only that emoji. Example reactions are automatically added to reaction-based instruction messages.
 
@@ -167,9 +156,7 @@ Get a template with:
 
 The CSV has these three columns:
 
-```csv
-add/remove,display-name,role
-```
+See [templates/member_role_template.csv](templates/member_role_template.csv) for the format.
 
 Replace the example row with actual values and attach the file to:
 
@@ -211,10 +198,7 @@ Get a template with:
 
 The CSV has these three fields:
 
-```csv
-name,type,category
-channel-name,text,category-name
-```
+See [templates/channel_template.csv](templates/channel_template.csv) for the format.
 
 - `name`: The channel name to create or configure
 - `type`: `text` or `voice`
