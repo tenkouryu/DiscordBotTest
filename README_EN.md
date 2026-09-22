@@ -108,18 +108,18 @@ Set `type` to `text` or `voice`. Existing channels are found by name and moved t
 ### Chat attachments
 
 ```text
-/chat get #text-channel [start-date YYYY-MM-DD]
+/chat get #text-channel [start-date YYYY-MM-DD] [extension]
 /chat get + CSV-file
 /chat template
 ```
 
-Mention a channel to download attachments from a single channel. The start date is optional and must use `YYYY-MM-DD`; messages from 00:00 UTC on that date onward are included.
+Mention a channel to download attachments from a single channel. The start date is optional and must use `YYYY-MM-DD`; messages from 00:00 UTC on that date onward are included. Extensions can be specified as `png` or `.png`, and multiple extensions can be specified as `png|jpg|gif`.
 
-For multiple channels, set `category_name,channel_name,start_date` in the CSV. Attachments from each channel are collected into one ZIP file organized as `category-name/channel-name/file-name`. Leave `start_date` blank to include the entire history for that channel. The Manage Messages permission is required.
+For multiple channels, set `category_name,channel_name,start_date,extension` in the CSV. Attachments from each channel are collected into one ZIP file organized as `category-name/channel-name/file-name`. Leave `start_date` or `extension` blank to omit that filter. The Manage Messages permission is required.
 
 ```csv
-category_name,channel_name,start_date
-category-name,channel-name,2026-09-01
+category_name,channel_name,start_date,extension
+category-name,channel-name,2026-09-01,png|jpg
 ```
 
 ### Event notifications
@@ -129,6 +129,36 @@ These are sample features. Change or disable the behavior and notification desti
 - Adding a thumbs-up reaction replies in the channel containing the reacted message.
 - Joining or leaving a voice channel sends a notification to that voice channel's text chat.
 - When a new member joins, a notification is sent to the channel specified by `REDIRECT_CHANNEL_ID`.
+
+### Scenarios
+
+```text
+/scenario template
+/scenario set + CSV-file
+/scenario list
+/scenario start scenario-id
+/scenario delete scenario-id
+```
+
+Scenario definitions are stored in `config/scenario_definitions.json`, while per-server progress is stored in `config/scenario_states.json`. `/scenario set` appends CSV entries while preserving existing scenarios. The same scenario ID and step number are updated.
+
+The scenario CSV format is:
+
+```csv
+scenario_id,step,instruction,completion_type,completion_value,response,branch_map
+welcome,1,React when ready.,reaction,*,Confirmed.,"{\"👍\":{\"scenario_id\":\"welcome\",\"step\":2}}"
+```
+
+When `completion_type` is `reaction`, the scenario advances when a reaction is added to the current instruction message. An empty `completion_value` or `*` accepts any reaction; a specific emoji accepts only that emoji. Example reactions are automatically added to reaction-based instruction messages.
+
+Use `branch_map` to route different reactions to different scenarios or steps.
+
+```json
+{
+   "👍": {"scenario_id": "success", "step": 1},
+   "👎": {"scenario_id": "retry", "step": 1}
+}
+```
 
 ## CSV
 
@@ -202,3 +232,13 @@ Attach the CSV file and run:
 ```
 
 Existing channels are found by name and moved to the specified category. Missing channels are created, and missing categories are created automatically.
+
+## Template files
+
+CSV templates are stored in the `templates` folder at the repository root.
+
+- `channel_template.csv`: Channel configuration
+- `chat_template.csv`: Attachment download
+- `member_role_template.csv`: Member role configuration
+- `server_role_template.csv`: Server role configuration
+- `scenario_template.csv`: Scenario registration

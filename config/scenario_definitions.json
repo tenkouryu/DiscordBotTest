@@ -5,7 +5,17 @@
 			"instruction": "参加ありがとうございます。確認できたら任意のリアクションを押してください。",
 			"completion_type": "reaction",
 			"completion_value": "*",
-			"response": "ありがとうございます。次の確認へ進みます。"
+			"response": "ありがとうございます。次の確認へ進みます。",
+			"branch_map": {
+				"👍": {
+					"scenario_id": "welcome",
+					"step": 2
+				},
+				"👎": {
+					"scenario_id": "welcome",
+					"step": 1
+				}
+			}
 		},
 		{
 			"step": 2,
