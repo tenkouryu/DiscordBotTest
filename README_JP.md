@@ -146,7 +146,9 @@ category_name,channel_name,start_date,extension
 
 ```csv
 scenario_id,step,instruction,completion_type,completion_value,response,branch_reaction_1,branch_scenario_id_1,branch_step_1,branch_reaction_2,branch_scenario_id_2,branch_step_2
-welcome,1,確認できたらリアクションを押してください。,reaction,*,確認しました。,👍,success,1,👎,retry,1
+welcome,1,参加ありがとうございます。確認できたら任意のリアクションを押してください。,reaction,*,ありがとうございます。次の確認へ進みます。,👍,welcome,2,👎,welcome,1
+welcome,2,名前を確認します。確認できたら✅を押してください。,reaction,✅,名前を確認しました。最後の確認へ進みます.,,,,,,
+welcome,3,最後に🎉を押してください。,reaction,🎉,シナリオが完了しました.,,,,,,
 ```
 
 `completion_type` が `reaction` の場合、現在の指示メッセージにリアクションが付くと次へ進みます。`completion_value` が `*` または空欄なら任意のリアクション、絵文字を指定した場合はその絵文字だけが有効です。リアクション条件の指示メッセージには、見本となるリアクションが自動で追加されます。
