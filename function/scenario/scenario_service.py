@@ -17,6 +17,9 @@ import discord
     register_scenario_csv:
         CSV形式の台本を定義JSONへ登録する。
 
+    export_scenario_csv:
+        シナリオ定義JSONをCSV形式へ変換する。
+
     list_scenarios:
         登録済み台本のIDとステップ数を取得する。
 
@@ -44,6 +47,14 @@ _REQUIRED_COLUMNS = {
     "response",
 }
 _BRANCH_COLUMNS = {"branch_reaction", "branch_scenario_id", "branch_step"}
+_SCENARIO_COLUMNS = [
+    "scenario_id",
+    "step",
+    "instruction",
+    "completion_type",
+    "completion_value",
+    "response",
+]
 
 
 def _read_json(path: Path, default: Any) -> Any:
@@ -72,7 +83,7 @@ def register_scenario_csv(
     csv_text: str,
     definitions_path: str | Path = _DEFAULT_DEFINITIONS_PATH,
 ) -> int:
-    """既存の台本定義を保持し、CSVの台本を定義JSONへ追記する。"""
+    """既存のシナリオを保持し、CSVに記載されたstepを更新する。"""
     reader = csv.DictReader(io.StringIO(csv_text))
     fieldnames = set(reader.fieldnames or [])
     if not _REQUIRED_COLUMNS.issubset(fieldnames):
@@ -82,7 +93,7 @@ def register_scenario_csv(
         )
 
     scenarios = _read_json(Path(definitions_path), {})
-    registered_count = 0
+    updates: dict[str, dict[int, dict[str, Any]]] = {}
     for row in reader:
         scenario_id = (row.get("scenario_id") or "").strip()
         if not scenario_id:
@@ -94,44 +105,44 @@ def register_scenario_csv(
         if step < 1:
             raise ValueError("stepは1以上で指定してください。")
 
-        scenario_steps = scenarios.setdefault(scenario_id, [])
-        existing_step = next(
-            (current_step for current_step in scenario_steps if current_step.get("step") == step),
-            None,
-        )
-
         branch_map = _parse_branch_columns(row)
-        if branch_map:
-            if existing_step is None:
-                existing_step = {
-                    "step": step,
-                    "instruction": (row.get("instruction") or "").strip(),
-                    "completion_type": (row.get("completion_type") or "keyword").strip().lower(),
-                    "completion_value": (row.get("completion_value") or "").strip(),
-                    "response": (row.get("response") or "").strip(),
-                    "branch_map": branch_map,
-                }
-                scenario_steps.append(existing_step)
+        update = updates.setdefault(scenario_id, {}).setdefault(
+            step,
+            {"base": None, "branch_map": {}},
+        )
+        if any(
+            (row.get(column) or "").strip()
+            for column in ("instruction", "completion_type", "completion_value", "response")
+        ):
+            update["base"] = {
+                "step": step,
+                "instruction": (row.get("instruction") or "").strip(),
+                "completion_type": (row.get("completion_type") or "keyword").strip().lower(),
+                "completion_value": (row.get("completion_value") or "").strip(),
+                "response": (row.get("response") or "").strip(),
+            }
+        update["branch_map"].update(branch_map)
+
+    registered_count = 0
+    for scenario_id, step_updates in updates.items():
+        scenario_steps = scenarios.setdefault(scenario_id, [])
+        steps_by_number = {
+            current_step["step"]: current_step for current_step in scenario_steps
+        }
+        for step, update in step_updates.items():
+            existing_step = steps_by_number.get(step)
+            if update["base"] is not None:
+                existing_step = update["base"]
+                existing_step["branch_map"] = update["branch_map"]
+                steps_by_number[step] = existing_step
+            elif existing_step is None:
+                raise ValueError(
+                    f"step {step}を更新する基本行がありません: {scenario_id}"
+                )
             else:
-                existing_step.setdefault("branch_map", {}).update(branch_map)
-        else:
-            scenario_steps[:] = [
-                current_step
-                for current_step in scenario_steps
-                if current_step.get("step") != step
-            ]
-            scenario_steps.append(
-                {
-                    "step": step,
-                    "instruction": (row.get("instruction") or "").strip(),
-                    "completion_type": (row.get("completion_type") or "keyword").strip().lower(),
-                    "completion_value": (row.get("completion_value") or "").strip(),
-                    "response": (row.get("response") or "").strip(),
-                    "branch_map": {},
-                }
-            )
-        scenario_steps.sort(key=lambda current_step: current_step["step"])
-        registered_count += 1
+                existing_step.setdefault("branch_map", {}).update(update["branch_map"])
+            registered_count += 1
+        scenario_steps[:] = sorted(steps_by_number.values(), key=lambda item: item["step"])
 
     _write_json(Path(definitions_path), scenarios)
     return registered_count
@@ -196,6 +207,57 @@ def list_scenarios(
         {"scenario_id": scenario_id, "step_count": len(steps)}
         for scenario_id, steps in sorted(scenarios.items())
     ]
+
+
+def export_scenario_csv(
+    definitions_path: str | Path = _DEFAULT_DEFINITIONS_PATH,
+) -> io.BytesIO:
+    """シナリオ定義JSONをテンプレート形式のCSVへ変換する。"""
+    scenarios = _read_json(Path(definitions_path), {})
+    max_branch_count = max(
+        2,
+        max(
+            (
+                len(step.get("branch_map", {}))
+                for steps in scenarios.values()
+                for step in steps
+            ),
+            default=0,
+        ),
+    )
+    fieldnames = list(_SCENARIO_COLUMNS)
+    for index in range(1, max_branch_count + 1):
+        fieldnames.extend(
+            [
+                f"branch_reaction_{index}",
+                f"branch_scenario_id_{index}",
+                f"branch_step_{index}",
+            ]
+        )
+
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=fieldnames, lineterminator="\n")
+    writer.writeheader()
+    for scenario_id, steps in sorted(scenarios.items()):
+        for step in sorted(steps, key=lambda item: item["step"]):
+            row = {
+                "scenario_id": scenario_id,
+                "step": step["step"],
+                "instruction": step.get("instruction", ""),
+                "completion_type": step.get("completion_type", "keyword"),
+                "completion_value": step.get("completion_value", ""),
+                "response": step.get("response", ""),
+            }
+            for index, (reaction, branch) in enumerate(
+                sorted(step.get("branch_map", {}).items()),
+                start=1,
+            ):
+                row[f"branch_reaction_{index}"] = reaction
+                row[f"branch_scenario_id_{index}"] = branch["scenario_id"]
+                row[f"branch_step_{index}"] = branch.get("step", "")
+            writer.writerow(row)
+
+    return io.BytesIO(output.getvalue().encode("utf-8-sig"))
 
 
 def delete_scenario(

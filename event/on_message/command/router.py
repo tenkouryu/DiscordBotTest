@@ -14,6 +14,7 @@ from .scenario import start as scenario_start
 from .scenario import template as scenario_template
 from .scenario import list as scenario_list
 from .scenario import delete as scenario_delete
+from .scenario import export as scenario_export
 from .member import (
     role_add as member_role_add,
     role_get as member_role_get,
@@ -151,6 +152,7 @@ async def _send_command_help(message: discord.Message) -> None:
         '/scenario start 台本ID [開始step] - 台本を開始\n'
         '/scenario list - 登録済み台本の一覧を表示\n'
         '/scenario delete 台本ID - 台本を削除\n'
+        '/scenario export - シナリオをCSVで出力\n'
         '各コマンドに -h を付けると詳細を表示します。'
     )
 
@@ -254,6 +256,7 @@ async def parse_message_command(
                     'start': scenario_start.main,
                     'list': scenario_list.main,
                     'delete': scenario_delete.main,
+                    'export': scenario_export.main,
                 },
             )
             if handler is None:

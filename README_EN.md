@@ -146,7 +146,9 @@ The scenario CSV format is:
 
 ```csv
 scenario_id,step,instruction,completion_type,completion_value,response,branch_reaction_1,branch_scenario_id_1,branch_step_1,branch_reaction_2,branch_scenario_id_2,branch_step_2
-welcome,1,React when ready.,reaction,*,Confirmed.,👍,success,1,👎,retry,1
+welcome,1,Welcome. React when ready.,reaction,*,Thank you. Moving to the next check.,👍,welcome,2,👎,welcome,1
+welcome,2,We will confirm your name. React with the check mark.,reaction,✅,Name confirmed. Moving to the final check.,,,,,,
+welcome,3,React with the celebration emoji to finish.,reaction,🎉,The scenario is complete.,,,,,,
 ```
 
 When `completion_type` is `reaction`, the scenario advances when a reaction is added to the current instruction message. An empty `completion_value` or `*` accepts any reaction; a specific emoji accepts only that emoji. Example reactions are automatically added to reaction-based instruction messages.
