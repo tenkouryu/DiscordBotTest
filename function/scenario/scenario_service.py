@@ -14,8 +14,14 @@ from typing import Any
     register_scenario_csv:
         CSV形式の台本を定義JSONへ登録する。
 
+    branch_map:
+        完了条件ごとの分岐先をJSON形式で指定する。
+
     list_scenarios:
         登録済み台本のIDとステップ数を取得する。
+
+    delete_scenario:
+        指定した台本と、その台本を進行中の状態を削除する。
 
     start_scenario:
         サーバーの台本進行を開始し、最初のステップを返す。
@@ -100,6 +106,7 @@ def register_scenario_csv(
                 "completion_type": (row.get("completion_type") or "keyword").strip().lower(),
                 "completion_value": (row.get("completion_value") or "").strip(),
                 "response": (row.get("response") or "").strip(),
+                "branch_map": _parse_branch_map(row.get("branch_map")),
             }
         )
         scenario_steps.sort(key=lambda current_step: current_step["step"])
@@ -107,6 +114,26 @@ def register_scenario_csv(
 
     _write_json(Path(definitions_path), scenarios)
     return registered_count
+
+
+def _parse_branch_map(value: str | None) -> dict[str, dict[str, Any]]:
+    """CSVの分岐先JSONを検証して読み込む。"""
+    if value is None or not value.strip():
+        return {}
+    try:
+        branch_map = json.loads(value)
+    except json.JSONDecodeError as error:
+        raise ValueError("branch_mapはJSON形式で指定してください。") from error
+    if not isinstance(branch_map, dict):
+        raise ValueError("branch_mapはオブジェクト形式で指定してください。")
+    for branch in branch_map.values():
+        if not isinstance(branch, dict) or "scenario_id" not in branch:
+            raise ValueError(
+                "branch_mapの分岐先にはscenario_idが必要です。"
+            )
+        if "step" in branch and not isinstance(branch["step"], int):
+            raise ValueError("branch_mapのstepは整数で指定してください。")
+    return branch_map
 
 
 def list_scenarios(
@@ -118,6 +145,39 @@ def list_scenarios(
         {"scenario_id": scenario_id, "step_count": len(steps)}
         for scenario_id, steps in sorted(scenarios.items())
     ]
+
+
+def delete_scenario(
+    scenario_id: str,
+    definitions_path: str | Path = _DEFAULT_DEFINITIONS_PATH,
+    states_path: str | Path = _DEFAULT_STATES_PATH,
+) -> int:
+    """指定した台本を定義JSONと進行状態から削除する。"""
+    scenario_id = scenario_id.strip()
+    if not scenario_id:
+        raise ValueError("削除する台本IDを指定してください。")
+
+    definitions_file = Path(definitions_path)
+    scenarios = _read_json(definitions_file, {})
+    if scenario_id not in scenarios:
+        raise ValueError(f"台本が見つかりません: {scenario_id}")
+
+    del scenarios[scenario_id]
+    _write_json(definitions_file, scenarios)
+
+    states_file = Path(states_path)
+    states = _read_json(states_file, {})
+    active_guild_ids = [
+        guild_id
+        for guild_id, state in states.items()
+        if state.get("scenario_id") == scenario_id
+    ]
+    for guild_id in active_guild_ids:
+        del states[guild_id]
+    if active_guild_ids:
+        _write_json(states_file, states)
+
+    return len(active_guild_ids)
 
 
 def start_scenario(
@@ -140,6 +200,22 @@ def start_scenario(
     }
     _write_json(Path(states_path), states)
     return steps[0]
+
+
+def get_scenario_reaction_examples(step: dict[str, Any]) -> list[str]:
+    """台本指示メッセージに付ける見本リアクションを返す。"""
+    if step.get("completion_type") != "reaction":
+        return []
+
+    completion_value = step.get("completion_value", "")
+    if completion_value not in {"", "*"}:
+        return [completion_value]
+
+    return [
+        reaction
+        for reaction in step.get("branch_map", {})
+        if reaction != "*"
+    ]
 
 
 def set_scenario_message_id(
@@ -195,6 +271,35 @@ def advance_scenario(
         return None
 
     response = current_step["response"]
+    branch_map = current_step.get("branch_map", {})
+    branch = branch_map.get(completion_value)
+    if branch is None and completion_type == "reaction":
+        branch = branch_map.get("*")
+    if branch is not None:
+        next_scenario_id = branch["scenario_id"]
+        next_steps = scenarios.get(next_scenario_id, [])
+        next_step_number = branch.get("step", next_steps[0]["step"] if next_steps else None)
+        next_index = next(
+            (
+                index
+                for index, step in enumerate(next_steps)
+                if step["step"] == next_step_number
+            ),
+            None,
+        )
+        if next_index is None:
+            raise ValueError("分岐先の台本ステップが見つかりません。")
+        state["scenario_id"] = next_scenario_id
+        state["step"] = next_steps[next_index]["step"]
+        _write_json(Path(states_path), states)
+        next_step = next_steps[next_index]
+        return {
+            "response": response,
+            "instruction": next_step["instruction"],
+            "reaction_examples": get_scenario_reaction_examples(next_step),
+            "completed": False,
+        }
+
     next_index = current_index + 1
     if next_index >= len(steps):
         del states[str(guild_id)]
@@ -207,5 +312,6 @@ def advance_scenario(
     return {
         "response": response,
         "instruction": next_step["instruction"],
+        "reaction_examples": get_scenario_reaction_examples(next_step),
         "completed": False,
     }

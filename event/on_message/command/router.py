@@ -13,6 +13,7 @@ from .scenario import set as scenario_set
 from .scenario import start as scenario_start
 from .scenario import template as scenario_template
 from .scenario import list as scenario_list
+from .scenario import delete as scenario_delete
 from .member import (
     role_add as member_role_add,
     role_get as member_role_get,
@@ -149,6 +150,7 @@ async def _send_command_help(message: discord.Message) -> None:
         '/scenario set + CSVファイル - 台本を登録\n'
         '/scenario start 台本ID - 台本を開始\n'
         '/scenario list - 登録済み台本の一覧を表示\n'
+        '/scenario delete 台本ID - 台本を削除\n'
         '各コマンドに -h を付けると詳細を表示します。'
     )
 
@@ -251,6 +253,7 @@ async def parse_message_command(
                     'set': scenario_set.main,
                     'start': scenario_start.main,
                     'list': scenario_list.main,
+                    'delete': scenario_delete.main,
                 },
             )
             if handler is None:

@@ -41,6 +41,8 @@ async def on_reaction_main(
                 next_message = await reaction.message.channel.send(
                     scenario_result["instruction"]
                 )
+                for next_reaction in scenario_result["reaction_examples"]:
+                    await next_message.add_reaction(next_reaction)
                 try:
                     set_scenario_message_id(
                         reaction.message.guild.id,

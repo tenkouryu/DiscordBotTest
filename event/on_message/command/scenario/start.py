@@ -1,6 +1,7 @@
 import discord
 
 from function.scenario.scenario_service import (
+    get_scenario_reaction_examples,
     set_scenario_message_id,
     start_scenario,
 )
@@ -35,6 +36,8 @@ async def main(message: discord.Message) -> None:
     sent_message = await message.channel.send(
         step["instruction"] or "台本を開始しました。"
     )
+    for reaction in get_scenario_reaction_examples(step):
+        await sent_message.add_reaction(reaction)
     try:
         set_scenario_message_id(message.guild.id, sent_message.id)
     except (OSError, ValueError) as error:
