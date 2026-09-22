@@ -148,7 +148,7 @@ async def _send_command_help(message: discord.Message) -> None:
         '/chat template - チャット添付ファイル取得CSVのテンプレートを取得\n'
         '/scenario template - 台本登録用CSVのテンプレートを取得\n'
         '/scenario set + CSVファイル - 台本を登録\n'
-        '/scenario start 台本ID - 台本を開始\n'
+        '/scenario start 台本ID [開始step] - 台本を開始\n'
         '/scenario list - 登録済み台本の一覧を表示\n'
         '/scenario delete 台本ID - 台本を削除\n'
         '各コマンドに -h を付けると詳細を表示します。'

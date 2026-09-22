@@ -183,24 +183,36 @@ def delete_scenario(
 def start_scenario(
     guild_id: int,
     scenario_id: str,
+    start_step: int | None = None,
     definitions_path: str | Path = _DEFAULT_DEFINITIONS_PATH,
     states_path: str | Path = _DEFAULT_STATES_PATH,
 ) -> dict[str, Any]:
-    """指定サーバーの台本進行を開始し、最初のステップを返す。"""
+    """指定サーバーの台本進行を開始し、指定ステップを返す。"""
     scenarios = _read_json(Path(definitions_path), {})
     steps = scenarios.get(scenario_id)
     if not steps:
         raise ValueError(f"台本が見つかりません: {scenario_id}")
 
+    selected_step = steps[0]
+    if start_step is not None:
+        selected_step = next(
+            (step for step in steps if step["step"] == start_step),
+            None,
+        )
+        if selected_step is None:
+            raise ValueError(
+                f"台本「{scenario_id}」にstep {start_step}はありません。"
+            )
+
     states = _read_json(Path(states_path), {})
     states[str(guild_id)] = {
         "scenario_id": scenario_id,
-        "step": steps[0]["step"],
+        "step": selected_step["step"],
         "message_id": None,
         "channel_id": None,
     }
     _write_json(Path(states_path), states)
-    return steps[0]
+    return selected_step
 
 
 def get_scenario_reaction_examples(step: dict[str, Any]) -> list[str]:

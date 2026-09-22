@@ -136,7 +136,7 @@ category_name,channel_name,start_date,extension
 /scenario template
 /scenario set + CSVファイル
 /scenario list
-/scenario start 台本ID
+/scenario start 台本ID [開始step]
 /scenario delete 台本ID
 ```
 
