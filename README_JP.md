@@ -55,6 +55,8 @@ Bot トークンは公開せず、`config/config.json` を Git にコミット�
 /member role remove @メンバー ロール名
 ```
 
+CSV形式は [テンプレートファイル](#テンプレートファイル) の `member_role_template.csv` を参照してください。
+
 `get` はメンバー名または表示名に一致するメンバーのロール一覧を返信します。メンションで指定することもできます。
 
 `add`、`set`、`remove` には「ロールの管理」権限が必要です。
@@ -70,6 +72,8 @@ Bot トークンは公開せず、`config/config.json` を Git にコミット�
 /server role template
 /server role remove ロール名
 ```
+
+CSV形式は [テンプレートファイル](#テンプレートファイル) の `server_role_template.csv` を参照してください。
 
 `add`、`edit`、`set`、`remove` には「ロールの管理」権限が必要です。
 
@@ -96,9 +100,7 @@ Bot トークンは公開せず、`config/config.json` を Git にコミット�
 
 `/channel get` でサーバーのチャンネル一覧を `name,type,category` 形式の CSV ファイルとして取得できます。
 
-`/channel set` の CSV は次の形式です。
-
-形式は [templates/channel_template.csv](templates/channel_template.csv) を参照してください。
+CSV形式は [テンプレートファイル](#テンプレートファイル) の `channel_template.csv` を参照してください。
 
 `type` には `text` または `voice` を指定します。既存チャンネルは名前で検索してカテゴリーを変更し、存在しない場合は新規作成します。カテゴリーが存在しない場合は自動作成します。
 
@@ -114,7 +116,7 @@ Bot トークンは公開せず、`config/config.json` を Git にコミット�
 
 CSVに `category_name,channel_name,start_date,extension` を指定すると、各行のチャンネルから開始日以降の添付ファイルを取得し、`カテゴリー名/チャンネル名/ファイル名` の構成で1つの ZIP ファイルにまとめて返信します。`start_date` または `extension` を空欄にすると、その条件では絞り込みません。実行には「メッセージの管理」権限が必要です。
 
-形式は [templates/chat_template.csv](templates/chat_template.csv) を参照してください。
+CSV形式は [テンプレートファイル](#テンプレートファイル) の `chat_template.csv` を参照してください。
 
 ### イベント通知
 
@@ -136,88 +138,18 @@ CSVに `category_name,channel_name,start_date,extension` を指定すると、�
 
 シナリオは `config/scenario_definitions.json` に保存され、サーバーごとの進行状態は `config/scenario_states.json` に保存されます。`/scenario set` は既存のシナリオを保持したままCSVの内容を追記します。同じシナリオIDとステップ番号がある場合は更新されます。
 
-シナリオCSVの形式は次のとおりです。
-
-形式は [templates/scenario_template.csv](templates/scenario_template.csv) を参照してください。`welcome` シナリオの3ステップ例が入っています。
+CSV形式と `welcome` シナリオの例は [テンプレートファイル](#テンプレートファイル) の `scenario_template.csv` を参照してください。
 
 `completion_type` が `reaction` の場合、現在の指示メッセージにリアクションが付くと次へ進みます。`completion_value` が `*` または空欄なら任意のリアクション、絵文字を指定した場合はその絵文字だけが有効です。リアクション条件の指示メッセージには、見本となるリアクションが自動で追加されます。
 
 複数の分岐は、1行に番号付きの列を追加して指定できます。`_1`、`_2` のように連番の列を必要な数だけ追加できます。
 
-## CSV
-
-### メンバーロール操作
-
-テンプレートを取得します。
-
-```text
-/member role template
-```
-
-CSV の列は次の3つです。
-
-形式は [templates/member_role_template.csv](templates/member_role_template.csv) を参照してください。
-
-2行目の説明を実際の値に置き換えてから、次のコマンドへ添付します。
-
-```text
-/member role set + CSVファイル
-```
-
-`追加/削除` には `追加` または `削除` を指定します。
-
-### サーバーロール設定
-
-テンプレートを取得します。
-
-```text
-/server role template
-```
-
-CSV の `name` 列は必須です。`color` 列と権限列は任意で、記載した列だけ設定されます。設定しない場合は、その列を CSV から削除してください。
-
-```text
-/server role set + CSVファイル
-```
-
-指定した名前のロールが存在しない場合は新規作成します。権限値には `true` または `false` を指定します。
-
-ロール一覧を設定 CSV として取得するには、次のコマンドを使用します。
-
-```text
-/server role get
-```
-
-### チャンネル設定
-
-テンプレートを取得します。
-
-```text
-/channel template
-```
-
-CSV の項目は次の3つです。
-
-形式は [templates/channel_template.csv](templates/channel_template.csv) を参照してください。
-
-- `name`: 作成または設定するチャンネル名
-- `type`: `text` または `voice`
-- `category`: 所属させるカテゴリー名。設定しない場合は列を削除します。
-
-CSV を添付して実行します。
-
-```text
-/channel set + CSVファイル
-```
-
-既存チャンネルは名前で検索してカテゴリーを変更し、存在しないチャンネルは新規作成します。カテゴリーが存在しない場合は自動作成します。
-
 ## テンプレートファイル
 
-各種CSVテンプレートはルート直下の `templates` フォルダに保存しています。
+各種CSVテンプレートはルート直下の `templates` フォルダに保存しています。リンク先のCSVを編集して各コマンドに添付してください。
 
-- `channel_template.csv`: チャンネル設定
-- `chat_template.csv`: 添付ファイル取得
-- `member_role_template.csv`: メンバーロール設定
-- `server_role_template.csv`: サーバーロール設定
-- `scenario_template.csv`: シナリオ登録
+- [channel_template.csv](templates/channel_template.csv): チャンネル設定
+- [chat_template.csv](templates/chat_template.csv): 添付ファイル取得
+- [member_role_template.csv](templates/member_role_template.csv): メンバーロール設定
+- [server_role_template.csv](templates/server_role_template.csv): サーバーロール設定
+- [scenario_template.csv](templates/scenario_template.csv): シナリオ登録

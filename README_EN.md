@@ -55,6 +55,8 @@ Add `-h` to any command to display its usage.
 /member role remove @member role-name
 ```
 
+See `member_role_template.csv` in the [Template files](#template-files) section for the CSV format.
+
 `get` replies with the roles of a member matching their username or display name. You can also specify a member by mention.
 
 The `add`, `set`, and `remove` commands require the Manage Roles permission.
@@ -70,6 +72,8 @@ The `add`, `set`, and `remove` commands require the Manage Roles permission.
 /server role template
 /server role remove role-name
 ```
+
+See `server_role_template.csv` in the [Template files](#template-files) section for the CSV format.
 
 The `add`, `edit`, `set`, and `remove` commands require the Manage Roles permission.
 
@@ -96,9 +100,7 @@ Creating and moving channels requires the Manage Channels permission. A specifie
 
 Use `/channel get` to export the server's channels as a CSV file in `name,type,category` format.
 
-The CSV format for `/channel set` is:
-
-See [templates/channel_template.csv](templates/channel_template.csv) for the format.
+See `channel_template.csv` in the [Template files](#template-files) section for the CSV format.
 
 Set `type` to `text` or `voice`. Existing channels are found by name and moved to the specified category; missing channels are created. Missing categories are created automatically.
 
@@ -114,7 +116,7 @@ Mention a channel to download attachments from a single channel. The start date 
 
 For multiple channels, set `category_name,channel_name,start_date,extension` in the CSV. Attachments from each channel are collected into one ZIP file organized as `category-name/channel-name/file-name`. Leave `start_date` or `extension` blank to omit that filter. The Manage Messages permission is required.
 
-See [templates/chat_template.csv](templates/chat_template.csv) for the format.
+See `chat_template.csv` in the [Template files](#template-files) section for the CSV format.
 
 ### Event notifications
 
@@ -136,88 +138,18 @@ These are sample features. Change or disable the behavior and notification desti
 
 Scenario definitions are stored in `config/scenario_definitions.json`, while per-server progress is stored in `config/scenario_states.json`. `/scenario set` appends CSV entries while preserving existing scenarios. The same scenario ID and step number are updated.
 
-The scenario CSV format is:
-
-See [templates/scenario_template.csv](templates/scenario_template.csv) for the format. It contains the three-step `welcome` scenario example.
+See `scenario_template.csv` in the [Template files](#template-files) section for the CSV format and the three-step `welcome` scenario example.
 
 When `completion_type` is `reaction`, the scenario advances when a reaction is added to the current instruction message. An empty `completion_value` or `*` accepts any reaction; a specific emoji accepts only that emoji. Example reactions are automatically added to reaction-based instruction messages.
 
 Define multiple branches in one row with numbered columns. Add sequential `_1`, `_2`, `_3`, and later columns as needed; there is no fixed maximum.
 
-## CSV
-
-### Member role operations
-
-Get a template with:
-
-```text
-/member role template
-```
-
-The CSV has these three columns:
-
-See [templates/member_role_template.csv](templates/member_role_template.csv) for the format.
-
-Replace the example row with actual values and attach the file to:
-
-```text
-/member role set + CSV-file
-```
-
-Set `add/remove` to `add` or `remove`.
-
-### Server role configuration
-
-Get a template with:
-
-```text
-/server role template
-```
-
-The `name` column is required. The `color` and permission columns are optional; only the columns included in the CSV are configured. Remove columns that should not be configured.
-
-```text
-/server role set + CSV-file
-```
-
-If a role with the specified name does not exist, it is created. Set permission values to `true` or `false`.
-
-To export the role list as a configuration CSV, use:
-
-```text
-/server role get
-```
-
-### Channel configuration
-
-Get a template with:
-
-```text
-/channel template
-```
-
-The CSV has these three fields:
-
-See [templates/channel_template.csv](templates/channel_template.csv) for the format.
-
-- `name`: The channel name to create or configure
-- `type`: `text` or `voice`
-- `category`: The category name. Remove this column if no category should be configured.
-
-Attach the CSV file and run:
-
-```text
-/channel set + CSV-file
-```
-
-Existing channels are found by name and moved to the specified category. Missing channels are created, and missing categories are created automatically.
-
 ## Template files
 
-CSV templates are stored in the `templates` folder at the repository root.
+CSV templates are stored in the `templates` folder at the repository root. Edit the linked CSV and attach it to the corresponding command.
 
-- `channel_template.csv`: Channel configuration
-- `chat_template.csv`: Attachment download
-- `member_role_template.csv`: Member role configuration
-- `server_role_template.csv`: Server role configuration
-- `scenario_template.csv`: Scenario registration
+- [channel_template.csv](templates/channel_template.csv): Channel configuration
+- [chat_template.csv](templates/chat_template.csv): Attachment download
+- [member_role_template.csv](templates/member_role_template.csv): Member role configuration
+- [server_role_template.csv](templates/server_role_template.csv): Server role configuration
+- [scenario_template.csv](templates/scenario_template.csv): Scenario registration
