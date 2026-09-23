@@ -21,6 +21,7 @@ class _InteractionChannel:
 
     async def send(self, *args: Any, **kwargs: Any) -> Any:
         if self._interaction.response.is_done():
+            kwargs.setdefault("wait", True)
             return await self._interaction.followup.send(*args, **kwargs)
         return await self._interaction.response.send_message(*args, **kwargs)
 
