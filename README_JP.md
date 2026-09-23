@@ -37,7 +37,7 @@ Bot トークンは公開せず、`config/config.json` を Git にコミット�
 
 ## コマンド
 
-すべてのコマンドは `-h` を付けると個別の使い方を表示できます。
+コマンドはスラッシュコマンド形式で利用します。`/help` で利用可能なコマンド一覧を表示できます。
 
 ### 共通機能
 
@@ -133,9 +133,10 @@ CSV形式は [テンプレートファイル](#テンプレートファイル) �
 /scenario list
 /scenario start シナリオID [開始step]
 /scenario delete シナリオID
+/scenario export
 ```
 
-シナリオは `config/scenario_definitions.json` に保存され、サーバーごとの進行状態は `config/scenario_states.json` に保存されます。`/scenario set` は既存のシナリオを保持したままCSVの内容を追記します。同じシナリオIDとステップ番号がある場合は更新されます。
+シナリオは `config/scenario_definitions.json` に保存され、サーバーごとの進行状態は `config/scenario_states.json` に保存されます。`/scenario set` は既存のシナリオを保持したままCSVの内容を追記します。同じシナリオIDとステップ番号がある場合は更新されます。`/scenario export` で登録済みシナリオをCSV形式で出力できます。
 
 CSV形式と `welcome` シナリオの例は [テンプレートファイル](#テンプレートファイル) の `scenario_template.csv` を参照してください。
 
