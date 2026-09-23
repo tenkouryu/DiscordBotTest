@@ -3,7 +3,9 @@ from __future__ import annotations
 import csv
 import io
 import json
+import os
 import re
+import time
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Any
@@ -66,16 +68,28 @@ def _read_json(path: Path, default: Any) -> Any:
 
 def _write_json(path: Path, data: Any) -> None:
     """JSONを一時ファイルへ書き込み、保存先へ置き換える。"""
-    path.parent.mkdir(parents=True, exist_ok=True)
+    target_path = path.resolve()
+    target_path.parent.mkdir(parents=True, exist_ok=True)
     with NamedTemporaryFile(
         "w",
         encoding="utf-8",
-        dir=path.parent,
+        dir=target_path.parent,
         delete=False,
     ) as temporary_file:
         json.dump(data, temporary_file, ensure_ascii=False, indent=2)
         temporary_path = Path(temporary_file.name)
-    temporary_path.replace(path)
+
+    try:
+        for attempt in range(5):
+            try:
+                os.replace(temporary_path, target_path)
+                return
+            except PermissionError:
+                if attempt == 4:
+                    raise
+                time.sleep(0.2 * (attempt + 1))
+    finally:
+        temporary_path.unlink(missing_ok=True)
 
 
 def register_scenario_csv(
