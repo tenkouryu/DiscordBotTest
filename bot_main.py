@@ -1,10 +1,12 @@
 import json
 import discord
+from discord import app_commands
 from event.on_ready import on_ready as on_ready_event
 from event.on_message import on_message as on_message_event
 from event.on_reaction import on_reaction as on_reaction_event
 from event.on_member_join import on_member_join as on_member_join_event
 from event.on_voice_state_update import on_voice_state_update as on_voice_state_update_event
+from event.on_message.command.slash_commands import register_slash_commands
 
 
 #----------Botの設定はここ----------
@@ -20,11 +22,18 @@ intents_set.reactions = True            #リアクションを取得するため
 intents_set.members = True              #メンバー情報を取得するために必要
 intents_set.voice_states = True         #ボイスチャンネルの状態を取得するために必要
 client = discord.Client(intents=intents_set)
+command_tree = app_commands.CommandTree(client)
+register_slash_commands(command_tree)
+commands_synced = False
 
 #----------イベントハンドラ群はここ----------
 """Bot起動時に実行されるイベントハンドラ"""
 @client.event
 async def on_ready() -> None:
+    global commands_synced
+    if not commands_synced:
+        await command_tree.sync()
+        commands_synced = True
     await on_ready_event.on_ready_main(client)
 
 """メッセージ受信時に実行されるイベントハンドラ"""
