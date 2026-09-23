@@ -46,7 +46,6 @@ _REQUIRED_COLUMNS = {
     "completion_value",
     "response",
 }
-_BRANCH_COLUMNS = {"branch_reaction", "branch_scenario_id", "branch_step"}
 _SCENARIO_COLUMNS = [
     "scenario_id",
     "step",
@@ -105,7 +104,7 @@ def register_scenario_csv(
         if step < 1:
             raise ValueError("stepは1以上で指定してください。")
 
-        branch_map = _parse_branch_columns(row)
+        branch_map = _parse_branch_columns(row, scenario_id)
         update = updates.setdefault(scenario_id, {}).setdefault(
             step,
             {"base": None, "branch_map": {}},
@@ -148,7 +147,10 @@ def register_scenario_csv(
     return registered_count
 
 
-def _parse_branch_columns(row: dict[str, str | None]) -> dict[str, dict[str, Any]]:
+def _parse_branch_columns(
+    row: dict[str, str | None],
+    scenario_id: str,
+) -> dict[str, dict[str, Any]]:
     """番号付き分岐列を1行から必要な数だけ読み込む。"""
     branch_map: dict[str, dict[str, Any]] = {}
     indexes = sorted(
@@ -163,14 +165,11 @@ def _parse_branch_columns(row: dict[str, str | None]) -> dict[str, dict[str, Any
     for index in indexes:
         suffix = f"_{index}"
         reaction = (row.get(f"branch_reaction{suffix}") or "").strip()
-        scenario_id = (row.get(f"branch_scenario_id{suffix}") or "").strip()
         step_text = (row.get(f"branch_step{suffix}") or "").strip()
-        if not reaction and not scenario_id and not step_text:
+        if not reaction and not step_text:
             continue
-        if not reaction or not scenario_id:
-            raise ValueError(
-                f"branch_reaction{suffix}とbranch_scenario_id{suffix}を指定してください。"
-            )
+        if not reaction:
+            raise ValueError(f"branch_reaction{suffix}を指定してください。")
         branch: dict[str, Any] = {"scenario_id": scenario_id}
         if step_text:
             try:
@@ -183,11 +182,10 @@ def _parse_branch_columns(row: dict[str, str | None]) -> dict[str, dict[str, Any
         return branch_map
 
     reaction = (row.get("branch_reaction") or "").strip()
-    scenario_id = (row.get("branch_scenario_id") or "").strip()
     step_text = (row.get("branch_step") or "").strip()
-    if reaction or scenario_id or step_text:
-        if not reaction or not scenario_id:
-            raise ValueError("branch_reactionとbranch_scenario_idを指定してください。")
+    if reaction or step_text:
+        if not reaction:
+            raise ValueError("branch_reactionを指定してください。")
         branch: dict[str, Any] = {"scenario_id": scenario_id}
         if step_text:
             try:
@@ -230,7 +228,6 @@ def export_scenario_csv(
         fieldnames.extend(
             [
                 f"branch_reaction_{index}",
-                f"branch_scenario_id_{index}",
                 f"branch_step_{index}",
             ]
         )
@@ -249,11 +246,16 @@ def export_scenario_csv(
                 "response": step.get("response", ""),
             }
             for index, (reaction, branch) in enumerate(
-                sorted(step.get("branch_map", {}).items()),
+                sorted(
+                    (
+                        (reaction, branch)
+                        for reaction, branch in step.get("branch_map", {}).items()
+                        if branch.get("scenario_id") == scenario_id
+                    ),
+                ),
                 start=1,
             ):
                 row[f"branch_reaction_{index}"] = reaction
-                row[f"branch_scenario_id_{index}"] = branch["scenario_id"]
                 row[f"branch_step_{index}"] = branch.get("step", "")
             writer.writerow(row)
 

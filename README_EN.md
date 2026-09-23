@@ -141,7 +141,7 @@ See `scenario_template.csv` in the [Template files](#template-files) section for
 
 When `completion_type` is `reaction`, the scenario advances when a reaction is added to the current instruction message. An empty `completion_value` or `*` accepts any reaction; a specific emoji accepts only that emoji. Example reactions are automatically added to reaction-based instruction messages.
 
-Define multiple branches in one row with numbered columns. Add sequential `_1`, `_2`, `_3`, and later columns as needed; there is no fixed maximum.
+Define multiple branches in one row with numbered `branch_reaction_N` and `branch_step_N` columns. Branches always target steps in the current scenario.
 
 ## Template files
 
