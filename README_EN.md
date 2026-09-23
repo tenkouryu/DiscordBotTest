@@ -37,7 +37,7 @@ Do not expose your bot token or commit `config/config.json` to Git.
 
 ## Commands
 
-Add `-h` to any command to display its usage.
+Commands are used as slash commands. Use `/help` to display the available command list.
 
 ### General features
 
@@ -133,9 +133,10 @@ These are sample features. Change or disable the behavior and notification desti
 /scenario list
 /scenario start scenario-id [start-step]
 /scenario delete scenario-id
+/scenario export
 ```
 
-Scenario definitions are stored in `config/scenario_definitions.json`, while per-server progress is stored in `config/scenario_states.json`. `/scenario set` appends CSV entries while preserving existing scenarios. The same scenario ID and step number are updated.
+Scenario definitions are stored in `config/scenario_definitions.json`, while per-server progress is stored in `config/scenario_states.json`. `/scenario set` appends CSV entries while preserving existing scenarios. The same scenario ID and step number are updated. `/scenario export` exports the registered scenarios as CSV.
 
 See `scenario_template.csv` in the [Template files](#template-files) section for the CSV format and the three-step `welcome` scenario example.
 
