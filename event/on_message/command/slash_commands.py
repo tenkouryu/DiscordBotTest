@@ -8,9 +8,14 @@ from discord import app_commands
 from . import channel as channel_mod
 from . import chat as chat_mod
 from . import member as member_mod
-from . import scenario as scenario_mod
 from . import server as server_mod
 from .help.help import get_command_help_text
+from .scenario import delete as scenario_delete
+from .scenario import export as scenario_export
+from .scenario import list as scenario_list
+from .scenario import set as scenario_set
+from .scenario import start as scenario_start
+from .scenario import template as scenario_template
 
 
 class _InteractionChannel:
@@ -18,6 +23,12 @@ class _InteractionChannel:
 
     def __init__(self, interaction: discord.Interaction) -> None:
         self._interaction = interaction
+
+    def __getattr__(self, name: str) -> Any:
+        channel = self._interaction.channel
+        if channel is None:
+            raise AttributeError(name)
+        return getattr(channel, name)
 
     async def send(self, *args: Any, **kwargs: Any) -> Any:
         if self._interaction.response.is_done():
@@ -165,28 +176,28 @@ def register_slash_commands(tree: app_commands.CommandTree[discord.Client]) -> N
 
     @scenario_group.command(name="template", description="シナリオCSVテンプレート")
     async def scenario_template_command(interaction: discord.Interaction) -> None:
-        await _run(interaction, scenario_mod.template.main, "/scenario_template")
+        await _run(interaction, scenario_template.main, "/scenario_template")
 
     @scenario_group.command(name="set", description="CSVからシナリオを登録")
     async def scenario_set_command(interaction: discord.Interaction, file: discord.Attachment) -> None:
-        await _run(interaction, scenario_mod.set.main, "/scenario_set", attachments=[file])
+        await _run(interaction, scenario_set.main, "/scenario_set", attachments=[file])
 
     @scenario_group.command(name="list", description="登録済みシナリオ一覧")
     async def scenario_list_command(interaction: discord.Interaction) -> None:
-        await _run(interaction, scenario_mod.list.main, "/scenario_list")
+        await _run(interaction, scenario_list.main, "/scenario_list")
 
     @scenario_group.command(name="start", description="シナリオを開始")
     async def scenario_start_command(interaction: discord.Interaction, scenario_id: str, start_step: int | None = None) -> None:
         content = f"/scenario_start {scenario_id} {start_step or ''}"
-        await _run(interaction, scenario_mod.start.main, content)
+        await _run(interaction, scenario_start.main, content)
 
     @scenario_group.command(name="delete", description="シナリオを削除")
     async def scenario_delete_command(interaction: discord.Interaction, scenario_id: str) -> None:
-        await _run(interaction, scenario_mod.delete.main, f"/scenario_delete {scenario_id}")
+        await _run(interaction, scenario_delete.main, f"/scenario_delete {scenario_id}")
 
     @scenario_group.command(name="export", description="シナリオをCSVで出力")
     async def scenario_export_command(interaction: discord.Interaction) -> None:
-        await _run(interaction, scenario_mod.export.main, "/scenario_export")
+        await _run(interaction, scenario_export.main, "/scenario_export")
 
     tree.add_command(member_group)
     tree.add_command(server_group)
