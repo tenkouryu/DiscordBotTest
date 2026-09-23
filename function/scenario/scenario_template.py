@@ -22,10 +22,8 @@ def create_scenario_template() -> io.BytesIO:
         "completion_value",
         "response",
         "branch_reaction_1",
-        "branch_scenario_id_1",
         "branch_step_1",
         "branch_reaction_2",
-        "branch_scenario_id_2",
         "branch_step_2",
     ])
     writer.writerow([
@@ -36,10 +34,8 @@ def create_scenario_template() -> io.BytesIO:
         "*",
         "ありがとうございます。次の確認へ進みます。",
         "👍",
-        "welcome",
         "2",
         "👎",
-        "welcome",
         "1",
     ])
     writer.writerow([
@@ -53,8 +49,6 @@ def create_scenario_template() -> io.BytesIO:
         "",
         "",
         "",
-        "",
-        "",
     ])
     writer.writerow([
         "welcome",
@@ -63,8 +57,6 @@ def create_scenario_template() -> io.BytesIO:
         "reaction",
         "🎉",
         "シナリオが完了しました。",
-        "",
-        "",
         "",
         "",
         "",
