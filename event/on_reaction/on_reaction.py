@@ -20,7 +20,7 @@ async def on_reaction_main(
     reaction: discord.Reaction,
     user: discord.User,
 ) -> None:
-    print(f'{user}がリアクションを追加しました：{reaction.emoji}')
+    print(f'reaction added: {ascii(user)} {ascii(reaction.emoji)}')
     # リアクションを付けたユーザーがBotの場合は無視する。
     if user.bot:
         return
