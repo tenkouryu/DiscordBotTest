@@ -1,0 +1,679 @@
+[2026-09-24 03:57:05] [INFO    ] discord.client: logging in using static token
+[2026-09-24 03:57:07] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 4d7d5e49efdc83a4fde873219a151490).
+[2026-09-24 03:57:56] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'start'
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 859, in _do_call
+    return await self._callback(interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\command\slash_commands.py", line 181, in scenario_start_command
+    await _run(interaction, scenario_mod.start.main, content)
+                            ^^^^^^^^^^^^^^^^^^
+AttributeError: module 'event.on_message.command.scenario' has no attribute 'start'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'start' raised an exception: AttributeError: module 'event.on_message.command.scenario' has no attribute 'start'
+[2026-09-24 03:57:58] [ERROR   ] discord.client: Ignoring exception in on_reaction_add
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 50, in on_reaction_add
+    await on_reaction_event.on_reaction_main(client, reaction, user)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_reaction\on_reaction.py", line 23, in on_reaction_main
+    print(f'{user}ÔøΩÔøΩÔøΩÔøΩÔøΩAÔøΩNÔøΩVÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ«âÔøΩÔøΩÔøΩÔøΩ‹ÇÔøΩÔøΩÔøΩÔøΩF{reaction.emoji}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f44d' in position 30: illegal multibyte sequence
+[2026-09-24 03:57:59] [ERROR   ] discord.client: Ignoring exception in on_reaction_add
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 50, in on_reaction_add
+    await on_reaction_event.on_reaction_main(client, reaction, user)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_reaction\on_reaction.py", line 23, in on_reaction_main
+    print(f'{user}ÔøΩÔøΩÔøΩÔøΩÔøΩAÔøΩNÔøΩVÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ«âÔøΩÔøΩÔøΩÔøΩ‹ÇÔøΩÔøΩÔøΩÔøΩF{reaction.emoji}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f44e' in position 30: illegal multibyte sequence
+[2026-09-24 03:58:03] [ERROR   ] discord.client: Ignoring exception in on_reaction_add
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 50, in on_reaction_add
+    await on_reaction_event.on_reaction_main(client, reaction, user)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_reaction\on_reaction.py", line 23, in on_reaction_main
+    print(f'{user}ÔøΩÔøΩÔøΩÔøΩÔøΩAÔøΩNÔøΩVÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ«âÔøΩÔøΩÔøΩÔøΩ‹ÇÔøΩÔøΩÔøΩÔøΩF{reaction.emoji}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f44d' in position 24: illegal multibyte sequence
+[2026-09-24 03:58:03] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}ÔøΩÔøΩÔøΩÔøΩÃÉÔøΩÔøΩbÔøΩZÔøΩ[ÔøΩWÔøΩF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 39: illegal multibyte sequence
+[2026-09-24 03:58:04] [ERROR   ] discord.client: Ignoring exception in on_reaction_add
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 50, in on_reaction_add
+    await on_reaction_event.on_reaction_main(client, reaction, user)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_reaction\on_reaction.py", line 23, in on_reaction_main
+    print(f'{user}ÔøΩÔøΩÔøΩÔøΩÔøΩAÔøΩNÔøΩVÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ«âÔøΩÔøΩÔøΩÔøΩ‹ÇÔøΩÔøΩÔøΩÔøΩF{reaction.emoji}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 30: illegal multibyte sequence
+[2026-09-24 03:58:06] [ERROR   ] discord.client: Ignoring exception in on_reaction_add
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 50, in on_reaction_add
+    await on_reaction_event.on_reaction_main(client, reaction, user)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_reaction\on_reaction.py", line 23, in on_reaction_main
+    print(f'{user}ÔøΩÔøΩÔøΩÔøΩÔøΩAÔøΩNÔøΩVÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ«âÔøΩÔøΩÔøΩÔøΩ‹ÇÔøΩÔøΩÔøΩÔøΩF{reaction.emoji}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 24: illegal multibyte sequence
+[2026-09-24 03:58:07] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}ÔøΩÔøΩÔøΩÔøΩÃÉÔøΩÔøΩbÔøΩZÔøΩ[ÔøΩWÔøΩF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f389' in position 27: illegal multibyte sequence
+[2026-09-24 03:58:07] [ERROR   ] discord.client: Ignoring exception in on_reaction_add
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 50, in on_reaction_add
+    await on_reaction_event.on_reaction_main(client, reaction, user)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_reaction\on_reaction.py", line 23, in on_reaction_main
+    print(f'{user}ÔøΩÔøΩÔøΩÔøΩÔøΩAÔøΩNÔøΩVÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ«âÔøΩÔøΩÔøΩÔøΩ‹ÇÔøΩÔøΩÔøΩÔøΩF{reaction.emoji}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f389' in position 30: illegal multibyte sequence
+[2026-09-24 03:58:09] [ERROR   ] discord.client: Ignoring exception in on_reaction_add
+
+„Ç¢„Éó„É™„Ç±„Éº„Ç∑„Éß„É≥„ÅåÂøúÁ≠î„Åó„Åæ„Åõ„Çì„Åß„Åó„Åü
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f389' in position 24: illegal multibyte sequence
+[2026-09-24 03:58:50] [INFO    ] discord.client: logging in using static token
+[2026-09-24 03:58:52] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 86c32afc710f38e35879c230707c838d).
+[2026-09-24 03:59:29] [INFO    ] discord.client: logging in using static token
+[2026-09-24 03:59:31] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: e25d88a91d3430243ecbbac5bc421e4c).
+[2026-09-24 04:00:53] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'start'
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 859, in _do_call
+    return await self._callback(interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\command\slash_commands.py", line 181, in scenario_start_command
+    await _run(interaction, scenario_mod.start.main, content)
+                            ^^^^^^^^^^^^^^^^^^
+AttributeError: module 'event.on_message.command.scenario' has no attribute 'start'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'start' raised an exception: AttributeError: module 'event.on_message.command.scenario' has no attribute 'start'
+[2026-09-24 04:00:58] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}ÔøΩÔøΩÔøΩÔøΩÃÉÔøΩÔøΩbÔøΩZÔøΩ[ÔøΩWÔøΩF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 39: illegal multibyte sequence
+[2026-09-24 04:01:21] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}ÔøΩÔøΩÔøΩÔøΩÃÉÔøΩÔøΩbÔøΩZÔøΩ[ÔøΩWÔøΩF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f389' in position 27: illegal multibyte sequence
+[2026-09-24 04:02:22] [INFO    ] discord.client: logging in using static token
+[2026-09-24 04:02:24] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 14ae0f8d79e73722cd26cc70e4d438e5).
+[2026-09-24 04:03:05] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'start'
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 859, in _do_call
+    return await self._callback(interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\command\slash_commands.py", line 181, in scenario_start_command
+    await _run(interaction, scenario_mod.start.main, content)
+                            ^^^^^^^^^^^^^^^^^^
+AttributeError: module 'event.on_message.command.scenario' has no attribute 'start'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'start' raised an exception: AttributeError: module 'event.on_message.command.scenario' has no attribute 'start'
+[2026-09-24 04:03:10] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}ÔøΩÔøΩÔøΩÔøΩÃÉÔøΩÔøΩbÔøΩZÔøΩ[ÔøΩWÔøΩF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 39: illegal multibyte sequence
+[2026-09-24 04:03:10] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}ÔøΩÔøΩÔøΩÔøΩÃÉÔøΩÔøΩbÔøΩZÔøΩ[ÔøΩWÔøΩF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 39: illegal multibyte sequence
+[2026-09-24 04:03:10] [WARNING ] discord.http: We are being rate limited. PUT https://discord.com/api/v10/channels/1545856247637614785/messages/1552394912069328999/reactions/%E2%9C%85/@me responded with 429. Retrying in 0.30 seconds.
+[2026-09-24 04:03:19] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}ÔøΩÔøΩÔøΩÔøΩÃÉÔøΩÔøΩbÔøΩZÔøΩ[ÔøΩWÔøΩF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f389' in position 27: illegal multibyte sequence
+[2026-09-24 04:03:20] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}ÔøΩÔøΩÔøΩÔøΩÃÉÔøΩÔøΩbÔøΩZÔøΩ[ÔøΩWÔøΩF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f389' in position 27: illegal multibyte sequence
+[2026-09-24 04:04:18] [INFO    ] discord.client: logging in using static token
+[2026-09-24 04:04:20] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 2180b17ca7e564b9a1bbea06af67141d).
+[2026-09-24 04:05:11] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'start'
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 859, in _do_call
+    return await self._callback(interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\command\slash_commands.py", line 181, in scenario_start_command
+    await _run(interaction, scenario_mod.start.main, content)
+                            ^^^^^^^^^^^^^^^^^^
+AttributeError: module 'event.on_message.command.scenario' has no attribute 'start'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'start' raised an exception: AttributeError: module 'event.on_message.command.scenario' has no attribute 'start'
+[2026-09-24 04:05:59] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'start'
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 859, in _do_call
+    return await self._callback(interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\command\slash_commands.py", line 181, in scenario_start_command
+    await _run(interaction, scenario_mod.start.main, content)
+                            ^^^^^^^^^^^^^^^^^^
+AttributeError: module 'event.on_message.command.scenario' has no attribute 'start'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'start' raised an exception: AttributeError: module 'event.on_message.command.scenario' has no attribute 'start'
+[2026-09-24 04:06:40] [INFO    ] discord.client: logging in using static token
+[2026-09-24 04:06:41] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 007887c626bf706431bb1a87edef3054).
+[2026-09-24 04:07:26] [ERROR   ] discord.app_commands.tree: Ignoring exception in command 'start'
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 859, in _do_call
+    return await self._callback(interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\command\slash_commands.py", line 186, in scenario_start_command
+    await _run(interaction, scenario_start.main, content)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\command\slash_commands.py", line 67, in _run
+    await handler(
+    ...<7 lines>...
+    )
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\command\scenario\start.py", line 58, in main
+    message.channel.id,
+    ^^^^^^^^^^^^^^^^^^
+AttributeError: '_InteractionChannel' object has no attribute 'id'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\app_commands\tree.py", line 1302, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\discord\app_commands\commands.py", line 877, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'start' raised an exception: AttributeError: '_InteractionChannel' object has no attribute 'id'
+[2026-09-24 04:08:18] [INFO    ] discord.client: logging in using static token
+[2026-09-24 04:08:20] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 0fb5ec6f97c060562889bc7a4f11f4a6).
+[2026-09-24 04:08:56] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 39: illegal multibyte sequence
+[2026-09-24 04:08:59] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f389' in position 27: illegal multibyte sequence
+[2026-09-24 04:51:39] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f3c1' in position 52: illegal multibyte sequence
+[2026-09-24 04:51:45] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f170' in position 40: illegal multibyte sequence
+[2026-09-24 04:51:58] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2694' in position 51: illegal multibyte sequence
+[2026-09-24 04:52:07] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 57: illegal multibyte sequence
+[2026-09-24 04:52:11] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f3c1' in position 52: illegal multibyte sequence
+[2026-09-24 04:52:17] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f170' in position 40: illegal multibyte sequence
+[2026-09-24 04:52:27] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2694' in position 51: illegal multibyte sequence
+[2026-09-24 04:52:31] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 57: illegal multibyte sequence
+[2026-09-24 04:52:34] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f3c1' in position 52: illegal multibyte sequence
+[2026-09-24 04:52:37] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f170' in position 40: illegal multibyte sequence
+[2026-09-24 04:52:41] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2694' in position 51: illegal multibyte sequence
+[2026-09-24 04:52:49] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 57: illegal multibyte sequence
+[2026-09-24 04:52:52] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f3c1' in position 52: illegal multibyte sequence
+[2026-09-24 04:52:55] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f170' in position 40: illegal multibyte sequence
+[2026-09-24 04:53:09] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2694' in position 51: illegal multibyte sequence
+[2026-09-24 04:53:12] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 57: illegal multibyte sequence
+[2026-09-24 04:53:17] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f3c1' in position 52: illegal multibyte sequence
+[2026-09-24 04:53:22] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f170' in position 40: illegal multibyte sequence
+[2026-09-24 04:53:32] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 37: illegal multibyte sequence
+[2026-09-24 05:02:07] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f3c1' in position 52: illegal multibyte sequence
+[2026-09-24 05:02:18] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 48: illegal multibyte sequence
+[2026-09-24 05:02:24] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f170' in position 40: illegal multibyte sequence
+[2026-09-24 05:02:28] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2694' in position 51: illegal multibyte sequence
+[2026-09-24 05:02:34] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 57: illegal multibyte sequence
+[2026-09-24 05:02:38] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f3c1' in position 52: illegal multibyte sequence
+[2026-09-24 05:02:41] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 48: illegal multibyte sequence
+[2026-09-24 05:02:47] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f170' in position 40: illegal multibyte sequence
+[2026-09-24 05:02:51] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2694' in position 51: illegal multibyte sequence
+[2026-09-24 05:02:56] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 57: illegal multibyte sequence
+[2026-09-24 05:03:04] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f3c1' in position 52: illegal multibyte sequence
+[2026-09-24 05:03:07] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 48: illegal multibyte sequence
+[2026-09-24 05:03:11] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f170' in position 40: illegal multibyte sequence
+[2026-09-24 05:03:15] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2694' in position 51: illegal multibyte sequence
+[2026-09-24 05:03:18] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 57: illegal multibyte sequence
+[2026-09-24 05:03:21] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\U0001f3c1' in position 52: illegal multibyte sequence
+[2026-09-24 05:03:26] [ERROR   ] discord.client: Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Python314\Lib\site-packages\discord\client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\bot_main.py", line 42, in on_message
+    await on_message_event.on_message_main(client, message)
+  File "c:\Users\owner\OneDrive\Desktop\DiscordBot_servercontroller\event\on_message\on_message.py", line 22, in on_message_main
+    print(f'{message.author}Ç©ÇÁÇÃÉÅÉbÉZÅ[ÉWÅF{message.content}')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'cp932' codec can't encode character '\u2705' in position 48: illegal multibyte sequence
+[2026-09-24 05:15:19] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 0fb5ec6f97c060562889bc7a4f11f4a6.
+[2026-09-24 10:44:35] [WARNING ] discord.gateway: Shard ID None has stopped responding to the gateway. Closing and restarting.
+[2026-09-24 10:44:35] [INFO    ] discord.gateway: Shard ID None session has been invalidated.
+[2026-09-24 10:44:41] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 81512c0be131b1bf156e8bc00f8920ed).
+[2026-09-24 20:55:27] [WARNING ] discord.gateway: Shard ID None has stopped responding to the gateway. Closing and restarting.
+[2026-09-24 20:55:28] [INFO    ] discord.gateway: Shard ID None session has been invalidated.
+[2026-09-24 20:55:34] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 71b5c0686ddfd60a14155a8928c8adcb).
