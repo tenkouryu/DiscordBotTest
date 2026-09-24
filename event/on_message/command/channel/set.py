@@ -1,5 +1,6 @@
 import csv
 import io
+import re
 
 import discord
 import function.discord.channel.edit_channel as edit_channel
@@ -33,7 +34,19 @@ async def set_channels_from_csv(
         channel_name = (row.get("name") or "").strip()
         channel_type = (row.get("type") or "").strip().lower()
         category_name = (row.get("category") or "").strip()
-
+        role_columns = sorted(
+            (
+                key
+                for key in row
+                if re.fullmatch(r"role_\d+", key or "")
+            ),
+            key=lambda key: int(key.rsplit("_", 1)[1]),
+        )
+        role_names = [
+            (row.get(column) or "").strip()
+            for column in role_columns
+            if (row.get(column) or "").strip()
+        ]
         try:
             if not channel_name:
                 raise ValueError("チャンネル名が空です。")
@@ -46,13 +59,13 @@ async def set_channels_from_csv(
             )
             if existing_channel is None:
                 if channel_type == "text":
-                    await edit_channel.create_text_channel(
+                    existing_channel = await edit_channel.create_text_channel(
                         guild,
                         channel_name,
                         category_name or None,
                     )
                 else:
-                    await edit_channel.create_voice_channel(
+                    existing_channel = await edit_channel.create_voice_channel(
                         guild,
                         channel_name,
                         category_name or None,
@@ -75,6 +88,12 @@ async def set_channels_from_csv(
                         category_name,
                     )
 
+            for role_name in role_names:
+                await edit_channel.grant_channel_role_access(
+                    existing_channel,
+                    role_name,
+                )
+
             success_count += 1
         except (ValueError, discord.Forbidden, discord.HTTPException) as error:
             errors.append(f"{row_number}行目（{channel_name or '名前なし'}）: {error}")
@@ -87,7 +106,7 @@ async def main(message: discord.Message) -> None:
     if message.content.partition(" ")[2].strip() == "-h":
         await message.channel.send(
             "/channel set + CSVファイル\n"
-            "CSV形式: name,type,category\n"
+            "CSV形式: name,type,category,role_1,role_2,...（role_列は追加可能）\n"
             "type は text または voice を指定します。"
         )
         return

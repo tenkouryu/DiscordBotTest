@@ -112,3 +112,34 @@ async def move_voice_channel_to_category(
         raise ValueError("ボイスチャンネルを指定してください。")
 
     return await move_channel_to_category(channel, category_name)
+
+
+async def grant_channel_role_access(
+    channel: discord.abc.GuildChannel,
+    role_name: str,
+) -> discord.abc.GuildChannel:
+    """指定ロールにチャンネル参加権限を付与する。"""
+    if channel is None or channel.guild is None:
+        raise ValueError("サーバーのチャンネルを指定してください。")
+
+    role_name = role_name.strip()
+    if not role_name:
+        raise ValueError("ロール名を指定してください。")
+
+    role = discord.utils.get(channel.guild.roles, name=role_name)
+    if role is None:
+        raise ValueError(f"ロールが見つかりません: {role_name}")
+
+    permissions = {"view_channel": True}
+    if isinstance(channel, discord.TextChannel):
+        permissions.update(
+            send_messages=True,
+            read_message_history=True,
+        )
+    elif isinstance(channel, discord.VoiceChannel):
+        permissions.update(connect=True, speak=True)
+    else:
+        raise ValueError("テキストまたはボイスチャンネルを指定してください。")
+
+    await channel.set_permissions(role, **permissions)
+    return channel
