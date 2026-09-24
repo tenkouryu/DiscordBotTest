@@ -21,11 +21,13 @@ async def main(message: discord.Message) -> None:
 
     output = io.StringIO(newline="")
     writer = csv.writer(output)
-    writer.writerow(["name", "type", "category"])
+    writer.writerow(["name", "type", "category", "role_1", "role_2"])
     writer.writerow([
         "設定するチャンネル名を入力",
         "text または voice を入力",
         "所属カテゴリー名を入力（設定しない場合は列を削除）",
+        "チャンネル参加を許可するロール名1",
+        "チャンネル参加を許可するロール名2",
     ])
     await message.channel.send(
         "チャンネル設定用 CSV テンプレートです。",
