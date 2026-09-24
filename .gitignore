@@ -2,6 +2,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.venv/
 .vscode/settings.json
 bot.log
-templates/team_match_scenario.csv
