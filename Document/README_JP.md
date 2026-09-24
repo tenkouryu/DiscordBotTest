@@ -6,14 +6,14 @@ Discord.py で作成した Discord Bot です。メンバー・ロール・チ�
 
 ## セットアップ
 
-1. Python 3.14 以降を用意します。
+1. Python 3.10 以降を用意します。
 2. discord.py をインストールします。
 
 ```powershell
 pip install discord.py
 ```
 
-3. `config/config.json` に Bot トークンと通知先チャンネル ID を設定します。
+3. `Src/config/config.json` に Bot トークンと通知先チャンネル ID を設定します。
 
 ```json
 {
@@ -33,7 +33,7 @@ pip install discord.py
 python bot_main.py
 ```
 
-Bot トークンは公開せず、`config/config.json` を Git にコミットしないでください。
+Bot トークンは公開せず、`Src/config/config.json` を Git にコミットしないでください。
 
 ## コマンド
 
@@ -146,10 +146,10 @@ CSV形式と `welcome` シナリオの例は [テンプレートファイル](#�
 
 ## テンプレートファイル
 
-各種CSVテンプレートはルート直下の `templates` フォルダに保存しています。リンク先のCSVを編集して各コマンドに添付してください。
+各種CSVテンプレートは `Src/templates` フォルダに保存しています。リンク先のCSVを編集して各コマンドに添付してください。
 
-- [channel_template.csv](templates/channel_template.csv): チャンネル設定
-- [chat_template.csv](templates/chat_template.csv): 添付ファイル取得
-- [member_role_template.csv](templates/member_role_template.csv): メンバーロール設定
-- [server_role_template.csv](templates/server_role_template.csv): サーバーロール設定
-- [scenario_template.csv](templates/scenario_template.csv): シナリオ登録
+- [channel_template.csv](../templates/channel_template.csv): チャンネル設定
+- [chat_template.csv](../templates/chat_template.csv): 添付ファイル取得
+- [member_role_template.csv](../templates/member_role_template.csv): メンバーロール設定
+- [server_role_template.csv](../templates/server_role_template.csv): サーバーロール設定
+- [scenario_template.csv](../templates/scenario_template.csv): シナリオ登録

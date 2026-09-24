@@ -1,4 +1,6 @@
 import json
+from pathlib import Path
+
 import discord
 from discord import app_commands
 from event.on_ready import on_ready as on_ready_event
@@ -11,7 +13,10 @@ from event.on_message.command.slash_commands import register_slash_commands
 
 #----------Botの設定はここ----------
 #Botの設定を読み込み
-with open('config/config.json', encoding='utf-8-sig') as f:
+PROJECT_ROOT = Path(__file__).resolve().parent
+CONFIG_PATH = PROJECT_ROOT / 'config' / 'config.json'
+
+with CONFIG_PATH.open(encoding='utf-8-sig') as f:
     config = json.load(f)
 TOKEN = config['BOT_TOKEN']
 REDIRECT_CHANNEL_ID = config['REDIRECT_CHANNEL_ID']

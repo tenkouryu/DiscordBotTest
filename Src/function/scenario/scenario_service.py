@@ -13,6 +13,9 @@ from typing import Any
 import discord
 
 
+_SRC_ROOT = Path(__file__).resolve().parents[2]
+
+
 """
     台本の登録とサーバーごとの進行状態を管理する共通処理。
 
@@ -38,8 +41,8 @@ import discord
         現在の指示が完了したかを確認し、完了していれば次のステップへ進める。
 """
 
-_DEFAULT_DEFINITIONS_PATH = Path("config/scenario_definitions.json")
-_DEFAULT_STATES_PATH = Path("config/scenario_states.json")
+_DEFAULT_DEFINITIONS_PATH = _SRC_ROOT / "config" / "scenario_definitions.json"
+_DEFAULT_STATES_PATH = _SRC_ROOT / "config" / "scenario_states.json"
 _REQUIRED_COLUMNS = {
     "scenario_id",
     "step",
