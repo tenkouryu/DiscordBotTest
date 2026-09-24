@@ -174,7 +174,8 @@ def _parse_branch_columns(
         {
             key.rsplit("_", 1)[1]
             for key in row
-            if key.startswith("branch_")
+            if isinstance(key, str)
+            and key.startswith("branch_")
             and key.rsplit("_", 1)[-1].isdigit()
         },
         key=int,
