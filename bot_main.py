@@ -11,7 +11,7 @@ from event.on_message.command.slash_commands import register_slash_commands
 
 #----------Botの設定はここ----------
 #Botの設定を読み込み
-with open('config/config.json') as f:
+with open('config/config.json', encoding='utf-8-sig') as f:
     config = json.load(f)
 TOKEN = config['BOT_TOKEN']
 REDIRECT_CHANNEL_ID = config['REDIRECT_CHANNEL_ID']
