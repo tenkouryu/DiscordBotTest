@@ -30,8 +30,10 @@ pip install discord.py
 5. 起動します。
 
 ```powershell
-python bot_main.py
+python Src/bot_main.py
 ```
+
+または `run_bot.cmd` を実行します。
 
 Bot トークンは公開せず、`Src/config/config.json` を Git にコミットしないでください。
 
@@ -57,7 +59,9 @@ Bot トークンは公開せず、`Src/config/config.json` を Git にコミッ�
 
 CSV形式は [テンプレートファイル](#テンプレートファイル) の `member_role_template.csv` を参照してください。
 
-`get` はメンバー名または表示名に一致するメンバーのロール一覧を返信します。メンションで指定することもできます。
+`get` はメンバー名または表示名に一致するメンバーのロール一覧を返信します。メンションで指定することもできます。現在、CSVではなくテキスト返信です。
+
+`set` は処理結果を `result` 列、失敗理由を `reason` 列に記録したCSVを返信します。
 
 `add`、`set`、`remove` には「ロールの管理」権限が必要です。
 
@@ -74,6 +78,8 @@ CSV形式は [テンプレートファイル](#テンプレートファイル) �
 ```
 
 CSV形式は [テンプレートファイル](#テンプレートファイル) の `server_role_template.csv` を参照してください。
+
+`/server role get` が出力するCSVは `/server role set` に添付して再利用できます。`set` の結果CSVには `result` と `reason` 列が追加されます。
 
 `add`、`edit`、`set`、`remove` には「ロールの管理」権限が必要です。
 
@@ -99,6 +105,8 @@ CSV形式は [テンプレートファイル](#テンプレートファイル) �
 チャンネルの作成・移動には「チャンネルの管理」権限が必要です。指定したカテゴリーが存在しない場合は自動作成します。
 
 `/channel get` でサーバーのチャンネル一覧を `name,type,category` 形式の CSV ファイルとして取得できます。
+
+このCSVは `/channel set` に添付して再利用できます。結果CSVには `result` と `reason` 列が追加されます。ロール列を1つ以上指定した場合は記載ロールだけにアクセスを許可し、未記載ロールの既存アクセス許可を解除します。ロール列が空の場合は既存権限を維持します。
 
 CSV形式は [テンプレートファイル](#テンプレートファイル) の `channel_template.csv` を参照してください。
 
@@ -136,7 +144,7 @@ CSV形式は [テンプレートファイル](#テンプレートファイル) �
 /scenario export
 ```
 
-シナリオは `config/scenario_definitions.json` に保存され、サーバーごとの進行状態は `config/scenario_states.json` に保存されます。`/scenario set` は既存のシナリオを保持したままCSVの内容を追記します。同じシナリオIDとステップ番号がある場合は更新されます。`/scenario export` で登録済みシナリオをCSV形式で出力できます。
+シナリオは `Src/config/scenario_definitions.json` に保存され、サーバーごとの進行状態は `Src/config/scenario_states.json` に保存されます。`/scenario set` は既存のシナリオを保持したままCSVの内容を追記します。同じシナリオIDとステップ番号がある場合は更新されます。登録結果を `result` / `reason` 列に記録したCSVを返信します。`/scenario export` のCSVは `/scenario set` に再利用できます。
 
 CSV形式と `welcome` シナリオの例は [テンプレートファイル](#テンプレートファイル) の `scenario_template.csv` を参照してください。
 
@@ -146,10 +154,23 @@ CSV形式と `welcome` シナリオの例は [テンプレートファイル](#�
 
 ## テンプレートファイル
 
-各種CSVテンプレートは `Src/templates` フォルダに保存しています。リンク先のCSVを編集して各コマンドに添付してください。
+CSVテンプレートは `Src/templates` の用途別フォルダにあります。必要なCSVを編集して各コマンドに添付してください。
 
-- [channel_template.csv](../templates/channel_template.csv): チャンネル設定
-- [chat_template.csv](../templates/chat_template.csv): 添付ファイル取得
-- [member_role_template.csv](../templates/member_role_template.csv): メンバーロール設定
-- [server_role_template.csv](../templates/server_role_template.csv): サーバーロール設定
-- [scenario_template.csv](../templates/scenario_template.csv): シナリオ登録
+### Set 入力
+
+- [channel_template.csv](../Src/templates/set/input/channel_template.csv): チャンネル設定
+- [member_role_template.csv](../Src/templates/set/input/member_role_template.csv): メンバーロール設定
+- [server_role_template.csv](../Src/templates/set/input/server_role_template.csv): サーバーロール設定
+- [scenario_template.csv](../Src/templates/set/input/scenario_template.csv): シナリオ登録
+- [team_match_scenario.csv](../Src/templates/set/input/team_match_scenario.csv): チーム戦シナリオ例
+
+### Get 入力
+
+- [chat_template.csv](../Src/templates/get/input/chat_template.csv): 複数チャンネルの添付ファイル取得
+
+### 応答・結果の配置
+
+- [Set応答フォルダ](../Src/templates/set/response/README.md): Setの結果CSVについて
+- [Get結果フォルダ](../Src/templates/get/result/README.md): Getの出力について
+
+応答・結果ファイルは実行ごとに各フォルダへ保存され、Discordの添付ファイルとしても返信されます。生成ファイルはサーバーデータを含む場合があるためGit管理対象外です。

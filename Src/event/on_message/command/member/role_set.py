@@ -1,10 +1,9 @@
 import csv
 import io
-import os
-import tempfile
 
 import discord
 import function.discord.role.edit_roll as edit_roll
+from function.file.template_output_service import save_template_output
 
 """
     CSVによるメンバーロール設定コマンドを処理する。
@@ -98,19 +97,31 @@ async def update_member_roles_from_csv(
     if not required_columns.issubset(reader.fieldnames or set()):
         raise ValueError("CSVには「追加/削除」「表示名」「ロール」列が必要です。")
 
+    fieldnames = list(reader.fieldnames or [])
+    if "result" not in fieldnames:
+        fieldnames.append("result")
+    if "reason" not in fieldnames:
+        fieldnames.append("reason")
+
     output = io.StringIO(newline="")
     writer = csv.writer(output)
-    writer.writerow(["追加/削除", "表示名", "ロール", "実行結果"])
+    writer.writerow(fieldnames)
     success_count = 0
 
     for row in reader:
         action = row.get("追加/削除", "").strip()
         display_name = row.get("表示名", "").strip()
         role_name = row.get("ロール", "").strip()
-        result = await _execute_row(guild, action, display_name, role_name)
-        if result.startswith("成功"):
+        operation_result = await _execute_row(guild, action, display_name, role_name)
+        succeeded = operation_result.startswith("成功")
+        result = "成功" if succeeded else "失敗"
+        reason = operation_result.partition(":")[2].strip() if not succeeded else ""
+        if succeeded:
             success_count += 1
-        writer.writerow([action, display_name, role_name, result])
+        output_row = [row.get(fieldname, "") or "" for fieldname in fieldnames]
+        output_row[fieldnames.index("result")] = result
+        output_row[fieldnames.index("reason")] = reason
+        writer.writerow(output_row)
 
     return output.getvalue(), success_count
 
@@ -121,7 +132,7 @@ async def main(message: discord.Message) -> None:
         await message.channel.send(
             "/member role set + CSVファイル\n"
             "CSV形式: 追加/削除,表示名,ロール\n"
-            "処理結果を「実行結果」列に追加したCSVを返信します。"
+            "処理結果を result、失敗理由を reason 列に追加したCSVを返信します。"
         )
         return
 
@@ -153,22 +164,12 @@ async def main(message: discord.Message) -> None:
         await message.channel.send(f"CSVを読み込めませんでした: {error}")
         return
 
-    file_path = None
-    try:
-        with tempfile.NamedTemporaryFile(
-            mode="w",
-            encoding="utf-8-sig",
-            newline="",
-            suffix="_result.csv",
-            delete=False,
-        ) as result_file:
-            result_file.write(result_csv)
-            file_path = result_file.name
-
-        await message.channel.send(
-            f"{success_count}件の処理が成功しました。実行結果CSVを添付します。",
-            file=discord.File(file_path, filename="member_roles_result.csv"),
-        )
-    finally:
-        if file_path and os.path.exists(file_path):
-            os.remove(file_path)
+    result_path = save_template_output(
+        "set/response",
+        f"member_role_set_{message.guild.id}",
+        result_csv.encode("utf-8-sig"),
+    )
+    await message.channel.send(
+        f"{success_count}件の処理が成功しました。結果CSVを添付します。",
+        file=discord.File(result_path, filename=result_path.name),
+    )

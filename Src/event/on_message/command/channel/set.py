@@ -4,6 +4,7 @@ import re
 
 import discord
 import function.discord.channel.edit_channel as edit_channel
+from function.file.template_output_service import save_template_output
 
 """
     CSVによるチャンネル設定コマンドを処理する。
@@ -18,8 +19,8 @@ import function.discord.channel.edit_channel as edit_channel
 async def set_channels_from_csv(
     guild: discord.Guild,
     csv_text: str,
-) -> tuple[int, list[str]]:
-    """CSVからチャンネルを作成またはカテゴリー設定する。"""
+) -> tuple[int, bytes]:
+    """CSVからチャンネルを設定し、各行の結果を含むCSVを返す。"""
     if guild is None:
         raise ValueError("サーバーが指定されていません。")
 
@@ -28,9 +29,19 @@ async def set_channels_from_csv(
     if not required_columns.issubset(reader.fieldnames or set()):
         raise ValueError("CSVには name、type、category 列が必要です。")
 
+    fieldnames = list(reader.fieldnames or [])
+    result_field = "result"
+    reason_field = "reason"
+    if result_field not in fieldnames:
+        fieldnames.append(result_field)
+    if reason_field not in fieldnames:
+        fieldnames.append(reason_field)
+
+    output = io.StringIO(newline="")
+    writer = csv.writer(output)
+    writer.writerow(fieldnames)
     success_count = 0
-    errors: list[str] = []
-    for row_number, row in enumerate(reader, start=2):
+    for row in reader:
         channel_name = (row.get("name") or "").strip()
         channel_type = (row.get("type") or "").strip().lower()
         category_name = (row.get("category") or "").strip()
@@ -47,6 +58,8 @@ async def set_channels_from_csv(
             for column in role_columns
             if (row.get(column) or "").strip()
         ]
+        result = "成功"
+        reason = ""
         try:
             if not channel_name:
                 raise ValueError("チャンネル名が空です。")
@@ -88,17 +101,23 @@ async def set_channels_from_csv(
                         category_name,
                     )
 
-            for role_name in role_names:
-                await edit_channel.grant_channel_role_access(
+            if role_names:
+                await edit_channel.sync_channel_role_access(
                     existing_channel,
-                    role_name,
+                    role_names,
                 )
 
             success_count += 1
         except (ValueError, discord.Forbidden, discord.HTTPException) as error:
-            errors.append(f"{row_number}行目（{channel_name or '名前なし'}）: {error}")
+            result = "失敗"
+            reason = str(error)
 
-    return success_count, errors
+        output_row = [row.get(fieldname) or "" for fieldname in fieldnames]
+        output_row[fieldnames.index(result_field)] = result
+        output_row[fieldnames.index(reason_field)] = reason
+        writer.writerow(output_row)
+
+    return success_count, output.getvalue().encode("utf-8-sig")
 
 
 async def main(message: discord.Message) -> None:
@@ -107,7 +126,7 @@ async def main(message: discord.Message) -> None:
         await message.channel.send(
             "/channel set + CSVファイル\n"
             "CSV形式: name,type,category,role_1,role_2,...（role_列は追加可能）\n"
-            "type は text または voice を指定します。"
+            "type は text または voice を指定します。処理結果を追記したCSVを返信します。"
         )
         return
 
@@ -131,7 +150,7 @@ async def main(message: discord.Message) -> None:
 
     try:
         csv_text = (await csv_attachment.read()).decode("utf-8-sig")
-        success_count, errors = await set_channels_from_csv(
+        success_count, result_csv = await set_channels_from_csv(
             message.guild,
             csv_text,
         )
@@ -139,7 +158,12 @@ async def main(message: discord.Message) -> None:
         await message.channel.send(f"CSVを読み込めませんでした: {error}")
         return
 
-    result = f"{success_count}件のチャンネルを設定しました。"
-    if errors:
-        result += "\n" + "\n".join(errors)
-    await message.channel.send(result)
+    result_path = save_template_output(
+        "set/response",
+        f"channel_set_{message.guild.id}",
+        result_csv,
+    )
+    await message.channel.send(
+        f"{success_count}件のチャンネルを設定しました。結果CSVを添付します。",
+        file=discord.File(result_path, filename=result_path.name),
+    )
