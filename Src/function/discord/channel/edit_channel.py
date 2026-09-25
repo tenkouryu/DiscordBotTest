@@ -143,3 +143,53 @@ async def grant_channel_role_access(
 
     await channel.set_permissions(role, **permissions)
     return channel
+
+
+async def sync_channel_role_access(
+    channel: discord.abc.GuildChannel,
+    role_names: list[str],
+) -> discord.abc.GuildChannel:
+    """指定ロールだけにチャンネルアクセスを許可する。"""
+    if channel is None or channel.guild is None:
+        raise ValueError("サーバーのチャンネルを指定してください。")
+
+    managed_permissions = (
+        ("view_channel", "send_messages", "read_message_history")
+        if isinstance(channel, discord.TextChannel)
+        else ("view_channel", "connect", "speak")
+        if isinstance(channel, discord.VoiceChannel)
+        else None
+    )
+    if managed_permissions is None:
+        raise ValueError("テキストまたはボイスチャンネルを指定してください。")
+
+    role_names = list(dict.fromkeys(name.strip() for name in role_names if name.strip()))
+    roles_by_name = {role.name: role for role in channel.guild.roles}
+    missing_roles = [name for name in role_names if name not in roles_by_name]
+    if missing_roles:
+        raise ValueError("ロールが見つかりません: " + ", ".join(missing_roles))
+
+    allowed_roles = {roles_by_name[name] for name in role_names}
+    for role in channel.guild.roles:
+        if role.is_default() or role in allowed_roles:
+            continue
+
+        overwrite = channel.overwrites_for(role)
+        changed = False
+        for permission in managed_permissions:
+            if getattr(overwrite, permission) is True:
+                setattr(overwrite, permission, None)
+                changed = True
+        if changed:
+            await channel.set_permissions(
+                role,
+                overwrite=None if overwrite.is_empty() else overwrite,
+            )
+
+    for role in allowed_roles:
+        await channel.set_permissions(
+            role,
+            **{permission: True for permission in managed_permissions},
+        )
+
+    return channel

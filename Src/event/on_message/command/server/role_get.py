@@ -1,9 +1,9 @@
 import csv
-import os
 
 import discord
 import function.discord.role.edit_roll as edit_roll
 import function.discord.message.send_message as send_message
+from function.file.template_output_service import create_template_output_path
 
 """
 	サーバーロール一覧取得コマンドを処理する。
@@ -59,15 +59,14 @@ async def main(client: discord.Client, message: discord.Message) -> None:
 		)
 		return
 
-	file_path = "roles_list.csv"
-	try:
-		export_roles_to_csv(message.guild, file_path)
-		await send_message.send_message_to_channel_with_file(
-			client,
-			message.channel.id,
-			"サーバーのロール一覧を送信します。",
-			file_path,
-		)
-	finally:
-		if os.path.exists(file_path):
-			os.remove(file_path)
+	file_path = create_template_output_path(
+		"get/result",
+		f"server_role_get_{message.guild.id}",
+	)
+	export_roles_to_csv(message.guild, str(file_path))
+	await send_message.send_message_to_channel_with_file(
+		client,
+		message.channel.id,
+		"サーバーのロール一覧を送信します。",
+		str(file_path),
+	)

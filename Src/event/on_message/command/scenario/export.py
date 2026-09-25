@@ -1,5 +1,6 @@
 import discord
 
+from function.file.template_output_service import save_template_output
 from function.scenario.scenario_service import export_scenario_csv
 
 """
@@ -25,7 +26,12 @@ async def main(message: discord.Message) -> None:
         await message.channel.send(f"シナリオCSVを出力できませんでした: {error}")
         return
 
+    result_path = save_template_output(
+        "get/result",
+        f"scenario_export_{message.guild.id}",
+        scenario_file.getvalue(),
+    )
     await message.channel.send(
         "登録済みシナリオのCSVです。",
-        file=discord.File(scenario_file, filename="scenario_definitions.csv"),
+        file=discord.File(result_path, filename=result_path.name),
     )

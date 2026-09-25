@@ -1,6 +1,36 @@
+import csv
+import io
+
 import discord
 
 from function.scenario.scenario_service import register_scenario_csv
+from function.file.template_output_service import save_template_output
+
+
+def _create_result_csv(csv_text: str, result: str, reason: str = "") -> bytes:
+    """入力CSVの各行へ登録結果を追加する。"""
+    rows = list(csv.reader(io.StringIO(csv_text)))
+    if not rows:
+        raise ValueError("CSVにヘッダー行がありません。")
+
+    fieldnames = rows[0]
+    if "result" not in fieldnames:
+        fieldnames.append("result")
+    if "reason" not in fieldnames:
+        fieldnames.append("reason")
+
+    result_index = fieldnames.index("result")
+    reason_index = fieldnames.index("reason")
+    output = io.StringIO(newline="")
+    writer = csv.writer(output)
+    writer.writerow(fieldnames)
+    for row in rows[1:]:
+        row.extend([""] * (len(fieldnames) - len(row)))
+        row[result_index] = result
+        row[reason_index] = reason
+        writer.writerow(row)
+
+    return output.getvalue().encode("utf-8-sig")
 
 """
     台本登録コマンドを処理する。
@@ -15,7 +45,7 @@ async def main(message: discord.Message) -> None:
     if message.content.partition(" ")[2].strip() == "-h":
         await message.channel.send(
             "/scenario set + CSVファイル\n"
-            "台本登録用CSVを読み込みます。"
+            "台本登録用CSVを読み込み、処理結果を追記したCSVを返信します。"
         )
         return
 
@@ -35,11 +65,27 @@ async def main(message: discord.Message) -> None:
 
     try:
         csv_text = (await csv_attachment.read()).decode("utf-8-sig")
-        registered_count = register_scenario_csv(csv_text)
-    except (UnicodeDecodeError, OSError, ValueError) as error:
+    except (UnicodeDecodeError, OSError) as error:
         await message.channel.send(f"台本を登録できませんでした: {error}")
         return
 
+    try:
+        registered_count = register_scenario_csv(csv_text)
+        result_csv = _create_result_csv(csv_text, "成功")
+    except (OSError, ValueError) as error:
+        try:
+            result_csv = _create_result_csv(csv_text, "失敗", str(error))
+        except ValueError:
+            await message.channel.send(f"台本を登録できませんでした: {error}")
+            return
+        registered_count = 0
+
+    result_path = save_template_output(
+        "set/response",
+        f"scenario_set_{message.guild.id}",
+        result_csv,
+    )
     await message.channel.send(
-        f"台本を{registered_count}ステップ登録しました。"
+        f"{registered_count}ステップ登録しました。結果CSVを添付します。",
+        file=discord.File(result_path, filename=result_path.name),
     )

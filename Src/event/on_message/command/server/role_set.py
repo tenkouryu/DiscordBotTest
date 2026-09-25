@@ -3,6 +3,7 @@ import io
 
 import discord
 import function.discord.role.edit_roll as edit_roll
+from function.file.template_output_service import save_template_output
 
 """
     CSVによるサーバーロール設定コマンドを処理する。
@@ -28,8 +29,8 @@ def _parse_bool(value: str, permission_name: str) -> bool:
     )
 
 
-async def set_roles_from_csv(guild: discord.Guild, csv_text: str) -> tuple[int, list[str]]:
-    """role_get.py の CSV を読み込み、ロール設定を更新する。"""
+async def set_roles_from_csv(guild: discord.Guild, csv_text: str) -> tuple[int, bytes]:
+    """role_get.py の CSV を読み込み、結果列付きの CSV を返す。"""
     if guild is None:
         raise ValueError("サーバーが指定されていません。")
 
@@ -38,16 +39,25 @@ async def set_roles_from_csv(guild: discord.Guild, csv_text: str) -> tuple[int, 
     if not required_columns.issubset(reader.fieldnames or set()):
         raise ValueError("CSVには name 列が必要です。")
 
-    success_count = 0
-    errors: list[str] = []
+    fieldnames = list(reader.fieldnames or [])
     permission_names = [
-        column
-        for column in reader.fieldnames or []
-        if column not in {"id", "name", "color"}
+        column for column in fieldnames
+        if column not in {"id", "name", "color", "result", "reason"}
     ]
+    if "result" not in fieldnames:
+        fieldnames.append("result")
+    if "reason" not in fieldnames:
+        fieldnames.append("reason")
 
-    for row_number, row in enumerate(reader, start=2):
+    output = io.StringIO(newline="")
+    writer = csv.writer(output)
+    writer.writerow(fieldnames)
+    success_count = 0
+
+    for row in reader:
         role_name = (row.get("name") or "").strip()
+        result = "成功"
+        reason = ""
         try:
             if not role_name:
                 raise ValueError("ロール名が空です。")
@@ -67,9 +77,15 @@ async def set_roles_from_csv(guild: discord.Guild, csv_text: str) -> tuple[int, 
             )
             success_count += 1
         except (ValueError, discord.Forbidden, discord.HTTPException) as error:
-            errors.append(f"{row_number}行目（{role_name or '名前なし'}）: {error}")
+            result = "失敗"
+            reason = str(error)
 
-    return success_count, errors
+        output_row = [row.get(fieldname, "") or "" for fieldname in fieldnames]
+        output_row[fieldnames.index("result")] = result
+        output_row[fieldnames.index("reason")] = reason
+        writer.writerow(output_row)
+
+    return success_count, output.getvalue().encode("utf-8-sig")
 
 
 async def main(message: discord.Message) -> None:
@@ -77,7 +93,8 @@ async def main(message: discord.Message) -> None:
     if message.content.partition(" ")[2].strip() == "-h":
         await message.channel.send(
             "/server role set + CSVファイル\n"
-            "role_get.py で出力した CSV を添付すると、ロールの色と権限を更新します。"
+            "role_get.py で出力した CSV を添付すると、ロールの色と権限を更新します。\n"
+            "処理結果を result、失敗理由を reason 列に追加したCSVを返信します。"
         )
         return
 
@@ -101,12 +118,17 @@ async def main(message: discord.Message) -> None:
 
     try:
         csv_text = (await csv_attachment.read()).decode("utf-8-sig")
-        success_count, errors = await set_roles_from_csv(message.guild, csv_text)
+        success_count, result_csv = await set_roles_from_csv(message.guild, csv_text)
     except (UnicodeDecodeError, ValueError) as error:
         await message.channel.send(f"CSVを読み込めませんでした: {error}")
         return
 
-    result = f"{success_count}件のロール設定を更新しました。"
-    if errors:
-        result += "\n" + "\n".join(errors)
-    await message.channel.send(result)
+    result_path = save_template_output(
+        "set/response",
+        f"server_role_set_{message.guild.id}",
+        result_csv,
+    )
+    await message.channel.send(
+        f"{success_count}件のロール設定を更新しました。結果CSVを添付します。",
+        file=discord.File(result_path, filename=result_path.name),
+    )

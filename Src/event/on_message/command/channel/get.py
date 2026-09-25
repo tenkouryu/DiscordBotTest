@@ -2,6 +2,7 @@ import csv
 import io
 
 import discord
+from function.file.template_output_service import save_template_output
 
 """
     チャンネル一覧取得コマンドを処理する。
@@ -51,10 +52,12 @@ async def main(message: discord.Message) -> None:
         await message.channel.send("チャンネルを管理する権限がありません。")
         return
 
+    result_path = save_template_output(
+        "get/result",
+        f"channel_get_{message.guild.id}",
+        export_channels_to_csv(message.guild),
+    )
     await message.channel.send(
         "チャンネル一覧を送信します。",
-        file=discord.File(
-            io.BytesIO(export_channels_to_csv(message.guild)),
-            filename="channels_list.csv",
-        ),
+        file=discord.File(result_path, filename=result_path.name),
     )

@@ -31,8 +31,10 @@ pip install discord.py
 5. Start the bot.
 
 ```powershell
-python bot_main.py
+python Src/bot_main.py
 ```
+
+Alternatively, run `run_bot.cmd`.
 
 Do not expose the bot token, and avoid committing `Src/config/config.json` to Git.
 
@@ -58,7 +60,9 @@ Commands are used as slash commands. Use `/help` to display all available comman
 
 See `member_role_template.csv` in the [Template files](#template-files) section for the CSV format.
 
-`get` returns the roles of the matching member by username or display name. A mention can also be used.
+`get` returns the roles of the matching member by username or display name. A mention can also be used. It currently replies with text, not CSV.
+
+`set` returns the submitted CSV with a `result` column and a `reason` column for failures.
 
 The `add`, `set`, and `remove` commands require the Manage Roles permission.
 
@@ -75,6 +79,8 @@ The `add`, `set`, and `remove` commands require the Manage Roles permission.
 ```
 
 See `server_role_template.csv` in the [Template files](#template-files) section for the CSV format.
+
+The CSV returned by `/server role get` can be attached to `/server role set`. The result CSV includes `result` and `reason` columns.
 
 The `add`, `edit`, `set`, and `remove` commands require the Manage Roles permission.
 
@@ -100,6 +106,8 @@ Exports the server member list as a CSV file.
 Creating and moving channels requires the Manage Channels permission. If the target category does not exist, it is created automatically.
 
 Use `/channel get` to export the server's channel list as `name,type,category` CSV.
+
+This CSV can be attached to `/channel set`. Its result CSV includes `result` and `reason` columns. If any role columns are populated, only the listed roles retain channel access; existing grants for unlisted roles are removed. If all role columns are blank, existing role permissions remain unchanged.
 
 See `channel_template.csv` in the [Template files](#template-files) section for the CSV format.
 
@@ -137,7 +145,7 @@ These are sample features and can be modified or disabled depending on your prod
 /scenario export
 ```
 
-Scenario definitions are stored in `config/scenario_definitions.json`, and per-server progress is stored in `config/scenario_states.json`. `/scenario set` preserves existing scenarios and appends or updates entries from the CSV. If the same scenario ID and step number already exist, they are updated. `/scenario export` exports registered scenarios as CSV.
+Scenario definitions are stored in `Src/config/scenario_definitions.json`, and per-server progress is stored in `Src/config/scenario_states.json`. `/scenario set` preserves existing scenarios and appends or updates entries from the CSV. If the same scenario ID and step number already exist, they are updated. It returns the CSV with `result` and `reason` columns. The CSV from `/scenario export` can be reused with `/scenario set`.
 
 See `scenario_template.csv` in the [Template files](#template-files) section for the CSV format and the example `welcome` scenario.
 
@@ -147,10 +155,23 @@ Multiple branches can be defined in one row using numbered `branch_reaction_N` a
 
 ## Template files
 
-CSV templates are stored in the `Src/templates` folder. Edit the linked CSV files and attach them to the corresponding commands.
+CSV templates are grouped by purpose under `Src/templates`. Edit the needed CSV and attach it to the corresponding command.
 
-- [channel_template.csv](../templates/channel_template.csv): Channel configuration
-- [chat_template.csv](../templates/chat_template.csv): Attachment retrieval
-- [member_role_template.csv](../templates/member_role_template.csv): Member role configuration
-- [server_role_template.csv](../templates/server_role_template.csv): Server role configuration
-- [scenario_template.csv](../templates/scenario_template.csv): Scenario registration
+### Set input
+
+- [channel_template.csv](../Src/templates/set/input/channel_template.csv): Channel configuration
+- [member_role_template.csv](../Src/templates/set/input/member_role_template.csv): Member role configuration
+- [server_role_template.csv](../Src/templates/set/input/server_role_template.csv): Server role configuration
+- [scenario_template.csv](../Src/templates/set/input/scenario_template.csv): Scenario registration
+- [team_match_scenario.csv](../Src/templates/set/input/team_match_scenario.csv): Team match scenario example
+
+### Get input
+
+- [chat_template.csv](../Src/templates/get/input/chat_template.csv): Attachment retrieval across multiple channels
+
+### Responses and results
+
+- [Set response folder](../Src/templates/set/response/README.md): Set result CSV behavior
+- [Get result folder](../Src/templates/get/result/README.md): Get output behavior
+
+Response and result files are saved in their respective folders and also sent as Discord attachments. Generated files are excluded from Git because they may contain server data.

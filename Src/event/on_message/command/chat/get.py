@@ -8,6 +8,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import discord
+from function.file.template_output_service import save_template_output
 
 from function.file.zip_service import compress_directory
 
@@ -339,9 +340,15 @@ async def main(message: discord.Message) -> None:
             result = f"{downloaded_count}件の添付ファイルをZIP圧縮しました。"
             if errors:
                 result += "\n取得できなかったファイル:\n" + "\n".join(errors)
+            result_path = save_template_output(
+                "get/result",
+                f"chat_get_{message.guild.id}",
+                archive_path.read_bytes(),
+                suffix=".zip",
+            )
             await message.channel.send(
                 result,
-                file=discord.File(archive_path, filename="chat_attachments.zip"),
+                file=discord.File(result_path, filename=result_path.name),
             )
         except (
             UnicodeDecodeError,
