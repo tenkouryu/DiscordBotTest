@@ -5,17 +5,32 @@ from typing import Any
 import discord
 from discord import app_commands
 
-from . import channel as channel_mod
-from . import chat as chat_mod
-from . import member as member_mod
-from . import server as server_mod
+from .channel import create as channel_create
+from .channel import get as channel_get
+from .channel import move as channel_move
+from .channel import set as channel_set
+from .channel import template as channel_template
+from .chat import get as chat_get
+from .chat import template as chat_template
 from .help.help import get_command_help_text
+from .member import role_add as member_role_add
+from .member import role_get as member_role_get
+from .member import role_remove as member_role_remove
+from .member import role_set as member_role_set
+from .member import role_template as member_role_template
 from .scenario import delete as scenario_delete
 from .scenario import export as scenario_export
 from .scenario import list as scenario_list
 from .scenario import set as scenario_set
 from .scenario import start as scenario_start
 from .scenario import template as scenario_template
+from .server import member_list as server_member_list
+from .server import role_add as server_role_add
+from .server import role_edit as server_role_edit
+from .server import role_get as server_role_get
+from .server import role_remove as server_role_remove
+from .server import role_set as server_role_set
+from .server import role_template as server_role_template
 
 
 class _InteractionChannel:
@@ -69,7 +84,11 @@ async def _run(
     mentions: list[discord.User] | None = None,
     channel_mentions: list[discord.abc.GuildChannel] | None = None,
 ) -> None:
-    await interaction.response.defer()
+    try:
+        await interaction.response.defer()
+    except discord.NotFound:
+        # Discord interaction tokens expire quickly; there is no response to send after that.
+        return
     await handler(
         _InteractionMessage(
             interaction,
@@ -99,80 +118,80 @@ def register_slash_commands(tree: app_commands.CommandTree[discord.Client]) -> N
     @member_role.command(name="add", description="メンバーにロールを追加")
     @app_commands.describe(member="対象メンバー", role_name="ロール名")
     async def member_role_add_command(interaction: discord.Interaction, member: discord.Member, role_name: str) -> None:
-        await _run(interaction, member_mod.role_add.main, f"/member_role_add {member.mention} {role_name}", mentions=[member])
+        await _run(interaction, member_role_add.main, f"/member_role_add {member.mention} {role_name}", mentions=[member])
 
     @member_role.command(name="get", description="メンバーのロール一覧を表示")
     async def member_role_get_command(interaction: discord.Interaction, member_name: str) -> None:
-        await _run(interaction, member_mod.role_get.main, f"/member_role_get {member_name}")
+        await _run(interaction, member_role_get.main, f"/member_role_get {member_name}")
 
     @member_role.command(name="remove", description="メンバーからロールを削除")
     async def member_role_remove_command(interaction: discord.Interaction, member: discord.Member, role_name: str) -> None:
-        await _run(interaction, member_mod.role_remove.main, f"/member_role_remove {member.mention} {role_name}", mentions=[member])
+        await _run(interaction, member_role_remove.main, f"/member_role_remove {member.mention} {role_name}", mentions=[member])
 
     @member_role.command(name="set", description="CSVからメンバーロールを設定")
     async def member_role_set_command(interaction: discord.Interaction, file: discord.Attachment) -> None:
-        await _run(interaction, member_mod.role_set.main, "/member_role_set", attachments=[file])
+        await _run(interaction, member_role_set.main, "/member_role_set", attachments=[file])
 
     @member_role.command(name="template", description="メンバーロールCSVテンプレート")
     async def member_role_template_command(interaction: discord.Interaction) -> None:
-        await _run(interaction, member_mod.role_template.main, "/member_role_template")
+        await _run(interaction, member_role_template.main, "/member_role_template")
 
     @server_role.command(name="add", description="サーバーにロールを追加")
     async def server_role_add_command(interaction: discord.Interaction, role_name: str) -> None:
-        await _run(interaction, server_mod.role_add.main, f"/server_role_add {role_name}")
+        await _run(interaction, server_role_add.main, f"/server_role_add {role_name}")
 
     @server_role.command(name="edit", description="ロールの権限または色を変更")
     async def server_role_edit_command(interaction: discord.Interaction, role_name: str, setting: str, value: str) -> None:
-        await _run(interaction, server_mod.role_edit.main, f"/server_role_edit {role_name} {setting} {value}")
+        await _run(interaction, server_role_edit.main, f"/server_role_edit {role_name} {setting} {value}")
 
     @server_role.command(name="get", description="サーバーロールをCSVで取得")
     async def server_role_get_command(interaction: discord.Interaction) -> None:
-        await _run(interaction, server_mod.role_get.main, "/server_role_get")
+        await _run(interaction, server_role_get.main, "/server_role_get")
 
     @server_role.command(name="set", description="CSVからサーバーロールを設定")
     async def server_role_set_command(interaction: discord.Interaction, file: discord.Attachment) -> None:
-        await _run(interaction, server_mod.role_set.main, "/server_role_set", attachments=[file])
+        await _run(interaction, server_role_set.main, "/server_role_set", attachments=[file])
 
     @server_role.command(name="template", description="サーバーロールCSVテンプレート")
     async def server_role_template_command(interaction: discord.Interaction) -> None:
-        await _run(interaction, server_mod.role_template.main, "/server_role_template")
+        await _run(interaction, server_role_template.main, "/server_role_template")
 
     @server_role.command(name="remove", description="サーバーからロールを削除")
     async def server_role_remove_command(interaction: discord.Interaction, role_name: str) -> None:
-        await _run(interaction, server_mod.role_remove.main, f"/server_role_remove {role_name}")
+        await _run(interaction, server_role_remove.main, f"/server_role_remove {role_name}")
 
     @server_member.command(name="list", description="サーバーメンバー一覧をCSVで取得")
     async def server_member_list_command(interaction: discord.Interaction) -> None:
-        await _run(interaction, lambda message: server_mod.member_list.main(interaction.client, message), "/server_member_list")
+        await _run(interaction, lambda message: server_member_list.main(interaction.client, message), "/server_member_list")
 
     @channel_group.command(name="create", description="チャンネルを作成")
     async def channel_create_command(interaction: discord.Interaction, channel_type: str, channel_name: str, category_name: str | None = None) -> None:
-        await _run(interaction, channel_mod.create.main, f"/channel_create {channel_type} {channel_name} {category_name or ''}")
+        await _run(interaction, channel_create.main, f"/channel_create {channel_type} {channel_name} {category_name or ''}")
 
     @channel_group.command(name="get", description="チャンネル一覧をCSVで取得")
     async def channel_get_command(interaction: discord.Interaction) -> None:
-        await _run(interaction, channel_mod.get.main, "/channel_get")
+        await _run(interaction, channel_get.main, "/channel_get")
 
     @channel_group.command(name="move", description="チャンネルをカテゴリーへ移動")
     async def channel_move_command(interaction: discord.Interaction, channel: discord.TextChannel, category_name: str) -> None:
-        await _run(interaction, channel_mod.move.main, f"/channel_move {channel.mention} {category_name}", channel_mentions=[channel])
+        await _run(interaction, channel_move.main, f"/channel_move {channel.mention} {category_name}", channel_mentions=[channel])
 
     @channel_group.command(name="set", description="CSVからチャンネルを設定")
     async def channel_set_command(interaction: discord.Interaction, file: discord.Attachment) -> None:
-        await _run(interaction, channel_mod.set.main, "/channel_set", attachments=[file])
+        await _run(interaction, channel_set.main, "/channel_set", attachments=[file])
 
     @channel_group.command(name="template", description="チャンネルCSVテンプレート")
     async def channel_template_command(interaction: discord.Interaction) -> None:
-        await _run(interaction, channel_mod.template.main, "/channel_template")
+        await _run(interaction, channel_template.main, "/channel_template")
 
     @chat_group.command(name="get", description="添付ファイルを取得")
     async def chat_get_command(interaction: discord.Interaction, channel: discord.TextChannel, start_date: str | None = None, extension: str | None = None) -> None:
         arguments = " ".join(value for value in (start_date, extension) if value)
-        await _run(interaction, chat_mod.get.main, f"/chat_get {arguments}", channel_mentions=[channel])
+        await _run(interaction, chat_get.main, f"/chat_get {arguments}", channel_mentions=[channel])
 
     @chat_group.command(name="template", description="添付ファイル取得CSVテンプレート")
     async def chat_template_command(interaction: discord.Interaction) -> None:
-        await _run(interaction, chat_mod.template.main, "/chat_template")
+        await _run(interaction, chat_template.main, "/chat_template")
 
     @scenario_group.command(name="template", description="シナリオCSVテンプレート")
     async def scenario_template_command(interaction: discord.Interaction) -> None:
