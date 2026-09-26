@@ -4,22 +4,22 @@ from function.security.permissions import can_manage_roles
 """
     メンバーのロール取得コマンドを処理する。
 
-    _find_members:
-        名前または表示名からメンバーを検索する。
+    _find_members_by_username:
+        Discordユーザー名からメンバーを検索する。
 
     main:
         指定したメンバーのロール一覧を送信する。
 """
 
-def _find_members(
+def _find_members_by_username(
     guild: discord.Guild,
-    member_name: str,
+    username: str,
 ) -> list[discord.Member]:
-    """名前または表示名が一致するメンバーを取得する。"""
+    """Discordユーザー名が一致するメンバーを取得する。"""
     return [
         member
         for member in guild.members
-        if member.name == member_name or member.display_name == member_name
+        if member.name.casefold() == username.casefold()
     ]
 
 
@@ -40,7 +40,7 @@ async def main(message: discord.Message) -> None:
     if message.mentions:
         members = [message.mentions[0]]
     else:
-        members = _find_members(message.guild, argument)
+        members = _find_members_by_username(message.guild, argument)
 
     if not members:
         await message.channel.send(f'メンバー「{argument}」が見つかりません。')
