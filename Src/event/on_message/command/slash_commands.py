@@ -71,6 +71,10 @@ class _InteractionMessage:
         self.channel_mentions = channel_mentions or []
         self.channel = _InteractionChannel(interaction)
 
+    @property
+    def author(self) -> discord.User | discord.Member:
+        return self._interaction.user
+
     def __getattr__(self, name: str) -> Any:
         return getattr(self._interaction, name)
 

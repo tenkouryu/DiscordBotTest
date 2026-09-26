@@ -1,5 +1,6 @@
 import discord
 import function.discord.role.edit_roll as edit_roll
+from function.security.permissions import can_manage_roles
 
 """
     サーバーロール変更コマンドを処理する。
@@ -17,7 +18,7 @@ async def main(message: discord.Message) -> None:
         )
         return
 
-    if not message.author.guild_permissions.manage_roles:
+    if not can_manage_roles(message.author):
         await message.channel.send('ロールを変更する権限がありません。')
         return
 
