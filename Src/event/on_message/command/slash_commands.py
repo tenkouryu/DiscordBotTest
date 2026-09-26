@@ -125,8 +125,8 @@ def register_slash_commands(tree: app_commands.CommandTree[discord.Client]) -> N
         await _run(interaction, member_role_add.main, f"/member_role_add {member.mention} {role_name}", mentions=[member])
 
     @member_role.command(name="get", description="メンバーのロール一覧を表示")
-    async def member_role_get_command(interaction: discord.Interaction, member_name: str) -> None:
-        await _run(interaction, member_role_get.main, f"/member_role_get {member_name}")
+    async def member_role_get_command(interaction: discord.Interaction, username: str) -> None:
+        await _run(interaction, member_role_get.main, f"/member_role_get {username}")
 
     @member_role.command(name="remove", description="メンバーからロールを削除")
     async def member_role_remove_command(interaction: discord.Interaction, member: discord.Member, role_name: str) -> None:

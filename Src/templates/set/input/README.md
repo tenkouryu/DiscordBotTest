@@ -3,7 +3,7 @@
 CSV files in this folder are input templates or examples for Set commands.
 
 - `channel_template.csv`: `/channel set` (optional `user_1`, `user_2`, ... columns accept Discord usernames for additional channel access)
-- `member_role_template.csv`: `/member role set`
+- `member_role_template.csv`: `/member role set` (the `ユーザー名` column accepts Discord usernames)
 - `server_role_template.csv`: `/server role set`
 - `scenario_template.csv` and `team_match_scenario.csv`: `/scenario set`
 

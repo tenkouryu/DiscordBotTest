@@ -52,7 +52,7 @@ Commands are used as slash commands. Use `/help` to display all available comman
 
 ```text
 /member role add @member role-name
-/member role get member-name
+/member role get username
 /member role set + CSV-file
 /member role template
 /member role remove @member role-name
@@ -60,7 +60,7 @@ Commands are used as slash commands. Use `/help` to display all available comman
 
 See `member_role_template.csv` in the [Template files](#template-files) section for the CSV format.
 
-`get` returns the roles of the matching member by username or display name. A mention can also be used. It currently replies with text, not CSV.
+`get` returns the roles of the member matching the Discord username. A mention can also be used. It currently replies with text, not CSV. The `ユーザー名` column in the `set` CSV also expects a Discord username; matching is case-insensitive.
 
 `set` returns the submitted CSV with a `result` column and a `reason` column for failures.
 

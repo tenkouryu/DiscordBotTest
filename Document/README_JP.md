@@ -51,7 +51,7 @@ Bot トークンは公開せず、`Src/config/config.json` を Git にコミッ�
 
 ```text
 /member role add @メンバー ロール名
-/member role get メンバー名
+/member role get ユーザー名
 /member role set + CSVファイル
 /member role template
 /member role remove @メンバー ロール名
@@ -59,7 +59,7 @@ Bot トークンは公開せず、`Src/config/config.json` を Git にコミッ�
 
 CSV形式は [テンプレートファイル](#テンプレートファイル) の `member_role_template.csv` を参照してください。
 
-`get` はメンバー名または表示名に一致するメンバーのロール一覧を返信します。メンションで指定することもできます。現在、CSVではなくテキスト返信です。
+`get` はDiscordユーザー名に一致するメンバーのロール一覧を返信します。メンションで指定することもできます。現在、CSVではなくテキスト返信です。`set` CSVの「ユーザー名」列もDiscordユーザー名を指定します（大文字小文字は区別しません）。
 
 `set` は処理結果を `result` 列、失敗理由を `reason` 列に記録したCSVを返信します。
 

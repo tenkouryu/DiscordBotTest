@@ -21,10 +21,10 @@ async def main(message: discord.Message) -> None:
 
     output = io.StringIO(newline="")
     writer = csv.writer(output)
-    writer.writerow(["追加/削除", "表示名", "ロール"])
+    writer.writerow(["追加/削除", "ユーザー名", "ロール"])
     writer.writerow([
         "追加または削除を入力",
-        "対象メンバーの表示名を入力",
+        "対象メンバーのDiscordユーザー名を入力",
         "対象ロール名を入力",
     ])
     await message.channel.send(

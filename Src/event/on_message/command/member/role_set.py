@@ -9,7 +9,7 @@ from function.file.template_output_service import save_template_output
 """
     CSVによるメンバーロール設定コマンドを処理する。
 
-    _find_member_by_display_name / _find_role:
+    _find_member_by_username / _find_role:
         CSV指定に対応するメンバーまたはロールを検索する。
 
     _execute_row:
@@ -22,15 +22,15 @@ from function.file.template_output_service import save_template_output
         添付CSVを読み込み、メンバーロール設定を実行する。
 """
 
-def _find_member_by_display_name(
+def _find_member_by_username(
     guild: discord.Guild,
-    display_name: str,
+    username: str,
 ) -> discord.Member | None:
-    """表示名から対象メンバーを特定する。"""
+    """Discordユーザー名から対象メンバーを特定する。"""
     matches = [
         member
         for member in guild.members
-        if member.display_name == display_name
+        if member.name.casefold() == username.casefold()
     ]
     return matches[0] if len(matches) == 1 else None
 
@@ -52,20 +52,20 @@ def _find_role(guild: discord.Guild, role_name: str) -> discord.Role | None:
 async def _execute_row(
     guild: discord.Guild,
     action: str,
-    display_name: str,
+    username: str,
     role_name: str,
 ) -> str:
     """CSV 1 行分のロール操作を実行する。"""
     if action not in ("追加", "削除"):
         return "失敗: 1列目は「追加」または「削除」を指定してください。"
-    if not display_name:
-        return "失敗: 表示名が空です。"
+    if not username:
+        return "失敗: ユーザー名が空です。"
     if not role_name:
         return "失敗: ロール名が空です。"
 
-    member = _find_member_by_display_name(guild, display_name)
+    member = _find_member_by_username(guild, username)
     if member is None:
-        return f"失敗: 表示名「{display_name}」のメンバーが見つかりません。"
+        return f"失敗: ユーザー名「{username}」のメンバーが見つかりません。"
 
     role = _find_role(guild, role_name)
     try:
@@ -94,9 +94,9 @@ async def update_member_roles_from_csv(
         raise ValueError("サーバーが指定されていません。")
 
     reader = csv.DictReader(io.StringIO(csv_text))
-    required_columns = {"追加/削除", "表示名", "ロール"}
+    required_columns = {"追加/削除", "ユーザー名", "ロール"}
     if not required_columns.issubset(reader.fieldnames or set()):
-        raise ValueError("CSVには「追加/削除」「表示名」「ロール」列が必要です。")
+        raise ValueError("CSVには「追加/削除」「ユーザー名」「ロール」列が必要です。")
 
     fieldnames = list(reader.fieldnames or [])
     if "result" not in fieldnames:
@@ -111,9 +111,9 @@ async def update_member_roles_from_csv(
 
     for row in reader:
         action = row.get("追加/削除", "").strip()
-        display_name = row.get("表示名", "").strip()
+        username = row.get("ユーザー名", "").strip()
         role_name = row.get("ロール", "").strip()
-        operation_result = await _execute_row(guild, action, display_name, role_name)
+        operation_result = await _execute_row(guild, action, username, role_name)
         succeeded = operation_result.startswith("成功")
         result = "成功" if succeeded else "失敗"
         reason = operation_result.partition(":")[2].strip() if not succeeded else ""
@@ -132,7 +132,7 @@ async def main(message: discord.Message) -> None:
     if message.content.partition(" ")[2].strip() == "-h":
         await message.channel.send(
             "/member role set + CSVファイル\n"
-            "CSV形式: 追加/削除,表示名,ロール\n"
+            "CSV形式: 追加/削除,ユーザー名,ロール\n"
             "処理結果を result、失敗理由を reason 列に追加したCSVを返信します。"
         )
         return
