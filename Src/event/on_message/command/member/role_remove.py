@@ -1,5 +1,6 @@
 import discord
 import function.discord.role.edit_roll as edit_roll
+from function.security.permissions import can_manage_roles
 
 """
     メンバーからのロール削除コマンドを処理する。
@@ -16,7 +17,7 @@ async def main(message: discord.Message) -> None:
         )
         return
 
-    if not message.author.guild_permissions.manage_roles:
+    if not can_manage_roles(message.author):
         await message.channel.send('メンバーのロールを削除する権限がありません。')
         return
 

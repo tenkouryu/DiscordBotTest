@@ -1,4 +1,5 @@
 import discord
+from function.security.permissions import can_manage_roles
 
 """
     メンバーのロール取得コマンドを処理する。
@@ -30,6 +31,10 @@ async def main(message: discord.Message) -> None:
             "/member role get メンバー名\n"
             "指定したメンバーのロール一覧を表示します。"
         )
+        return
+
+    if not can_manage_roles(message.author):
+        await message.channel.send('メンバーのロールを取得する権限がありません。')
         return
 
     if message.mentions:

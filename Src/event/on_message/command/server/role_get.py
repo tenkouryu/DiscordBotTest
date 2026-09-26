@@ -4,6 +4,7 @@ import discord
 import function.discord.role.edit_roll as edit_roll
 import function.discord.message.send_message as send_message
 from function.file.template_output_service import create_template_output_path
+from function.security.permissions import can_manage_roles
 
 """
 	サーバーロール一覧取得コマンドを処理する。
@@ -57,6 +58,10 @@ async def main(client: discord.Client, message: discord.Message) -> None:
 		await message.channel.send(
 			"/server role get: サーバーのロール情報を CSV ファイルで取得します。"
 		)
+		return
+
+	if not can_manage_roles(message.author):
+		await message.channel.send('ロールを取得する権限がありません。')
 		return
 
 	file_path = create_template_output_path(

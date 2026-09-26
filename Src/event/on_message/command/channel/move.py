@@ -2,6 +2,7 @@ import re
 
 import discord
 import function.discord.channel.edit_channel as edit_channel
+from function.security.permissions import can_manage_channels
 
 """
     チャンネル移動コマンドを処理する。
@@ -16,7 +17,7 @@ async def main(message: discord.Message) -> None:
         await message.channel.send('/channel move #チャンネル カテゴリー名')
         return
 
-    if not message.author.guild_permissions.manage_channels:
+    if not can_manage_channels(message.author):
         await message.channel.send('チャンネルを管理する権限がありません。')
         return
 

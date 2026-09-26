@@ -5,6 +5,7 @@ import re
 import discord
 import function.discord.channel.edit_channel as edit_channel
 from function.file.template_output_service import save_template_output
+from function.security.permissions import can_manage_channels
 
 """
     CSVによるチャンネル設定コマンドを処理する。
@@ -130,7 +131,7 @@ async def main(message: discord.Message) -> None:
         )
         return
 
-    if not message.author.guild_permissions.manage_channels:
+    if not can_manage_channels(message.author):
         await message.channel.send("チャンネルを管理する権限がありません。")
         return
 
