@@ -145,6 +145,35 @@ async def grant_channel_role_access(
     return channel
 
 
+async def grant_channel_member_access(
+    channel: discord.abc.GuildChannel,
+    member: discord.Member,
+) -> discord.abc.GuildChannel:
+    """指定メンバーにチャンネルへの閲覧・利用権限を付与する。"""
+    if channel is None or channel.guild is None:
+        raise ValueError("サーバーのチャンネルを指定してください。")
+    if member.guild != channel.guild:
+        raise ValueError("同じサーバーのメンバーを指定してください。")
+
+    if isinstance(channel, discord.TextChannel):
+        permissions = {
+            "view_channel": True,
+            "send_messages": True,
+            "read_message_history": True,
+        }
+    elif isinstance(channel, discord.VoiceChannel):
+        permissions = {
+            "view_channel": True,
+            "connect": True,
+            "speak": True,
+        }
+    else:
+        raise ValueError("テキストまたはボイスチャンネルを指定してください。")
+
+    await channel.set_permissions(member, **permissions)
+    return channel
+
+
 async def sync_channel_role_access(
     channel: discord.abc.GuildChannel,
     role_names: list[str],

@@ -107,7 +107,7 @@ Creating and moving channels requires the Manage Channels permission. If the tar
 
 Use `/channel get` to export the server's channel list as `name,type,category` CSV.
 
-This CSV can be attached to `/channel set`. Its result CSV includes `result` and `reason` columns. If any role columns are populated, only the listed roles retain channel access; existing grants for unlisted roles are removed. If all role columns are blank, existing role permissions remain unchanged.
+This CSV can be attached to `/channel set`. Its result CSV includes `result` and `reason` columns. If any role columns are populated, only the listed roles retain channel access; existing grants for unlisted roles are removed. If all role columns are blank, existing role permissions remain unchanged. Optional `user_1`, `user_2`, and later columns accept Discord usernames and grant those members channel access without changing existing member-specific overwrites.
 
 See `channel_template.csv` in the [Template files](#template-files) section for the CSV format.
 

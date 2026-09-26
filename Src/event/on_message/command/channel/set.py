@@ -59,6 +59,19 @@ async def set_channels_from_csv(
             for column in role_columns
             if (row.get(column) or "").strip()
         ]
+        user_columns = sorted(
+            (
+                key
+                for key in row
+                if re.fullmatch(r"user_\d+", key or "")
+            ),
+            key=lambda key: int(key.rsplit("_", 1)[1]),
+        )
+        usernames = [
+            (row.get(column) or "").strip()
+            for column in user_columns
+            if (row.get(column) or "").strip()
+        ]
         result = "成功"
         reason = ""
         try:
@@ -66,6 +79,7 @@ async def set_channels_from_csv(
                 raise ValueError("チャンネル名が空です。")
             if channel_type not in {"text", "voice"}:
                 raise ValueError("type は text または voice を指定してください。")
+            members = _resolve_members_by_username(guild, usernames)
 
             existing_channel = discord.utils.get(
                 guild.channels,
@@ -107,6 +121,11 @@ async def set_channels_from_csv(
                     existing_channel,
                     role_names,
                 )
+            for member in members:
+                await edit_channel.grant_channel_member_access(
+                    existing_channel,
+                    member,
+                )
 
             success_count += 1
         except (ValueError, discord.Forbidden, discord.HTTPException) as error:
@@ -121,12 +140,39 @@ async def set_channels_from_csv(
     return success_count, output.getvalue().encode("utf-8-sig")
 
 
+def _resolve_members_by_username(
+    guild: discord.Guild,
+    usernames: list[str],
+) -> list[discord.Member]:
+    """CSVのDiscordユーザー名を同じサーバーのメンバーへ解決する。"""
+    resolved_members: list[discord.Member] = []
+    resolved_ids: set[int] = set()
+
+    for username in usernames:
+        matches = [
+            member
+            for member in guild.members
+            if member.name.casefold() == username.casefold()
+        ]
+        if not matches:
+            raise ValueError(f"ユーザーが見つかりません: {username}")
+        if len(matches) > 1:
+            raise ValueError(f"ユーザー名が重複しています: {username}")
+
+        member = matches[0]
+        if member.id not in resolved_ids:
+            resolved_members.append(member)
+            resolved_ids.add(member.id)
+
+    return resolved_members
+
+
 async def main(message: discord.Message) -> None:
     """添付されたCSVからチャンネルを作成または設定する。"""
     if message.content.partition(" ")[2].strip() == "-h":
         await message.channel.send(
             "/channel set + CSVファイル\n"
-            "CSV形式: name,type,category,role_1,role_2,...（role_列は追加可能）\n"
+            "CSV形式: name,type,category,role_1,...,user_1,...（列は追加可能）\n"
             "type は text または voice を指定します。処理結果を追記したCSVを返信します。"
         )
         return
