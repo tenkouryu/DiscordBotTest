@@ -9,6 +9,7 @@ from event.on_reaction import on_reaction as on_reaction_event
 from event.on_member_join import on_member_join as on_member_join_event
 from event.on_voice_state_update import on_voice_state_update as on_voice_state_update_event
 from event.on_message.command.slash_commands import register_slash_commands
+from function.security.single_instance import single_instance
 
 
 #----------Botの設定はここ----------
@@ -75,4 +76,8 @@ async def on_voice_state_update(
 
 #----------Botの起動処理はここ----------
 # Botの起動とDiscordサーバーへの接続
-client.run(TOKEN)
+with single_instance(r"Local\DiscordBot_servercontroller") as is_primary:
+    if not is_primary:
+        print("BOTはすでに起動しているため、このプロセスを終了します。")
+        raise SystemExit(0)
+    client.run(TOKEN)
